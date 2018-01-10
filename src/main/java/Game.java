@@ -8,7 +8,7 @@ public class Game {
     private Pair<Integer, Integer>[][] board;
 
     public Game(int width, int height, Player player1, Player player2) {
-        this(getBlankBoard(width, height), player1, player2);
+        this(BoardUtils.getBlankBoard(width, height), player1, player2);
     }
 
     public Game(Pair<Integer, Integer>[][] configuration, Player player1, Player player2) {
@@ -53,15 +53,4 @@ public class Game {
         return board;
     }
 
-    private static Pair<Integer, Integer>[][] getBlankBoard(int width, int height) {
-        Pair[][] board = new Pair[width][height];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = new Pair<Integer, Integer>(0, 0);
-            }
-        }
-        board[0][0] = new Pair<Integer, Integer>(1, 20);
-        board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 20);
-        return board;
-    }
 }

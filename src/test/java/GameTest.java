@@ -75,7 +75,7 @@ public class GameTest {
 
     @Test
     public void initializeWithSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = new Pair[2][2];
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2,2);
         Game g = new Game(configuration, player1, player2);
         assertThat(g.getBoard(), is(configuration));
     }
@@ -88,10 +88,9 @@ public class GameTest {
 
     @Test
     public void callsPlayerReinforcementOnSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = new Pair[2][2];
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2,2);
         configuration[0][0] = new Pair<Integer, Integer>(1, 10);
         configuration[0][1] = new Pair<Integer, Integer>(1, 10);
-        configuration[1][0] = new Pair<Integer, Integer>(0, 0);
         configuration[1][1] = new Pair<Integer, Integer>(2, 10);
         Game g = new Game(configuration, player1, player2);
 
