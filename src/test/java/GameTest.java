@@ -75,7 +75,7 @@ public class GameTest {
 
     @Test
     public void initializeWithSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2,2);
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2, 2);
         Game g = new Game(configuration, player1, player2);
         assertThat(g.getBoard(), is(configuration));
     }
@@ -88,7 +88,7 @@ public class GameTest {
 
     @Test
     public void callsPlayerReinforcementOnSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2,2);
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2, 2);
         configuration[0][0] = new Pair<Integer, Integer>(1, 10);
         configuration[0][1] = new Pair<Integer, Integer>(1, 10);
         configuration[1][1] = new Pair<Integer, Integer>(2, 10);
@@ -105,5 +105,17 @@ public class GameTest {
         game.tick();
         verify(player1).onAttack(game.getBoard());
         verify(player2).onAttack(game.getBoard());
+    }
+
+    @Test
+    public void appliesAttackMoves() throws Exception {
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(0, 1, 1));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(boardDim - 1, boardDim - 2, 1));
+        game.tick();
+        Pair<Integer, Integer>[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
+        assertThat(board[0][1], is(new Pair<Integer, Integer>(1, 1)));
+        assertThat(board[boardDim - 1][boardDim - 2], is(new Pair<Integer, Integer>(2, 1)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
     }
 }

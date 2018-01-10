@@ -35,8 +35,16 @@ public class Game {
         player2.onReinforcement(getBoard(), getPlayerCellCount(2));
         board[0][0] = new Pair<Integer, Integer>(1, 21);
         board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 21);
-        player1.onAttack(getBoard());
-        player2.onAttack(getBoard());
+        AttackMove move1 = player1.onAttack(getBoard());
+        AttackMove move2 = player2.onAttack(getBoard());
+        if (move1 != null) {
+            board[0][0] = new Pair<Integer, Integer>(1, 19);
+            board[0][1] = new Pair<Integer, Integer>(1, 1);
+        }
+        if (move2 != null) {
+            board[width - 1][height - 2] = new Pair<Integer, Integer>(2, 1);
+            board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 19);
+        }
     }
 
     private int getPlayerCellCount(int playerId) {
