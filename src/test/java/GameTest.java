@@ -125,7 +125,7 @@ public class GameTest {
 
     @Test
     public void initializeWithSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2,2);
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2, 2);
         Game g = new Game(configuration, player1, player2);
         assertThat(g.getBoard(), is(configuration));
     }
@@ -138,7 +138,7 @@ public class GameTest {
 
     @Test
     public void callsPlayerReinforcementOnSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2,2);
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2, 2);
         configuration[0][0] = new Pair<Integer, Integer>(1, 10);
         configuration[0][1] = new Pair<Integer, Integer>(1, 10);
         configuration[1][1] = new Pair<Integer, Integer>(2, 10);
@@ -148,5 +148,48 @@ public class GameTest {
 
         verify(player1).onReinforcement(configuration, 2);
         verify(player2).onReinforcement(configuration, 1);
+    }
+
+    @Test
+    public void callsPlayerOnAttackWithSuitableArguments() {
+        game.tick();
+        verify(player1).onAttack(game.getBoard());
+        verify(player2).onAttack(game.getBoard());
+    }
+
+    @Test
+    public void appliesAttackMoves() {
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(0, 1, 1));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(boardDim - 1, boardDim - 2, 1));
+        game.tick();
+        Pair<Integer, Integer>[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
+        assertThat(board[0][1], is(new Pair<Integer, Integer>(1, 1)));
+        assertThat(board[boardDim - 1][boardDim - 2], is(new Pair<Integer, Integer>(2, 1)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
+    }
+
+    @Test
+    public void appliesDifferentAttackMoves() {
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(1, 0, 1));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(boardDim - 2, boardDim - 1, 1));
+        game.tick();
+        Pair<Integer, Integer>[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
+        assertThat(board[1][0], is(new Pair<Integer, Integer>(1, 1)));
+        assertThat(board[boardDim - 2][boardDim - 1], is(new Pair<Integer, Integer>(2, 1)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
+    }
+
+    @Test
+    public void appliesAttackMovesAmount() {
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(1, 0, 5));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(boardDim - 2, boardDim - 1, 2));
+        game.tick();
+        Pair<Integer, Integer>[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 15)));
+        assertThat(board[1][0], is(new Pair<Integer, Integer>(1, 5)));
+        assertThat(board[boardDim - 2][boardDim - 1], is(new Pair<Integer, Integer>(2, 2)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 18)));
     }
 }
