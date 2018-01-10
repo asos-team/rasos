@@ -118,4 +118,16 @@ public class GameTest {
         assertThat(board[boardDim - 1][boardDim - 2], is(new Pair<Integer, Integer>(2, 1)));
         assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
     }
+
+    @Test
+    public void appliesDifferentAttackMoves() throws Exception {
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(1, 0, 1));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(boardDim - 2, boardDim - 1, 1));
+        game.tick();
+        Pair<Integer, Integer>[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
+        assertThat(board[1][0], is(new Pair<Integer, Integer>(1, 1)));
+        assertThat(board[boardDim - 2][boardDim - 1], is(new Pair<Integer, Integer>(2, 1)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
+    }
 }

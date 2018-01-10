@@ -38,12 +38,12 @@ public class Game {
         AttackMove move1 = player1.onAttack(getBoard());
         AttackMove move2 = player2.onAttack(getBoard());
         if (move1 != null) {
-            board[0][0] = new Pair<Integer, Integer>(1, 19);
-            board[0][1] = new Pair<Integer, Integer>(1, 1);
+            board[0][0]= new Pair<Integer, Integer>(1, 19);
+            board[move1.getX()][move1.getY()] = new Pair<Integer, Integer>(1, 1);
         }
         if (move2 != null) {
-            board[width - 1][height - 2] = new Pair<Integer, Integer>(2, 1);
             board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 19);
+            board[move2.getX()][move2.getY()] = new Pair<Integer, Integer>(2, 1);
         }
     }
 
