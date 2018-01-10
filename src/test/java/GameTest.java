@@ -99,4 +99,11 @@ public class GameTest {
         verify(player1).onReinforcement(configuration, 2);
         verify(player2).onReinforcement(configuration, 1);
     }
+
+    @Test
+    public void callsPlayerOnAttackWithSuitableArguments() throws Exception {
+        game.tick();
+        verify(player1).onAttack(game.getBoard());
+        verify(player2).onAttack(game.getBoard());
+    }
 }
