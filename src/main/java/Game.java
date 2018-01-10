@@ -8,33 +8,53 @@ public class Game {
     private Pair<Integer, Integer>[][] board;
 
     public Game(int width, int height, Player player1, Player player2) {
-        this.width = width;
-        this.height = height;
-        this.player1 = player1;
-        this.player2 = player2;
-        initializeBoard();
+        this(getBlankBoard(width, height), player1, player2);
     }
 
     public Game(Pair<Integer, Integer>[][] configuration, Player player1, Player player2) {
-        width = configuration.length;
-        height = configuration[0].length;
+        this.width = configuration.length;
+        this.height = configuration[0].length;
         this.player1 = player1;
         this.player2 = player2;
+        this.board = configuration;
+        validateBoardInitialized(configuration);
+    }
+
+    private void validateBoardInitialized(Pair<Integer, Integer>[][] board) {
+        for (Pair<Integer, Integer>[] column : board) {
+            for (Pair<Integer, Integer> cell : column) {
+                if (cell == null) {
+                    throw new RuntimeException("Board isn't fully initialized!");
+                }
+            }
+        }
     }
 
     public void tick() {
-        player1.onReinforcement(getBoard(), 1);
-        player2.onReinforcement(getBoard(), 1);
+        player1.onReinforcement(getBoard(), getPlayerCellCount(1));
+        player2.onReinforcement(getBoard(), getPlayerCellCount(2));
         board[0][0] = new Pair<Integer, Integer>(1, 21);
         board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 21);
+    }
+
+    private int getPlayerCellCount(int playerId) {
+        int playerCellCount = 0;
+        for (Pair<Integer, Integer>[] column : board) {
+            for (Pair<Integer, Integer> cell : column) {
+                if (cell.getKey() == playerId) {
+                    playerCellCount++;
+                }
+            }
+        }
+        return playerCellCount;
     }
 
     public Pair<Integer, Integer>[][] getBoard() {
         return board;
     }
 
-    private void initializeBoard() {
-        board = new Pair[width][height];
+    private static Pair<Integer, Integer>[][] getBlankBoard(int width, int height) {
+        Pair[][] board = new Pair[width][height];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 board[i][j] = new Pair<Integer, Integer>(0, 0);
@@ -42,5 +62,6 @@ public class Game {
         }
         board[0][0] = new Pair<Integer, Integer>(1, 20);
         board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 20);
+        return board;
     }
 }
