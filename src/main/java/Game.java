@@ -31,10 +31,21 @@ public class Game {
     }
 
     public void tick() {
-        player1.onReinforcement(getBoard(), getPlayerCellCount(1));
-        player2.onReinforcement(getBoard(), getPlayerCellCount(2));
-        board[0][0] = new Pair<Integer, Integer>(1, 21);
-        board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 21);
+        Iterable<ReinforcementMove> player1ReinforcementMoves = player1.onReinforcement(getBoard(), getPlayerCellCount(1));
+        Iterable<ReinforcementMove> player2ReinforcementMoves = player2.onReinforcement(getBoard(), getPlayerCellCount(2));
+
+        applyReinforcements(player1ReinforcementMoves, 1);
+        applyReinforcements(player2ReinforcementMoves, 2);
+    }
+
+    private void applyReinforcements(Iterable<ReinforcementMove> reinforcementMoves, int playerId) {
+        for (ReinforcementMove move :
+                reinforcementMoves) {
+            Pair<Integer, Integer> currentCell = board[move.getCol()][move.getRow()];
+            Pair<Integer, Integer> newCell = new Pair<Integer, Integer>(playerId, currentCell.getValue() + move.getAmount());
+
+            board[move.getCol()][move.getRow()]=newCell;
+        }
     }
 
     private int getPlayerCellCount(int playerId) {

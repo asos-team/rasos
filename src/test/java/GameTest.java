@@ -1,6 +1,10 @@
+import com.google.common.collect.Lists;
 import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -18,6 +22,8 @@ public class GameTest {
     public void setUp() {
         player1 = mock(Player.class);
         player2 = mock(Player.class);
+        when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList());
+        when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList());
         game = new Game(boardDim, boardDim, player1, player2);
     }
 
@@ -53,9 +59,10 @@ public class GameTest {
     }
 
     @Test
-    public void appliesReinforcement() {
-        when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(new ReinforcementMove(0, 0, 1));
-        when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(new ReinforcementMove(4, 4, 1));
+    public void appliesFirstMoveReinforcement() {
+        when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList(new ReinforcementMove(0, 0, 1)));
+        when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim-1, boardDim-1, 1)));
+
         game.tick();
 
         Pair<Integer, Integer>[][] board = game.getBoard();
@@ -71,6 +78,49 @@ public class GameTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void appliesValidReinforcementForAMidgameBoardConfiguration(){
+        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(3,3);
+        configuration[0][0]=new Pair<Integer, Integer>(1,18);
+        configuration[0][1]=new Pair<Integer, Integer>(1,2);
+        configuration[0][2]=new Pair<Integer, Integer>(1,1);
+        configuration[1][0]=new Pair<Integer, Integer>(0,0);
+        configuration[1][1]=new Pair<Integer, Integer>(2,8);
+        configuration[1][2]=new Pair<Integer, Integer>(2,7);
+        configuration[2][0]=new Pair<Integer, Integer>(1,5);
+        configuration[2][1]=new Pair<Integer, Integer>(2,1);
+        configuration[2][2]=new Pair<Integer, Integer>(2,5);
+
+        List<ReinforcementMove> player1Reinforcements = Lists.newArrayList(new ReinforcementMove(0,0,1),
+                new ReinforcementMove(0,1,1),
+                new ReinforcementMove(0,2,1),
+                new ReinforcementMove(2,0,1));
+        List<ReinforcementMove> player2Reinforcements = Lists.newArrayList(new ReinforcementMove(1,1,1),
+                new ReinforcementMove(1,2,1),
+                new ReinforcementMove(2,1,1),
+                new ReinforcementMove(2,2,1));
+
+
+        when(player1.onReinforcement(any(Pair[][].class),any(int.class))).thenReturn(player1Reinforcements);
+        when(player2.onReinforcement(any(Pair[][].class),any(int.class))).thenReturn(player2Reinforcements);
+
+        Game game = new Game(configuration,player1,player2);
+
+        game.tick();
+
+        Pair<Integer, Integer>[][] nextConfiguration = BoardUtils.getBlankBoard(3,3);
+        nextConfiguration[0][0]=new Pair<Integer, Integer>(1,19);
+        nextConfiguration[0][1]=new Pair<Integer, Integer>(1,3);
+        nextConfiguration[0][2]=new Pair<Integer, Integer>(1,2);
+        nextConfiguration[1][0]=new Pair<Integer, Integer>(0,0);
+        nextConfiguration[1][1]=new Pair<Integer, Integer>(2,9);
+        nextConfiguration[1][2]=new Pair<Integer, Integer>(2,8);
+        nextConfiguration[2][0]=new Pair<Integer, Integer>(1,6);
+        nextConfiguration[2][1]=new Pair<Integer, Integer>(2,2);
+        nextConfiguration[2][2]=new Pair<Integer, Integer>(2,6);
+        assertThat(game.getBoard(),is(nextConfiguration));
     }
 
     @Test
