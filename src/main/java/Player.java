@@ -5,7 +5,7 @@ public class Player {
         return null;
     }
 
-    public AttackMove onAttack(Pair<Integer, Integer>[][] board) {
+    public Iterable<AttackMove> onAttack(Pair<Integer, Integer>[][] board) {
         return null;
     }
 }
