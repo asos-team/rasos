@@ -1,20 +1,32 @@
 public class AttackMove {
-    private int x;
-    private int y;
+    private int fromCol;
+    private int fromRow;
+    private int toCol;
+    private int toRow;
     private int amount;
 
-    public AttackMove(int x, int y, int amount) {
-        this.x = x;
-        this.y = y;
+    public AttackMove(int fromCol, int fromRow, int toCol, int toRow, int amount) {
+        this.fromCol = fromCol;
+        this.fromRow = fromRow;
+        this.toCol = toCol;
+        this.toRow = toRow;
         this.amount = amount;
     }
 
-    public int getX() {
-        return x;
+    public int getFromCol() {
+        return fromCol;
     }
 
-    public int getY() {
-        return y;
+    public int getFromRow() {
+        return fromRow;
+    }
+
+    public int getToCol() {
+        return toCol;
+    }
+
+    public int getToRow() {
+        return toRow;
     }
 
     public int getAmount() {

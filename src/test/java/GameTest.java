@@ -25,6 +25,8 @@ public class GameTest {
         player2 = mock(Player.class);
         when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList());
         when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList());
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(Lists.newArrayList());
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(Lists.newArrayList());
         game = new Game(boardDim, boardDim, player1, player2);
     }
 
@@ -160,8 +162,8 @@ public class GameTest {
 
     @Test
     public void appliesAttackMoves() {
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 1, 1)));
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(boardDim - 1, boardDim - 2, 1)));
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 0, 1, 1)));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 1, boardDim - 2, 1)));
         game.tick();
         Pair<Integer, Integer>[][] board = game.getBoard();
         assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
@@ -172,8 +174,8 @@ public class GameTest {
 
     @Test
     public void appliesDifferentAttackMoves() {
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 0, 1)));
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(boardDim - 2, boardDim - 1, 1)));
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
         game.tick();
         Pair<Integer, Integer>[][] board = game.getBoard();
         assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
@@ -184,8 +186,8 @@ public class GameTest {
 
     @Test
     public void appliesAttackMovesAmount() {
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 0, 5)));
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(boardDim - 2, boardDim - 1, 2)));
+        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
+        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
         game.tick();
         Pair<Integer, Integer>[][] board = game.getBoard();
         assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 15)));
@@ -195,16 +197,26 @@ public class GameTest {
     }
 
     @Test
-    public void appliesManyAttackMoves() {
-        AttackMove move1 = new AttackMove(0, 1, 4);
-        AttackMove move2 = new AttackMove(1, 0, 2);
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Arrays.asList(move1, move2));
+    public void appliesManyAttackMovesPlayer1() {
+        testAppliesManyAttackMoves(player1, 1, new AttackMove(0, 0, 0, 1, 4), new AttackMove(0, 0, 1, 0, 2));
+    }
+
+    @Test
+    public void appliesManyAttackMovesPlayer2() {
+        testAppliesManyAttackMoves(player2, 2, new AttackMove(1, 1, 0, 1, 4), new AttackMove(1, 1, 1, 0, 2));
+    }
+
+    private void testAppliesManyAttackMoves(Player player, int playerId, AttackMove move1, AttackMove move2) {
+        when(player.onAttack(any(Pair[][].class))).thenReturn(Arrays.asList(move1, move2));
         game.tick();
         Pair<Integer, Integer>[][] board = game.getBoard();
-        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 14)));
-        assertThat(board[0][1], is(new Pair<Integer, Integer>(1, 4)));
-        assertThat(board[1][0], is(new Pair<Integer, Integer>(1, 2)));
-        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 20)));
+        Pair<Integer, Integer> playerHome = playerId == 1 ? board[0][0] : board[boardDim - 1][boardDim - 1];
+        Pair<Integer, Integer> otherPlayerHome = playerId == 1 ? board[boardDim - 1][boardDim - 1] : board[0][0];
+        assertThat(playerHome, is(new Pair<Integer, Integer>(playerId, 14)));
+        assertThat(board[0][1], is(new Pair<Integer, Integer>(playerId, 4)));
+        assertThat(board[1][0], is(new Pair<Integer, Integer>(playerId, 2)));
+        int otherPlayerId = 3 - playerId;
+        assertThat(otherPlayerHome, is(new Pair<Integer, Integer>(otherPlayerId, 20)));
     }
 
 //    @Test

@@ -31,31 +31,23 @@ public class Game {
     }
 
     public void tick() {
-        Iterable<ReinforcementMove> player1ReinforcementMoves = player1.onReinforcement(getBoard(), getPlayerCellCount(1));
-        Iterable<ReinforcementMove> player2ReinforcementMoves = player2.onReinforcement(getBoard(), getPlayerCellCount(2));
+        applyReinforcements(1, player1);
+        applyReinforcements(2, player2);
 
-        applyReinforcements(player1ReinforcementMoves, 1);
-        applyReinforcements(player2ReinforcementMoves, 2);
+        applyAttackMoves(1, player1);
+        applyAttackMoves(2, player2);
+    }
 
-        Iterable<AttackMove> attackMovesPlayer1 = player1.onAttack(getBoard());
-        if (attackMovesPlayer1 != null) {
-            for (AttackMove move : attackMovesPlayer1) {
-                board[0][0] = new Pair<Integer, Integer>(1, board[0][0].getValue() - move.getAmount());
-                board[move.getX()][move.getY()] = new Pair<Integer, Integer>(1, board[move.getX()][move.getY()].getValue() + move.getAmount());
-            }
-        }
-        Iterable<AttackMove> attackMovesPlayer2 = player2.onAttack(getBoard());
-        if (attackMovesPlayer2 != null) {
-            for (AttackMove move : attackMovesPlayer2) {
-                board[width - 1][height - 1] = new Pair<Integer, Integer>(2, 20 - move.getAmount());
-                board[move.getX()][move.getY()] = new Pair<Integer, Integer>(2, move.getAmount());
-            }
+    private void applyAttackMoves(int playerId, Player player) {
+        for (AttackMove move : player.onAttack(getBoard())) {
+            board[move.getFromCol()][move.getFromRow()] = new Pair<Integer, Integer>(playerId, board[move.getFromCol()][move.getFromRow()].getValue() - move.getAmount());
+            board[move.getToCol()][move.getToRow()] = new Pair<Integer, Integer>(playerId, board[move.getToCol()][move.getToRow()].getValue() + move.getAmount());
         }
     }
 
-    private void applyReinforcements(Iterable<ReinforcementMove> reinforcementMoves, int playerId) {
+    private void applyReinforcements(int playerId, Player player) {
         for (ReinforcementMove move :
-                reinforcementMoves) {
+                player.onReinforcement(getBoard(), getPlayerCellCount(playerId))) {
             Pair<Integer, Integer> currentCell = board[move.getCol()][move.getRow()];
             Pair<Integer, Integer> newCell = new Pair<Integer, Integer>(playerId, currentCell.getValue() + move.getAmount());
 
