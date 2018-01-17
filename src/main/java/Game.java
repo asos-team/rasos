@@ -1,5 +1,8 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Game {
-    private final Player[] players;
+    private final Map<Integer, Player> players;
     private Cell[][] board;
 
     public Game(int width, int height, Player player1, Player player2) {
@@ -7,7 +10,9 @@ public class Game {
     }
 
     public Game(Cell[][] configuration, Player player1, Player player2) {
-        this.players = new Player[]{player1, player2};
+        this.players = new HashMap<Integer, Player>(2);
+        players.put(1,player1);
+        players.put(2,player2);
         this.board = configuration;
         validateBoardInitialized(configuration);
     }
@@ -30,14 +35,14 @@ public class Game {
     }
 
     private void applyAttackMoves(int playerId) {
-        for (AttackMove move : players[playerId - 1].onAttack(getBoard())) {
+        for (AttackMove move : players.get(playerId).onAttack(getBoard())) {
             board[move.getFromCol()][move.getFromRow()] = new Cell(playerId, board[move.getFromCol()][move.getFromRow()].getNumSoldiers() - move.getAmount());
             board[move.getToCol()][move.getToRow()] = new Cell(playerId, board[move.getToCol()][move.getToRow()].getNumSoldiers() + move.getAmount());
         }
     }
 
     private void applyReinforcements(int playerId) {
-        Iterable<ReinforcementMove> moves = players[playerId - 1].onReinforcement(getBoard(), getPlayerCellCount(playerId));
+        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(getBoard(), getPlayerCellCount(playerId));
         for (ReinforcementMove move :
                 moves) {
             Cell currentCell = board[move.getCol()][move.getRow()];
@@ -46,7 +51,6 @@ public class Game {
             board[move.getCol()][move.getRow()] = newCell;
         }
     }
-
 
     private int getPlayerCellCount(int playerId) {
         int playerCellCount = 0;
@@ -63,5 +67,4 @@ public class Game {
     public Cell[][] getBoard() {
         return board;
     }
-
 }
