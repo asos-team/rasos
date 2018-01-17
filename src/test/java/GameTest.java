@@ -1,5 +1,4 @@
 import com.google.common.collect.Lists;
-import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,16 +22,16 @@ public class GameTest {
     public void setUp() {
         player1 = mock(Player.class);
         player2 = mock(Player.class);
-        when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList());
-        when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList());
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Lists.newArrayList());
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Lists.newArrayList());
+        when(player1.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
+        when(player2.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
+        when(player1.onAttack(any(Cell[][].class))).thenReturn(Lists.<AttackMove>newArrayList());
+        when(player2.onAttack(any(Cell[][].class))).thenReturn(Lists.<AttackMove>newArrayList());
         game = new Game(boardDim, boardDim, player1, player2);
     }
 
     @Test
     public void getsBoardDimensions() {
-        Pair<Integer, Integer>[][] board = game.getBoard();
+        Cell[][] board = game.getBoard();
 
         assertThat(board.length, is(boardDim));
         assertThat(board[0].length, is(boardDim));
@@ -42,13 +41,13 @@ public class GameTest {
     public void boardInitializesEmptyWithSoldiersOnStartPoints() {
         for (int i = 0; i < game.getBoard().length; i++) {
             for (int j = 0; j < game.getBoard()[i].length; j++) {
-                Pair<Integer, Integer> cell = game.getBoard()[i][j];
+                Cell cell = game.getBoard()[i][j];
                 if (i == 0 && j == 0) {
-                    assertThat(cell, is(new Pair<Integer, Integer>(1, 20)));
+                    assertThat(cell, is(new Cell(1, 20)));
                 } else if (i == boardDim - 1 && j == boardDim - 1) {
-                    assertThat(cell, is(new Pair<Integer, Integer>(2, 20)));
+                    assertThat(cell, is(new Cell(2, 20)));
                 } else {
-                    assertThat(cell, is(new Pair<Integer, Integer>(0, 0)));
+                    assertThat(cell, is(new Cell(0, 0)));
                 }
             }
         }
@@ -63,21 +62,21 @@ public class GameTest {
 
     @Test
     public void appliesFirstMoveReinforcement() {
-        when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList(new ReinforcementMove(0, 0, 1)));
-        when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim - 1, boardDim - 1, 1)));
+        when(player1.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.newArrayList(new ReinforcementMove(0, 0, 1)));
+        when(player2.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim - 1, boardDim - 1, 1)));
 
         game.tick();
 
-        Pair<Integer, Integer>[][] board = game.getBoard();
+        Cell[][] board = game.getBoard();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                Pair<Integer, Integer> cell = board[i][j];
+                Cell cell = board[i][j];
                 if (i == 0 && j == 0) {
-                    assertThat(cell, is(new Pair<Integer, Integer>(1, 21)));
+                    assertThat(cell, is(new Cell(1, 21)));
                 } else if (i == boardDim - 1 && j == boardDim - 1) {
-                    assertThat(cell, is(new Pair<Integer, Integer>(2, 21)));
+                    assertThat(cell, is(new Cell(2, 21)));
                 } else {
-                    assertThat(cell, is(new Pair<Integer, Integer>(0, 0)));
+                    assertThat(cell, is(new Cell(0, 0)));
                 }
             }
         }
@@ -85,16 +84,16 @@ public class GameTest {
 
     @Test
     public void appliesValidReinforcementForAMidgameBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(3, 3);
-        configuration[0][0] = new Pair<Integer, Integer>(1, 18);
-        configuration[0][1] = new Pair<Integer, Integer>(1, 2);
-        configuration[0][2] = new Pair<Integer, Integer>(1, 1);
-        configuration[1][0] = new Pair<Integer, Integer>(0, 0);
-        configuration[1][1] = new Pair<Integer, Integer>(2, 8);
-        configuration[1][2] = new Pair<Integer, Integer>(2, 7);
-        configuration[2][0] = new Pair<Integer, Integer>(1, 5);
-        configuration[2][1] = new Pair<Integer, Integer>(2, 1);
-        configuration[2][2] = new Pair<Integer, Integer>(2, 5);
+        Cell[][] configuration = BoardUtils.getBlankBoard(3, 3);
+        configuration[0][0] = new Cell(1, 18);
+        configuration[0][1] = new Cell(1, 2);
+        configuration[0][2] = new Cell(1, 1);
+        configuration[1][0] = new Cell(0, 0);
+        configuration[1][1] = new Cell(2, 8);
+        configuration[1][2] = new Cell(2, 7);
+        configuration[2][0] = new Cell(1, 5);
+        configuration[2][1] = new Cell(2, 1);
+        configuration[2][2] = new Cell(2, 5);
 
         List<ReinforcementMove> player1Reinforcements = Lists.newArrayList(new ReinforcementMove(0, 0, 1),
                 new ReinforcementMove(0, 1, 1),
@@ -106,45 +105,45 @@ public class GameTest {
                 new ReinforcementMove(2, 2, 1));
 
 
-        when(player1.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(player1Reinforcements);
-        when(player2.onReinforcement(any(Pair[][].class), any(int.class))).thenReturn(player2Reinforcements);
+        when(player1.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(player1Reinforcements);
+        when(player2.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(player2Reinforcements);
 
         Game game = new Game(configuration, player1, player2);
 
         game.tick();
 
-        Pair<Integer, Integer>[][] nextConfiguration = BoardUtils.getBlankBoard(3, 3);
-        nextConfiguration[0][0] = new Pair<Integer, Integer>(1, 19);
-        nextConfiguration[0][1] = new Pair<Integer, Integer>(1, 3);
-        nextConfiguration[0][2] = new Pair<Integer, Integer>(1, 2);
-        nextConfiguration[1][0] = new Pair<Integer, Integer>(0, 0);
-        nextConfiguration[1][1] = new Pair<Integer, Integer>(2, 9);
-        nextConfiguration[1][2] = new Pair<Integer, Integer>(2, 8);
-        nextConfiguration[2][0] = new Pair<Integer, Integer>(1, 6);
-        nextConfiguration[2][1] = new Pair<Integer, Integer>(2, 2);
-        nextConfiguration[2][2] = new Pair<Integer, Integer>(2, 6);
+        Cell[][] nextConfiguration = BoardUtils.getBlankBoard(3, 3);
+        nextConfiguration[0][0] = new Cell(1, 19);
+        nextConfiguration[0][1] = new Cell(1, 3);
+        nextConfiguration[0][2] = new Cell(1, 2);
+        nextConfiguration[1][0] = new Cell(0, 0);
+        nextConfiguration[1][1] = new Cell(2, 9);
+        nextConfiguration[1][2] = new Cell(2, 8);
+        nextConfiguration[2][0] = new Cell(1, 6);
+        nextConfiguration[2][1] = new Cell(2, 2);
+        nextConfiguration[2][2] = new Cell(2, 6);
         assertThat(game.getBoard(), is(nextConfiguration));
     }
 
     @Test
     public void initializeWithSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2, 2);
+        Cell[][] configuration = BoardUtils.getBlankBoard(2, 2);
         Game g = new Game(configuration, player1, player2);
         assertThat(g.getBoard(), is(configuration));
     }
 
     @Test(expected = RuntimeException.class)
     public void throwOnUninitializedBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = new Pair[2][2];
+        Cell[][] configuration = new Cell[2][2];
         new Game(configuration, player1, player2);
     }
 
     @Test
     public void callsPlayerReinforcementOnSpecialBoardConfiguration() {
-        Pair<Integer, Integer>[][] configuration = BoardUtils.getBlankBoard(2, 2);
-        configuration[0][0] = new Pair<Integer, Integer>(1, 10);
-        configuration[0][1] = new Pair<Integer, Integer>(1, 10);
-        configuration[1][1] = new Pair<Integer, Integer>(2, 10);
+        Cell[][] configuration = BoardUtils.getBlankBoard(2, 2);
+        configuration[0][0] = new Cell(1, 10);
+        configuration[0][1] = new Cell(1, 10);
+        configuration[1][1] = new Cell(2, 10);
         Game g = new Game(configuration, player1, player2);
 
         g.tick();
@@ -162,38 +161,38 @@ public class GameTest {
 
     @Test
     public void appliesAttackMoves() {
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 0, 1, 1)));
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 1, boardDim - 2, 1)));
+        when(player1.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 0, 1, 1)));
+        when(player2.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 1, boardDim - 2, 1)));
         game.tick();
-        Pair<Integer, Integer>[][] board = game.getBoard();
-        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
-        assertThat(board[0][1], is(new Pair<Integer, Integer>(1, 1)));
-        assertThat(board[boardDim - 1][boardDim - 2], is(new Pair<Integer, Integer>(2, 1)));
-        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
+        Cell[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Cell(1, 19)));
+        assertThat(board[0][1], is(new Cell(1, 1)));
+        assertThat(board[boardDim - 1][boardDim - 2], is(new Cell(2, 1)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Cell(2, 19)));
     }
 
     @Test
     public void appliesDifferentAttackMoves() {
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
+        when(player1.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
+        when(player2.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
         game.tick();
-        Pair<Integer, Integer>[][] board = game.getBoard();
-        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
-        assertThat(board[1][0], is(new Pair<Integer, Integer>(1, 1)));
-        assertThat(board[boardDim - 2][boardDim - 1], is(new Pair<Integer, Integer>(2, 1)));
-        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 19)));
+        Cell[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Cell(1, 19)));
+        assertThat(board[1][0], is(new Cell(1, 1)));
+        assertThat(board[boardDim - 2][boardDim - 1], is(new Cell(2, 1)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Cell(2, 19)));
     }
 
     @Test
     public void appliesAttackMovesAmount() {
-        when(player1.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
-        when(player2.onAttack(any(Pair[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
+        when(player1.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
+        when(player2.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
         game.tick();
-        Pair<Integer, Integer>[][] board = game.getBoard();
-        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 15)));
-        assertThat(board[1][0], is(new Pair<Integer, Integer>(1, 5)));
-        assertThat(board[boardDim - 2][boardDim - 1], is(new Pair<Integer, Integer>(2, 2)));
-        assertThat(board[boardDim - 1][boardDim - 1], is(new Pair<Integer, Integer>(2, 18)));
+        Cell[][] board = game.getBoard();
+        assertThat(board[0][0], is(new Cell(1, 15)));
+        assertThat(board[1][0], is(new Cell(1, 5)));
+        assertThat(board[boardDim - 2][boardDim - 1], is(new Cell(2, 2)));
+        assertThat(board[boardDim - 1][boardDim - 1], is(new Cell(2, 18)));
     }
 
     @Test
@@ -207,27 +206,27 @@ public class GameTest {
     }
 
     private void testAppliesManyAttackMoves(Player player, int playerId, AttackMove move1, AttackMove move2) {
-        when(player.onAttack(any(Pair[][].class))).thenReturn(Arrays.asList(move1, move2));
+        when(player.onAttack(any(Cell[][].class))).thenReturn(Arrays.asList(move1, move2));
         game.tick();
-        Pair<Integer, Integer>[][] board = game.getBoard();
-        Pair<Integer, Integer> playerHome = playerId == 1 ? board[0][0] : board[boardDim - 1][boardDim - 1];
-        Pair<Integer, Integer> otherPlayerHome = playerId == 1 ? board[boardDim - 1][boardDim - 1] : board[0][0];
-        assertThat(playerHome, is(new Pair<Integer, Integer>(playerId, 14)));
-        assertThat(board[0][1], is(new Pair<Integer, Integer>(playerId, 4)));
-        assertThat(board[1][0], is(new Pair<Integer, Integer>(playerId, 2)));
+        Cell[][] board = game.getBoard();
+        Cell playerHome = playerId == 1 ? board[0][0] : board[boardDim - 1][boardDim - 1];
+        Cell otherPlayerHome = playerId == 1 ? board[boardDim - 1][boardDim - 1] : board[0][0];
+        assertThat(playerHome, is(new Cell(playerId, 14)));
+        assertThat(board[0][1], is(new Cell(playerId, 4)));
+        assertThat(board[1][0], is(new Cell(playerId, 2)));
         int otherPlayerId = 3 - playerId;
-        assertThat(otherPlayerHome, is(new Pair<Integer, Integer>(otherPlayerId, 20)));
+        assertThat(otherPlayerHome, is(new Cell(otherPlayerId, 20)));
     }
 
 //    @Test
 //    public void appliesAttackOnSameCell_Tie() {
-//        when(player1.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(0, 1, 1));
-//        when(player2.onAttack(any(Pair[][].class))).thenReturn(new AttackMove(0, 1, 1));
+//        when(player1.onAttack(any(Cell[][].class))).thenReturn(new AttackMove(0, 1, 1));
+//        when(player2.onAttack(any(Cell[][].class))).thenReturn(new AttackMove(0, 1, 1));
 //        game.tick();
-//        Pair<Integer, Integer>[][] board = game.getBoard();
-//        assertThat(board[0][0], is(new Pair<Integer, Integer>(1, 19)));
-//        assertThat(board[0][1], is(new Pair<Integer, Integer>(0, 0)));
-//        assertThat(board[1][0], is(new Pair<Integer, Integer>(0, 0)));
-//        assertThat(board[1][1], is(new Pair<Integer, Integer>(2, 19)));
+//        Cell[][] board = game.getBoard();
+//        assertThat(board[0][0], is(new Cell(1, 19)));
+//        assertThat(board[0][1], is(new Cell(0, 0)));
+//        assertThat(board[1][0], is(new Cell(0, 0)));
+//        assertThat(board[1][1], is(new Cell(2, 19)));
 //    }
 }

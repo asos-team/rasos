@@ -1,11 +1,9 @@
-import javafx.util.Pair;
-
 public class Player {
-    public Iterable<ReinforcementMove> onReinforcement(Pair<Integer, Integer>[][] board, int reinforcement) {
+    public Iterable<ReinforcementMove> onReinforcement(Cell[][] board, int reinforcement) {
         return null;
     }
 
-    public Iterable<AttackMove> onAttack(Pair<Integer, Integer>[][] board) {
+    public Iterable<AttackMove> onAttack(Cell[][] board) {
         return null;
     }
 }
