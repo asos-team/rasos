@@ -1,5 +1,5 @@
 public class BoardUtils {
-    static Cell[][] getBlankBoard(int width, int height) {
+    static Cell[][] getDefaultBoard(int width, int height) {
         Cell[][] board = new Cell[width][height];
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {

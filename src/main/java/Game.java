@@ -3,7 +3,7 @@ public class Game {
     private Cell[][] board;
 
     public Game(int width, int height, Player player1, Player player2) {
-        this(BoardUtils.getBlankBoard(width, height), player1, player2);
+        this(BoardUtils.getDefaultBoard(width, height), player1, player2);
     }
 
     public Game(Cell[][] configuration, Player player1, Player player2) {
@@ -37,8 +37,9 @@ public class Game {
     }
 
     private void applyReinforcements(int playerId) {
+        Iterable<ReinforcementMove> moves = players[playerId - 1].onReinforcement(getBoard(), getPlayerCellCount(playerId));
         for (ReinforcementMove move :
-                players[playerId - 1].onReinforcement(getBoard(), getPlayerCellCount(playerId))) {
+                moves) {
             Cell currentCell = board[move.getCol()][move.getRow()];
             Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
 
