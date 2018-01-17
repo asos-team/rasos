@@ -44,20 +44,21 @@ public class GameTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void throwsOnUninitializedBoardConfiguration() {
-        Cell[][] configuration = new Cell[2][2];
+    public void throwsOnBoardContainingNulls() {
+        Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
+        configuration[0][1] = null;
         new Game(configuration, player1, player2);
     }
 
     @Test
-    public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
+    public void callsPlayerOnReinforcement() {
         game.tick();
         verify(player1).onReinforcement(game.getBoard(), 1);
         verify(player2).onReinforcement(game.getBoard(), 1);
     }
 
     @Test
-    public void callsPlayerReinforcementOnSpecialBoardConfiguration() {
+    public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
         Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
         configuration[0][1] = new Cell(1, 4);
         Game g = new Game(configuration, player1, player2);
