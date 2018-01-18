@@ -59,14 +59,13 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
-        Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
-        configuration[0][1] = new Cell(1, 4);
-        Game g = new Game(configuration, player1, player2);
+        Cell[][] board = game.getBoard();
+        board[0][1] = new Cell(1, 4);
 
-        g.tick();
+        game.tick();
 
-        verify(player1).onReinforcement(configuration, 2);
-        verify(player2).onReinforcement(configuration, 1);
+        verify(player1).onReinforcement(board, 2);
+        verify(player2).onReinforcement(board, 1);
     }
 
     @Test
