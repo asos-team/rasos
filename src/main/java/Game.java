@@ -16,17 +16,7 @@ public class Game {
         players.put(2, player2);
         betterBoard = board;
         this.board = betterBoard.getConfiguration();
-        validateBoardInitialized(betterBoard.getConfiguration());
-    }
-
-    private void validateBoardInitialized(Cell[][] board) {
-        for (Cell[] column : board) {
-            for (Cell cell : column) {
-                if (cell == null) {
-                    throw new RuntimeException("Board isn't fully initialized!");
-                }
-            }
-        }
+        betterBoard.validateBoardInitialized();
     }
 
     public void tick() {

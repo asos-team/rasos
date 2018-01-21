@@ -28,4 +28,14 @@ class Board {
         }
         return playerCellCount;
     }
+
+    void validateBoardInitialized() {
+        for (Cell[] column : configuration) {
+            for (Cell cell : column) {
+                if (cell == null) {
+                    throw new RuntimeException("Board isn't fully initialized!");
+                }
+            }
+        }
+    }
 }
