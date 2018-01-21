@@ -30,10 +30,7 @@ public class GameTest {
 
     @Test
     public void getsBoardDimensions() {
-        Cell[][] board = game.getBoardInnerConfiguration();
-
-        assertThat(board.length, is(boardDim));
-        assertThat(board[0].length, is(boardDim));
+        assertThat(game.getBoard().getDim(), is(boardDim));
     }
 
     @Test
@@ -61,8 +58,8 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
-        Cell[][] board = game.getBoardInnerConfiguration();
-        board[0][1] = new Cell(1, 4);
+        Board board = game.getBoard();
+        board.setCell(0, 1, new Cell(1, 4));
 
         game.tick();
 
@@ -79,9 +76,9 @@ public class GameTest {
 
         game.tick();
 
-        Cell[][] board = game.getBoardInnerConfiguration();
-        TestUtils.assertCellContents(board[0][0], 1, 21);
-        TestUtils.assertCellContents(board[boardDim - 1][boardDim - 1], 2, 21);
+        Board board = game.getBoard();
+        TestUtils.assertCellContents(board.getCell(0, 0), 1, 21);
+        TestUtils.assertCellContents(board.getCell(boardDim - 1, boardDim - 1), 2, 21);
     }
 
     @Test
@@ -96,11 +93,11 @@ public class GameTest {
         when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
         when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
         game.tick();
-        Cell[][] board = game.getBoardInnerConfiguration();
-        TestUtils.assertCellContents(board[0][0], 1, 19);
-        TestUtils.assertCellContents(board[1][0], 1, 1);
-        TestUtils.assertCellContents(board[boardDim - 2][boardDim - 1], 2, 1);
-        TestUtils.assertCellContents(board[boardDim - 1][boardDim - 1], 2, 19);
+        Board board = game.getBoard();
+        TestUtils.assertCellContents(board.getCell(0, 0), 1, 19);
+        TestUtils.assertCellContents(board.getCell(1, 0), 1, 1);
+        TestUtils.assertCellContents(board.getCell(boardDim - 2, boardDim - 1), 2, 1);
+        TestUtils.assertCellContents(board.getCell(boardDim - 1, boardDim - 1), 2, 19);
     }
 
     @Test
@@ -108,11 +105,11 @@ public class GameTest {
         when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
         when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
         game.tick();
-        Cell[][] board = game.getBoardInnerConfiguration();
-        TestUtils.assertCellContents(board[0][0], 1, 15);
-        TestUtils.assertCellContents(board[1][0], 1, 5);
-        TestUtils.assertCellContents(board[boardDim - 2][boardDim - 1], 2, 2);
-        TestUtils.assertCellContents(board[boardDim - 1][boardDim - 1], 2, 18);
+        Board board = game.getBoard();
+        TestUtils.assertCellContents(board.getCell(0, 0), 1, 15);
+        TestUtils.assertCellContents(board.getCell(1, 0), 1, 5);
+        TestUtils.assertCellContents(board.getCell(boardDim - 2, boardDim - 1), 2, 2);
+        TestUtils.assertCellContents(board.getCell(boardDim - 1, boardDim - 1), 2, 18);
     }
 
     @Test
@@ -128,12 +125,12 @@ public class GameTest {
     private void testAppliesManyAttackMoves(Player player, int playerId, AttackMove move1, AttackMove move2) {
         when(player.onAttack(any(Board.class))).thenReturn(Arrays.asList(move1, move2));
         game.tick();
-        Cell[][] board = game.getBoardInnerConfiguration();
-        Cell playerHome = playerId == 1 ? board[0][0] : board[boardDim - 1][boardDim - 1];
-        Cell otherPlayerHome = playerId == 1 ? board[boardDim - 1][boardDim - 1] : board[0][0];
+        Board board = game.getBoard();
+        Cell playerHome = playerId == 1 ? board.getCell(0, 0) : board.getCell(boardDim - 1, boardDim - 1);
+        Cell otherPlayerHome = playerId == 1 ? board.getCell(boardDim - 1, boardDim - 1) : board.getCell(0, 0);
         TestUtils.assertCellContents(playerHome, playerId, 14);
-        TestUtils.assertCellContents(board[0][1], playerId, 4);
-        TestUtils.assertCellContents(board[1][0], playerId, 2);
+        TestUtils.assertCellContents(board.getCell(0, 1), playerId, 4);
+        TestUtils.assertCellContents(board.getCell(1, 0), playerId, 2);
         int otherPlayerId = 3 - playerId;
         TestUtils.assertCellContents(otherPlayerHome, otherPlayerId, 20);
     }

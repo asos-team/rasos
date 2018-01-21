@@ -43,10 +43,6 @@ public class Game {
         }
     }
 
-    public Cell[][] getBoardInnerConfiguration() {
-        return board.getConfiguration();
-    }
-
     public Board getBoard() {
         return board;
     }

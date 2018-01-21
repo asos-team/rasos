@@ -50,4 +50,8 @@ class Board {
             }
         }
     }
+
+    public int getDim() {
+        return dim;
+    }
 }
