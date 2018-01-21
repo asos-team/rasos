@@ -21,8 +21,8 @@ public class GameTest {
     public void setUp() {
         player1 = mock(Player.class);
         player2 = mock(Player.class);
-        when(player1.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
-        when(player2.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
+        when(player1.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
+        when(player2.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
         when(player1.onAttack(any(Board.class))).thenReturn(Lists.<AttackMove>newArrayList());
         when(player2.onAttack(any(Board.class))).thenReturn(Lists.<AttackMove>newArrayList());
         game = new Game(boardDim, boardDim, player1, player2);
@@ -53,8 +53,8 @@ public class GameTest {
     @Test
     public void callsPlayerOnReinforcement() {
         game.tick();
-        verify(player1).onReinforcement(game.getBoard(), 1);
-        verify(player2).onReinforcement(game.getBoard(), 1);
+        verify(player1).onReinforcement(game.getBetterBoard(), 1);
+        verify(player2).onReinforcement(game.getBetterBoard(), 1);
     }
 
     @Test
@@ -64,15 +64,15 @@ public class GameTest {
 
         game.tick();
 
-        verify(player1).onReinforcement(board, 2);
-        verify(player2).onReinforcement(board, 1);
+        verify(player1).onReinforcement(game.getBetterBoard(), 2);
+        verify(player2).onReinforcement(game.getBetterBoard(), 1);
     }
 
     @Test
     public void appliesReinforcement() {
-        when(player1.onReinforcement(any(Cell[][].class), any(int.class)))
+        when(player1.onReinforcement(any(Board.class), any(int.class)))
                 .thenReturn(Lists.newArrayList(new ReinforcementMove(0, 0, 1)));
-        when(player2.onReinforcement(any(Cell[][].class), any(int.class)))
+        when(player2.onReinforcement(any(Board.class), any(int.class)))
                 .thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim - 1, boardDim - 1, 1)));
 
         game.tick();

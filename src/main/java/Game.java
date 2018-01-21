@@ -44,7 +44,7 @@ public class Game {
     }
 
     private void applyReinforcements(int playerId) {
-        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(getBoard(), getPlayerCellCount(playerId));
+        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(betterBoard, getPlayerCellCount(playerId));
         for (ReinforcementMove move :
                 moves) {
             Cell currentCell = betterBoard.getCell(move.getCol(), move.getRow());

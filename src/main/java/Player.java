@@ -1,5 +1,5 @@
 public class Player {
-    public Iterable<ReinforcementMove> onReinforcement(Cell[][] board, int reinforcement) {
+    public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         return null;
     }
 
