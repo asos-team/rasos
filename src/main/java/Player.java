@@ -3,7 +3,7 @@ public class Player {
         return null;
     }
 
-    public Iterable<AttackMove> onAttack(Cell[][] board) {
+    public Iterable<AttackMove> onAttack(Board board) {
         return null;
     }
 }

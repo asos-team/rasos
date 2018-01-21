@@ -23,8 +23,8 @@ public class GameTest {
         player2 = mock(Player.class);
         when(player1.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
         when(player2.onReinforcement(any(Cell[][].class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
-        when(player1.onAttack(any(Cell[][].class))).thenReturn(Lists.<AttackMove>newArrayList());
-        when(player2.onAttack(any(Cell[][].class))).thenReturn(Lists.<AttackMove>newArrayList());
+        when(player1.onAttack(any(Board.class))).thenReturn(Lists.<AttackMove>newArrayList());
+        when(player2.onAttack(any(Board.class))).thenReturn(Lists.<AttackMove>newArrayList());
         game = new Game(boardDim, boardDim, player1, player2);
     }
 
@@ -39,7 +39,7 @@ public class GameTest {
     @Test
     public void initializeWithSpecialBoardConfiguration() {
         Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
-        Game g = new Game(configuration, player1, player2);
+        Game g = new Game(new Board(configuration), player1, player2);
         assertThat(g.getBoard(), is(configuration));
     }
 
@@ -47,7 +47,7 @@ public class GameTest {
     public void throwsOnBoardContainingNulls() {
         Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
         configuration[0][1] = null;
-        new Game(configuration, player1, player2);
+        new Game(new Board(configuration), player1, player2);
     }
 
     @Test
@@ -85,14 +85,14 @@ public class GameTest {
     @Test
     public void callsPlayerOnAttackWithSuitableArguments() {
         game.tick();
-        verify(player1).onAttack(game.getBoard());
-        verify(player2).onAttack(game.getBoard());
+        verify(player1).onAttack(game.getBetterBoard());
+        verify(player2).onAttack(game.getBetterBoard());
     }
 
     @Test
     public void appliesAttackMoves() {
-        when(player1.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
-        when(player2.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
+        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
+        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
         game.tick();
         Cell[][] board = game.getBoard();
         TestUtils.assertCellContents(board[0][0], 1, 19);
@@ -103,8 +103,8 @@ public class GameTest {
 
     @Test
     public void appliesAttackMovesAmount() {
-        when(player1.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
-        when(player2.onAttack(any(Cell[][].class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
+        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
+        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
         game.tick();
         Cell[][] board = game.getBoard();
         TestUtils.assertCellContents(board[0][0], 1, 15);
@@ -124,7 +124,7 @@ public class GameTest {
     }
 
     private void testAppliesManyAttackMoves(Player player, int playerId, AttackMove move1, AttackMove move2) {
-        when(player.onAttack(any(Cell[][].class))).thenReturn(Arrays.asList(move1, move2));
+        when(player.onAttack(any(Board.class))).thenReturn(Arrays.asList(move1, move2));
         game.tick();
         Cell[][] board = game.getBoard();
         Cell playerHome = playerId == 1 ? board[0][0] : board[boardDim - 1][boardDim - 1];

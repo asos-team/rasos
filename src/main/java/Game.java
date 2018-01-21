@@ -4,17 +4,19 @@ import java.util.Map;
 public class Game {
     private final Map<Integer, Player> players;
     private Cell[][] board;
+    private Board betterBoard;
 
     public Game(int width, int height, Player player1, Player player2) {
-        this(BoardUtils.getDefaultBoard(width, height), player1, player2);
+        this(new Board(BoardUtils.getDefaultBoard(width, height)), player1, player2);
     }
 
-    public Game(Cell[][] configuration, Player player1, Player player2) {
+    public Game(Board board, Player player1, Player player2) {
         this.players = new HashMap<Integer, Player>(2);
-        players.put(1,player1);
-        players.put(2,player2);
-        this.board = configuration;
-        validateBoardInitialized(configuration);
+        players.put(1, player1);
+        players.put(2, player2);
+        betterBoard = board;
+        this.board = betterBoard.getConfiguration();
+        validateBoardInitialized(betterBoard.getConfiguration());
     }
 
     private void validateBoardInitialized(Cell[][] board) {
@@ -35,9 +37,9 @@ public class Game {
     }
 
     private void applyAttackMoves(int playerId) {
-        for (AttackMove move : players.get(playerId).onAttack(getBoard())) {
-            board[move.getFromCol()][move.getFromRow()] = new Cell(playerId, board[move.getFromCol()][move.getFromRow()].getNumSoldiers() - move.getAmount());
-            board[move.getToCol()][move.getToRow()] = new Cell(playerId, board[move.getToCol()][move.getToRow()].getNumSoldiers() + move.getAmount());
+        for (AttackMove move : players.get(playerId).onAttack(betterBoard)) {
+            betterBoard.setCell(move.getFromCol(), move.getFromRow(), new Cell(playerId, board[move.getFromCol()][move.getFromRow()].getNumSoldiers() - move.getAmount()));
+            betterBoard.setCell(move.getToCol(), move.getToRow(), new Cell(playerId, board[move.getToCol()][move.getToRow()].getNumSoldiers() + move.getAmount()));
         }
     }
 
@@ -45,10 +47,10 @@ public class Game {
         Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(getBoard(), getPlayerCellCount(playerId));
         for (ReinforcementMove move :
                 moves) {
-            Cell currentCell = board[move.getCol()][move.getRow()];
+            Cell currentCell = betterBoard.getCell(move.getCol(), move.getRow());
             Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
 
-            board[move.getCol()][move.getRow()] = newCell;
+            betterBoard.setCell(move.getCol(), move.getRow(), newCell);
         }
     }
 
@@ -66,5 +68,9 @@ public class Game {
 
     public Cell[][] getBoard() {
         return board;
+    }
+
+    public Board getBetterBoard() {
+        return betterBoard;
     }
 }
