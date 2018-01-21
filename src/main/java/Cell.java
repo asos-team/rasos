@@ -2,6 +2,11 @@ public class Cell {
     private int controllingPlayer;
     private int numSoldiers;
 
+    public Cell() {
+        controllingPlayer = 0;
+        numSoldiers = 0;
+    }
+
     public Cell(int controllingPlayer, int numSoldiers) {
         this.controllingPlayer = controllingPlayer;
         this.numSoldiers = numSoldiers;

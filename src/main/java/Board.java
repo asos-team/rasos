@@ -1,20 +1,20 @@
 class Board {
     private final Cell[][] configuration;
+    private final int dim;
 
-    Board(Cell[][] configuration) {
-        this.configuration = configuration;
-    }
-
-    static Cell[][] getDefaultBoard(int width, int height) {
-        Cell[][] board = new Cell[width][height];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = new Cell(0, 0);
+    public Board(int dim) {
+        this.dim = dim;
+        configuration = new Cell[dim][dim];
+        for (int i = 0; i < configuration.length; i++) {
+            for (int j = 0; j < configuration[i].length; j++) {
+                configuration[i][j] = new Cell();
             }
         }
-        board[0][0] = new Cell(1, 20);
-        board[width - 1][height - 1] = new Cell(2, 20);
-        return board;
+    }
+
+    public void populateHomeBases(int numSoldiers) {
+        setCell(0, 0, new Cell(1, numSoldiers));
+        setCell(dim - 1, dim - 1, new Cell(2, numSoldiers));
     }
 
     public Cell[][] getConfiguration() {
