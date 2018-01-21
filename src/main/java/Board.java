@@ -16,4 +16,16 @@ class Board {
     public Cell getCell(int col, int row) {
         return configuration[col][row];
     }
+
+    int getPlayerCellCount(int playerId) {
+        int playerCellCount = 0;
+        for (Cell[] column : configuration) {
+            for (Cell cell : column) {
+                if (cell.getControllingPlayer() == playerId) {
+                    playerCellCount++;
+                }
+            }
+        }
+        return playerCellCount;
+    }
 }
