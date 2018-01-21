@@ -38,14 +38,14 @@ public class GameTest {
 
     @Test
     public void initializeWithSpecialBoardConfiguration() {
-        Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
+        Cell[][] configuration = Board.getDefaultBoard(2, 2);
         Game g = new Game(new Board(configuration), player1, player2);
         assertThat(g.getBoard(), is(configuration));
     }
 
     @Test(expected = RuntimeException.class)
     public void throwsOnBoardContainingNulls() {
-        Cell[][] configuration = BoardUtils.getDefaultBoard(2, 2);
+        Cell[][] configuration = Board.getDefaultBoard(2, 2);
         configuration[0][1] = null;
         new Game(new Board(configuration), player1, player2);
     }

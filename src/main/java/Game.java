@@ -3,11 +3,10 @@ import java.util.Map;
 
 public class Game {
     private final Map<Integer, Player> players;
-    private Cell[][] board;
     private Board betterBoard;
 
     public Game(int width, int height, Player player1, Player player2) {
-        this(new Board(BoardUtils.getDefaultBoard(width, height)), player1, player2);
+        this(new Board(Board.getDefaultBoard(width, height)), player1, player2);
     }
 
     public Game(Board board, Player player1, Player player2) {
@@ -15,7 +14,6 @@ public class Game {
         players.put(1, player1);
         players.put(2, player2);
         betterBoard = board;
-        this.board = betterBoard.getConfiguration();
         betterBoard.validateBoardInitialized();
     }
 
@@ -28,8 +26,10 @@ public class Game {
 
     private void applyAttackMoves(int playerId) {
         for (AttackMove move : players.get(playerId).onAttack(betterBoard)) {
-            betterBoard.setCell(move.getFromCol(), move.getFromRow(), new Cell(playerId, board[move.getFromCol()][move.getFromRow()].getNumSoldiers() - move.getAmount()));
-            betterBoard.setCell(move.getToCol(), move.getToRow(), new Cell(playerId, board[move.getToCol()][move.getToRow()].getNumSoldiers() + move.getAmount()));
+            Cell newOriginCell = new Cell(playerId, betterBoard.getCell(move.getOriginCol(), move.getOriginRow()).getNumSoldiers() - move.getAmount());
+            Cell newDestinationCell = new Cell(playerId, betterBoard.getCell(move.getDestCol(), move.getDestRow()).getNumSoldiers() + move.getAmount());
+            betterBoard.setCell(move.getOriginCol(), move.getOriginRow(), newOriginCell);
+            betterBoard.setCell(move.getDestCol(), move.getDestRow(), newDestinationCell);
         }
     }
 
@@ -45,7 +45,7 @@ public class Game {
     }
 
     public Cell[][] getBoard() {
-        return board;
+        return betterBoard.getConfiguration();
     }
 
     public Board getBetterBoard() {
