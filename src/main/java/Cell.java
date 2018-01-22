@@ -2,8 +2,8 @@ public class Cell {
     public static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
     public static final String NEGATIVE_CONTROLLING_PLAYER_ID_ERROR = "Negative controlling player ID is not allowed.";
     public static final String NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR = "Negative amount of soldiers is not allowed.";
-    private int controllingPlayer;
-    private int numSoldiers;
+    private final int controllingPlayerId;
+    private final int numSoldiers;
 
     public Cell() {
         this(0, 0);
@@ -11,8 +11,8 @@ public class Cell {
 
     public Cell(int controllingPlayerId, int numSoldiers) {
         validateParams(controllingPlayerId, numSoldiers);
-        this.controllingPlayer = controllingPlayerId;
         this.numSoldiers = numSoldiers;
+        this.controllingPlayerId = decideControllingPlayerId(controllingPlayerId, numSoldiers);
     }
 
     @Override
@@ -22,19 +22,19 @@ public class Cell {
 
         Cell cell = (Cell) o;
 
-        if (controllingPlayer != cell.controllingPlayer) return false;
+        if (controllingPlayerId != cell.controllingPlayerId) return false;
         return numSoldiers == cell.numSoldiers;
     }
 
     @Override
     public int hashCode() {
-        int result = controllingPlayer;
+        int result = controllingPlayerId;
         result = 31 * result + numSoldiers;
         return result;
     }
 
-    public int getControllingPlayer() {
-        return controllingPlayer;
+    public int getControllingPlayerId() {
+        return controllingPlayerId;
     }
 
     public int getNumSoldiers() {
@@ -42,7 +42,15 @@ public class Cell {
     }
 
     public boolean isEmpty() {
-        return controllingPlayer == 0;
+        return controllingPlayerId == 0;
+    }
+
+    private int decideControllingPlayerId(int controllingPlayerId, int numSoldiers) {
+        if (numSoldiers == 0) {
+            return 0;
+        } else {
+            return controllingPlayerId;
+        }
     }
 
     private void validateParams(int controllingPlayerId, int numSoldiers) {

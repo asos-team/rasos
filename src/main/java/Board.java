@@ -33,7 +33,7 @@ class Board {
         int playerCellCount = 0;
         for (Cell[] column : configuration) {
             for (Cell cell : column) {
-                if (cell.getControllingPlayer() == playerId) {
+                if (cell.getControllingPlayerId() == playerId) {
                     playerCellCount++;
                 }
             }

@@ -21,6 +21,11 @@ public class CellTest {
     }
 
     @Test
+    public void cellWithoutSoldiersIsNoMoreControlled() throws Exception {
+        assertTrue(new Cell(5, 0).isEmpty());
+    }
+
+    @Test
     public void impossibleToCreateCellWithNonControlledSoldiers() throws Exception {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
