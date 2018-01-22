@@ -17,10 +17,6 @@ class Board {
         setCell(dim - 1, dim - 1, new Cell(2, numSoldiers));
     }
 
-    public Cell[][] getConfiguration() {
-        return configuration;
-    }
-
     public void setCell(int col, int row, Cell cell) {
         configuration[col][row] = cell;
     }

@@ -5,12 +5,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class GameTest {
+public class AttackTest {
 
     private static final int boardDim = 2;
     private Game game;
@@ -29,61 +27,9 @@ public class GameTest {
     }
 
     @Test
-    public void getsBoardDimensions() {
-        assertThat(game.getBoard().getDim(), is(boardDim));
-    }
-
-    @Test
-    public void initializeWithSpecialBoardConfiguration() {
-        Board board = new Board(2);
-        board.populateHomeBases(20);
-        Game game = new Game(board, player1, player2);
-        assertThat(game.getBoard(), is(board));
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void throwsOnBoardContainingNulls() {
-        Board board = new Board(2);
-        board.populateHomeBases(20);
-        board.setCell(0, 1, null);
-        new Game(board, player1, player2);
-    }
-
-    @Test
-    public void callsPlayerOnReinforcement() {
-        game.tick();
-        verify(player1).onReinforcement(game.getBoard(), 1);
-        verify(player2).onReinforcement(game.getBoard(), 1);
-    }
-
-    @Test
-    public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
-        Board board = game.getBoard();
-        board.setCell(0, 1, new Cell(1, 4));
-
+    public void callsPlayerOnAttackWithGameBoard() {
         game.tick();
 
-        verify(player1).onReinforcement(game.getBoard(), 2);
-        verify(player2).onReinforcement(game.getBoard(), 1);
-    }
-
-    @Test
-    public void appliesReinforcement() {
-        when(player1.onReinforcement(any(Board.class), any(int.class)))
-                .thenReturn(Lists.newArrayList(new ReinforcementMove(0, 0, 1)));
-        when(player2.onReinforcement(any(Board.class), any(int.class)))
-                .thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim - 1, boardDim - 1, 1)));
-
-        game.tick();
-
-        Board board = game.getBoard();
-        TestUtils.assertCellContents(board.getCell(0, 0), 1, 21);
-        TestUtils.assertCellContents(board.getCell(boardDim - 1, boardDim - 1), 2, 21);
-    }
-
-    @Test
-    public void callsPlayerOnAttackWithSuitableArguments() {
-        game.tick();
         verify(player1).onAttack(game.getBoard());
         verify(player2).onAttack(game.getBoard());
     }
