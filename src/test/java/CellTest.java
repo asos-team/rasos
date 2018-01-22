@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 public class CellTest {
 
     @Rule
-    public ExpectedException expectedEx = ExpectedException.none();
+    public final ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void emptyCell() throws Exception {
