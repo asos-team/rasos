@@ -25,7 +25,11 @@ class Board {
         return configuration[col][row];
     }
 
-    int getPlayerCellCount(int playerId) {
+    public int getDim() {
+        return dim;
+    }
+
+    public int getPlayerCellCount(int playerId) {
         int playerCellCount = 0;
         for (Cell[] column : configuration) {
             for (Cell cell : column) {
@@ -37,7 +41,7 @@ class Board {
         return playerCellCount;
     }
 
-    void validateBoardInitialized() {
+    public void validateBoardInitialized() {
         for (Cell[] column : configuration) {
             for (Cell cell : column) {
                 if (cell == null) {
@@ -45,9 +49,5 @@ class Board {
                 }
             }
         }
-    }
-
-    public int getDim() {
-        return dim;
     }
 }
