@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 class Board {
     private final Cell[][] configuration;
     private final int dim;
@@ -32,15 +35,9 @@ class Board {
     }
 
     public int getPlayerCellCount(int playerId) {
-        int playerCellCount = 0;
-        for (Cell[] column : configuration) {
-            for (Cell cell : column) {
-                if (cell.getControllingPlayerId() == playerId) {
-                    playerCellCount++;
-                }
-            }
-        }
-        return playerCellCount;
+        return (int) getBoardCellStream()
+                .filter(cell -> cell.getControllingPlayerId() == playerId)
+                .count();
     }
 
     public Cell getHome1Cell() {
@@ -49,5 +46,10 @@ class Board {
 
     public Cell getHome2Cell() {
         return getCell(dim - 1, dim - 1);
+    }
+
+    private Stream<Cell> getBoardCellStream() {
+        return Arrays.stream(configuration)
+                .flatMap(Arrays::stream);
     }
 }
