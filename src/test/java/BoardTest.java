@@ -1,8 +1,14 @@
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BoardTest {
+
+    @Test
+    public void retrieveDimension() throws Exception {
+        assertEquals(6, new Board(6).getDim());
+    }
 
     @Test
     public void boardInitializesEmpty() {
