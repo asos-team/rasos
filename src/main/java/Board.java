@@ -18,6 +18,8 @@ class Board {
     }
 
     public void setCell(int col, int row, Cell cell) {
+        if (cell == null)
+            throw new RuntimeException("Cell cannot hold null value.");
         configuration[col][row] = cell;
     }
 
@@ -39,15 +41,5 @@ class Board {
             }
         }
         return playerCellCount;
-    }
-
-    public void validateBoardInitialized() {
-        for (Cell[] column : configuration) {
-            for (Cell cell : column) {
-                if (cell == null) {
-                    throw new RuntimeException("Board isn't fully initialized!");
-                }
-            }
-        }
     }
 }

@@ -14,8 +14,10 @@ public class Game {
         this.players = new HashMap<Integer, Player>(2);
         players.put(1, player1);
         players.put(2, player2);
+        if (board == null) {
+            throw new RuntimeException("Game cannot initialize with null configuration.");
+        }
         this.board = board;
-        this.board.validateBoardInitialized();
     }
 
     public void tick() {

@@ -15,22 +15,15 @@ public class GameGeneralTest {
 
     @Test
     public void initializeWithExistingBoard() {
-        Board board = createSomeInitializedBoard();
+        Board board = new Board(7);
+        board.populateHomeBases(15);
         Game game = createGame(board);
         assertThat(game.getBoard(), is(board));
     }
 
     @Test(expected = RuntimeException.class)
-    public void throwsOnBoardContainingNulls() {
-        Board board = createSomeInitializedBoard();
-        board.setCell(3, 5, null);
-        createGame(board);
-    }
-
-    private Board createSomeInitializedBoard() {
-        Board board = new Board(7);
-        board.populateHomeBases(15);
-        return board;
+    public void throwsWhenInitializedWithNullConfiguration() throws Exception {
+        createGame(null);
     }
 
     private Game createGame(Board board) {

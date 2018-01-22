@@ -32,4 +32,10 @@ public class BoardTest {
         TestUtils.assertCellContents(board.getCell(0, 0), 1, soldiers);
         TestUtils.assertCellContents(board.getCell(dim - 1, dim - 1), 2, soldiers);
     }
+
+    @Test(expected = RuntimeException.class)
+    public void throwsOnBoardContainingNulls() {
+        Board board = new Board(7);
+        board.setCell(3, 2, null);
+    }
 }
