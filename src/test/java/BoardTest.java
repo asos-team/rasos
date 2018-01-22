@@ -57,4 +57,16 @@ public class BoardTest {
     public void cannotSetCellsToNull() {
         board.setCell(3, 2, null);
     }
+
+    @Test
+    public void getPlayerCellCount() throws Exception {
+        board.setCell(1, 3, new Cell(7, 12));
+        board.setCell(5, 0, new Cell(7, 57));
+        board.setCell(2, 6, new Cell(7, 7));
+
+        // Should be neutral according to Cell's contract
+        board.setCell(2, 1, new Cell(7, 0));
+
+        assertEquals(3, board.getPlayerCellCount(7));
+    }
 }
