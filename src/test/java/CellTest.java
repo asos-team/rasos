@@ -11,22 +11,22 @@ public class CellTest {
     public final ExpectedException expectedEx = ExpectedException.none();
 
     @Test
-    public void emptyCell() throws Exception {
-        assertTrue(new Cell().isEmpty());
+    public void neutralCell() throws Exception {
+        assertTrue(new Cell().isNeutral());
     }
 
     @Test
-    public void nonEmptyCell() throws Exception {
-        assertFalse(new Cell(2, 50).isEmpty());
+    public void nonNeutralCell() throws Exception {
+        assertFalse(new Cell(2, 50).isNeutral());
     }
 
     @Test
-    public void cellWithoutSoldiersIsNoMoreControlled() throws Exception {
-        assertTrue(new Cell(5, 0).isEmpty());
+    public void cellWithoutSoldiersIsNeutral() throws Exception {
+        assertTrue(new Cell(5, 0).isNeutral());
     }
 
     @Test
-    public void impossibleToCreateCellWithNonControlledSoldiers() throws Exception {
+    public void impossibleToCreateNeutralCellWithSoldiers() throws Exception {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
         new Cell(0, 12);
@@ -40,7 +40,7 @@ public class CellTest {
     }
 
     @Test
-    public void noNegativeNumSoldiers() throws Exception {
+    public void cellCannotContainNegativeNumberOfSoldiers() throws Exception {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         new Cell(2, -70);

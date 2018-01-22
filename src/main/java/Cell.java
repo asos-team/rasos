@@ -41,7 +41,7 @@ public class Cell {
         return numSoldiers;
     }
 
-    public boolean isEmpty() {
+    public boolean isNeutral() {
         return controllingPlayerId == 0;
     }
 

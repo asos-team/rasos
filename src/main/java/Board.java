@@ -42,4 +42,12 @@ class Board {
         }
         return playerCellCount;
     }
+
+    public Cell getHome1Cell() {
+        return getCell(0, 0);
+    }
+
+    public Cell getHome2Cell() {
+        return getCell(dim - 1, dim - 1);
+    }
 }

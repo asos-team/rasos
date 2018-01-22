@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 public class GameGeneralTest {
 
     @Test
-    public void getsBoardDimensions() {
+    public void initializeBySpecifyingDimension() {
         int boardDim = 7;
         Game game = new Game(boardDim, mock(Player.class), mock(Player.class));
         assertThat(game.getBoard().getDim(), is(boardDim));
@@ -22,7 +22,7 @@ public class GameGeneralTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void throwsWhenInitializedWithNullConfiguration() throws Exception {
+    public void throwsWhenInitializedWithNullBoard() throws Exception {
         createGame(null);
     }
 
