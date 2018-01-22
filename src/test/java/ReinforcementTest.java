@@ -51,7 +51,7 @@ public class ReinforcementTest {
         game.tick();
 
         Board board = game.getBoard();
-        TestUtils.assertCellContents(board.getCell(0, 0), 1, 21);
-        TestUtils.assertCellContents(board.getCell(boardDim - 1, boardDim - 1), 2, 21);
+        TestUtils.assertCellContents(board.getHome1Cell(), 1, 21);
+        TestUtils.assertCellContents(board.getHome2Cell(), 2, 21);
     }
 }
