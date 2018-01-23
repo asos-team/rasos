@@ -33,8 +33,8 @@ public class Cell {
         return result;
     }
 
-    public int getControllingPlayerId() {
-        return controllingPlayerId;
+    public boolean isControlledBy(int playerId) {
+        return controllingPlayerId == playerId;
     }
 
     public int getNumSoldiers() {

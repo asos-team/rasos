@@ -38,9 +38,9 @@ public class Game {
 
     private void reinforce(int playerId) {
         Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, board.getPlayerCellCount(playerId));
-        if (moves != null) {
-            applyMoves(playerId, moves);
-        }
+        if (moves == null)
+            return;
+        applyMoves(playerId, moves);
     }
 
     private void applyMoves(int playerId, Iterable<ReinforcementMove> moves) {
@@ -51,6 +51,8 @@ public class Game {
 
     private void applyMove(int playerId, ReinforcementMove move) {
         Cell currentCell = board.getCell(move.getCol(), move.getRow());
+        if (!currentCell.isControlledBy(playerId))
+            return;
         Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
         board.setCell(move.getCol(), move.getRow(), newCell);
     }

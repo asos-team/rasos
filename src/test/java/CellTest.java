@@ -2,8 +2,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CellTest {
 
@@ -44,5 +43,15 @@ public class CellTest {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         new Cell(2, -70);
+    }
+
+    @Test
+    public void isControlledBy() throws Exception {
+        assertTrue(new Cell(12, 456).isControlledBy(12));
+    }
+
+    @Test
+    public void getNumSoldiers() throws Exception {
+        assertEquals(32, new Cell(3, 32).getNumSoldiers());
     }
 }

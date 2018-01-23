@@ -36,7 +36,7 @@ class Board {
 
     public int getPlayerCellCount(int playerId) {
         return (int) getBoardCellStream()
-                .filter(cell -> cell.getControllingPlayerId() == playerId)
+                .filter(cell -> cell.isControlledBy(playerId))
                 .count();
     }
 
