@@ -22,8 +22,8 @@ public class BoardTest {
 
     @Test
     public void boardInitializesEmpty() {
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
+        for (int i = 1; i <= dim; i++) {
+            for (int j = 1; j <= dim; j++) {
                 assertTrue(board.getCell(i, j).isNeutral());
             }
         }
@@ -31,14 +31,14 @@ public class BoardTest {
 
     @Test
     public void retrievesHome1Cell() throws Exception {
-        board.setCell(0, 0, new Cell(1, 7));
+        board.setCell(1, 1, new Cell(1, 7));
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 7);
     }
 
     @Test
     public void retrievesHome2Cell() throws Exception {
-        board.setCell(dim - 1, dim - 1, new Cell(78, 11));
+        board.setCell(dim, dim, new Cell(78, 11));
 
         TestUtils.assertCellContents(board.getHome2Cell(), 78, 11);
     }
@@ -55,17 +55,17 @@ public class BoardTest {
 
     @Test(expected = RuntimeException.class)
     public void cannotSetCellsToNull() {
-        board.setCell(3, 2, null);
+        board.setCell(4, 3, null);
     }
 
     @Test
     public void getPlayerCellCount() throws Exception {
-        board.setCell(1, 3, new Cell(7, 12));
-        board.setCell(5, 0, new Cell(7, 57));
-        board.setCell(2, 6, new Cell(7, 7));
+        board.setCell(2, 4, new Cell(7, 12));
+        board.setCell(6, 1, new Cell(7, 57));
+        board.setCell(3, 7, new Cell(7, 7));
 
         // Should be neutral according to Cell's contract
-        board.setCell(2, 1, new Cell(7, 0));
+        board.setCell(3, 2, new Cell(7, 0));
 
         assertEquals(3, board.getPlayerCellCount(7));
     }

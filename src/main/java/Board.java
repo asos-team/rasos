@@ -16,18 +16,18 @@ class Board {
     }
 
     public void populateHomeBases(int numSoldiers) {
-        setCell(0, 0, new Cell(1, numSoldiers));
-        setCell(dim - 1, dim - 1, new Cell(2, numSoldiers));
+        setCell(1, 1, new Cell(1, numSoldiers));
+        setCell(dim, dim, new Cell(2, numSoldiers));
     }
 
     public void setCell(int col, int row, Cell cell) {
         if (cell == null)
             throw new RuntimeException("Cell cannot hold null value.");
-        configuration[col][row] = cell;
+        configuration[col - 1][row - 1] = cell;
     }
 
     public Cell getCell(int col, int row) {
-        return configuration[col][row];
+        return configuration[col - 1][row - 1];
     }
 
     public int getDim() {
@@ -41,11 +41,11 @@ class Board {
     }
 
     public Cell getHome1Cell() {
-        return getCell(0, 0);
+        return getCell(1, 1);
     }
 
     public Cell getHome2Cell() {
-        return getCell(dim - 1, dim - 1);
+        return getCell(dim, dim);
     }
 
     private Stream<Cell> getBoardCellStream() {

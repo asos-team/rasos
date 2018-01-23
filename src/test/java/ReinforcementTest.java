@@ -16,10 +16,10 @@ public class ReinforcementTest {
     public void setUp() {
         player1 = mock(Player.class);
         player2 = mock(Player.class);
-        when(player1.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
-        when(player2.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.<ReinforcementMove>newArrayList());
-        when(player1.onAttack(any(Board.class))).thenReturn(Lists.<AttackMove>newArrayList());
-        when(player2.onAttack(any(Board.class))).thenReturn(Lists.<AttackMove>newArrayList());
+        when(player1.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
+        when(player2.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
+        when(player1.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
+        when(player2.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
         game = new Game(boardDim, player1, player2);
     }
 
@@ -33,7 +33,7 @@ public class ReinforcementTest {
 
     @Test
     public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
-        game.getBoard().setCell(0, 1, new Cell(1, 4));
+        game.getBoard().setCell(1, 2, new Cell(1, 4));
 
         game.tick();
 
@@ -44,9 +44,9 @@ public class ReinforcementTest {
     @Test
     public void appliesReinforcement() {
         when(player1.onReinforcement(any(Board.class), any(int.class)))
-                .thenReturn(Lists.newArrayList(new ReinforcementMove(0, 0, 1)));
+                .thenReturn(Lists.newArrayList(new ReinforcementMove(1, 1, 1)));
         when(player2.onReinforcement(any(Board.class), any(int.class)))
-                .thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim - 1, boardDim - 1, 1)));
+                .thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim, boardDim, 1)));
 
         game.tick();
 

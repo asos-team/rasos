@@ -36,47 +36,47 @@ public class AttackTest {
 
     @Test
     public void appliesAttackMoves() {
-        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 1)));
-        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 1)));
+        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, 2, 1, 1)));
+        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(2, 2, 1, 2, 1)));
         game.tick();
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 19);
-        TestUtils.assertCellContents(board.getCell(1, 0), 1, 1);
-        TestUtils.assertCellContents(board.getCell(boardDim - 2, boardDim - 1), 2, 1);
+        TestUtils.assertCellContents(board.getCell(2, 1), 1, 1);
+        TestUtils.assertCellContents(board.getCell(1, 2), 2, 1);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 19);
     }
 
     @Test
     public void appliesAttackMovesAmount() {
-        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(0, 0, 1, 0, 5)));
-        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, boardDim - 2, boardDim - 1, 2)));
+        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, 2, 1, 5)));
+        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(2, 2, 1, 2, 2)));
         game.tick();
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 15);
-        TestUtils.assertCellContents(board.getCell(1, 0), 1, 5);
-        TestUtils.assertCellContents(board.getCell(boardDim - 2, boardDim - 1), 2, 2);
+        TestUtils.assertCellContents(board.getCell(2, 1), 1, 5);
+        TestUtils.assertCellContents(board.getCell(1, 2), 2, 2);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 18);
     }
 
     @Test
     public void appliesManyAttackMovesPlayer1() {
-        testAppliesManyAttackMoves(player1, 1, new AttackMove(0, 0, 0, 1, 4), new AttackMove(0, 0, 1, 0, 2));
+        testAppliesManyAttackMoves(player1, 1, new AttackMove(1, 1, 1, 2, 4), new AttackMove(1, 1, 2, 1, 2));
     }
 
     @Test
     public void appliesManyAttackMovesPlayer2() {
-        testAppliesManyAttackMoves(player2, 2, new AttackMove(1, 1, 0, 1, 4), new AttackMove(1, 1, 1, 0, 2));
+        testAppliesManyAttackMoves(player2, 2, new AttackMove(2, 2, 1, 2, 4), new AttackMove(2, 2, 2, 1, 2));
     }
 
     private void testAppliesManyAttackMoves(Player player, int playerId, AttackMove move1, AttackMove move2) {
         when(player.onAttack(any(Board.class))).thenReturn(Arrays.asList(move1, move2));
         game.tick();
         Board board = game.getBoard();
-        Cell playerHome = playerId == 1 ? board.getHome1Cell() : board.getCell(boardDim - 1, boardDim - 1);
-        Cell otherPlayerHome = playerId == 1 ? board.getCell(boardDim - 1, boardDim - 1) : board.getHome1Cell();
+        Cell playerHome = playerId == 1 ? board.getHome1Cell() : board.getHome2Cell();
+        Cell otherPlayerHome = playerId == 1 ? board.getHome2Cell() : board.getHome1Cell();
         TestUtils.assertCellContents(playerHome, playerId, 14);
-        TestUtils.assertCellContents(board.getCell(0, 1), playerId, 4);
-        TestUtils.assertCellContents(board.getCell(1, 0), playerId, 2);
+        TestUtils.assertCellContents(board.getCell(1, 2), playerId, 4);
+        TestUtils.assertCellContents(board.getCell(2, 1), playerId, 2);
         int otherPlayerId = 3 - playerId;
         TestUtils.assertCellContents(otherPlayerHome, otherPlayerId, 20);
     }
