@@ -11,7 +11,7 @@ public class Game {
     }
 
     public Game(Board board, Player player1, Player player2) {
-        this.players = new HashMap<Integer, Player>(2);
+        this.players = new HashMap<>(2);
         players.put(1, player1);
         players.put(2, player2);
         if (board == null) {
@@ -20,7 +20,7 @@ public class Game {
         this.board = board;
     }
 
-    public void tick() {
+    public void start() {
         for (int playerId = 1; playerId <= 2; playerId++) {
             applyReinforcements(playerId);
             applyAttackMoves(playerId);

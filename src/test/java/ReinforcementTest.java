@@ -25,7 +25,7 @@ public class ReinforcementTest {
 
     @Test
     public void callsPlayerOnReinforcementWithGameBoard() {
-        game.tick();
+        game.start();
 
         verify(player1).onReinforcement(eq(game.getBoard()), any(int.class));
         verify(player2).onReinforcement(eq(game.getBoard()), any(int.class));
@@ -35,7 +35,7 @@ public class ReinforcementTest {
     public void callsPlayerOnReinforcementWithSuitableNumberOfSoldiers() {
         game.getBoard().setCell(1, 2, new Cell(1, 4));
 
-        game.tick();
+        game.start();
 
         verify(player1).onReinforcement(any(Board.class), eq(2));
         verify(player2).onReinforcement(any(Board.class), eq(1));
@@ -48,7 +48,7 @@ public class ReinforcementTest {
         when(player2.onReinforcement(any(Board.class), any(int.class)))
                 .thenReturn(Lists.newArrayList(new ReinforcementMove(boardDim, boardDim, 1)));
 
-        game.tick();
+        game.start();
 
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 21);
