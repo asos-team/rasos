@@ -43,17 +43,13 @@ public class ReinforcementTest {
     }
 
     @Test
-    public void appliesReinforcementSimplestCase() {
-        int soldiers = 13;
-        Game game = new Game(boardDim, NO_SOLDIERS, player1, player2);
-        game.getBoard().setCell(2, 3, new Cell(2, soldiers));
-        when(player2.onReinforcement(any(Board.class), any(int.class)))
-                .thenReturn(Lists.newArrayList(new ReinforcementMove(2, 3, 1)));
+    public void appliesReinforcementSimplestCase_player1() {
+        testAppliesReinforcementSimplestCase(player1, 1);
+    }
 
-        game.start();
-
-        Board board = game.getBoard();
-        TestUtils.assertCellContents(board.getCell(2, 3), 2, soldiers + 1);
+    @Test
+    public void appliesReinforcementSimplestCase_player2() {
+        testAppliesReinforcementSimplestCase(player2, 2);
     }
 
     private void makePlayer1ControlTotalOf_3_Cells(Game game) {
@@ -65,5 +61,18 @@ public class ReinforcementTest {
     private void makePlayer2ControlTotalOf_2_Cells(Game game) {
         game.getBoard().setCell(2, 2, new Cell(2, 2));
         game.getBoard().setCell(3, 2, new Cell(2, 2));
+    }
+
+    private void testAppliesReinforcementSimplestCase(Player player, int playerId) {
+        int soldiers = 13;
+        Game game = new Game(boardDim, NO_SOLDIERS, player1, player2);
+        game.getBoard().setCell(2, 3, new Cell(playerId, soldiers));
+        when(player.onReinforcement(any(Board.class), any(int.class)))
+                .thenReturn(Lists.newArrayList(new ReinforcementMove(2, 3, 1)));
+
+        game.start();
+
+        Board board = game.getBoard();
+        TestUtils.assertCellContents(board.getCell(2, 3), playerId, soldiers + 1);
     }
 }
