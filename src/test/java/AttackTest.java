@@ -25,7 +25,7 @@ public class AttackTest {
         when(player2.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
         when(player1.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
         when(player2.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
-        game = new Game(boardDim, player1, player2);
+        game = new Game(boardDim, 20, player1, player2);
     }
 
     @Test

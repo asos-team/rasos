@@ -7,9 +7,9 @@ import static org.mockito.Mockito.mock;
 public class GameInitTest {
 
     @Test
-    public void initializeBySpecifyingDimension() {
+    public void initializesWithSpecifiedDimension() {
         int boardDim = 7;
-        Game game = new Game(boardDim, mock(Player.class), mock(Player.class));
+        Game game = new Game(boardDim, 20, mock(Player.class), mock(Player.class));
         assertThat(game.getBoard().getDim(), is(boardDim));
     }
 
@@ -19,6 +19,15 @@ public class GameInitTest {
         board.populateHomeBases(15);
         Game game = createGame(board);
         assertThat(game.getBoard(), is(board));
+    }
+
+    @Test
+    public void populatesHomeBasesWithSpecifiedNumberOfSoldiers() throws Exception {
+        int soldiers = 99;
+        Game game = new Game(7, soldiers, mock(Player.class), mock(Player.class));
+
+        TestUtils.assertCellContents(game.getBoard().getHome1Cell(), 1, soldiers);
+        TestUtils.assertCellContents(game.getBoard().getHome2Cell(), 2, soldiers);
     }
 
     @Test(expected = RuntimeException.class)

@@ -5,9 +5,9 @@ public class Game {
     private final Map<Integer, Player> players;
     private Board board;
 
-    public Game(int dim, Player player1, Player player2) {
+    public Game(int dim, int numSoldiers, Player player1, Player player2) {
         this(new Board(dim), player1, player2);
-        this.board.populateHomeBases(20);
+        this.board.populateHomeBases(numSoldiers);
     }
 
     public Game(Board board, Player player1, Player player2) {
