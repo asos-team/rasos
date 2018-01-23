@@ -10,14 +10,13 @@ import static org.mockito.Mockito.*;
 public class ReinforcementTest {
 
     private static final int NO_SOLDIERS = 0;
-    private int boardDim;
     private Player player1;
     private Player player2;
     private Game game;
 
     @Before
     public void setUp() {
-        boardDim = 3;
+        int boardDim = 3;
         player1 = mock(Player.class);
         player2 = mock(Player.class);
         game = new Game(boardDim, NO_SOLDIERS, player1, player2);
