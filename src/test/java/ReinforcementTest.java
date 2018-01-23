@@ -1,6 +1,5 @@
 import com.google.common.collect.Lists;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.mockito.Matchers.any;
@@ -31,8 +30,8 @@ public class ReinforcementTest {
 
     @Test
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
-        makePlayer1ControllTotalOf_3_Cells();
-        makePlayer2ControllTotalOf_2_Cells();
+        makePlayer1ControlTotalOf_3_Cells();
+        makePlayer2ControlTotalOf_2_Cells();
 
         game.start();
 
@@ -40,18 +39,8 @@ public class ReinforcementTest {
         verify(player2).onReinforcement(any(Board.class), eq(2));
     }
 
-    private void makePlayer2ControllTotalOf_2_Cells() {
-        game.getBoard().setCell(3, 2, new Cell(2, 2));
-    }
-
-    private void makePlayer1ControllTotalOf_3_Cells() {
-        game.getBoard().setCell(1, 2, new Cell(1, 4));
-        game.getBoard().setCell(3, 1, new Cell(1, 19));
-    }
-
-    @Ignore
     @Test
-    public void appliesReinforcement() {
+    public void appliesReinforcementSimplestCase() {
         when(player1.onReinforcement(any(Board.class), any(int.class)))
                 .thenReturn(Lists.newArrayList(new ReinforcementMove(1, 1, 1)));
         when(player2.onReinforcement(any(Board.class), any(int.class)))
@@ -62,5 +51,14 @@ public class ReinforcementTest {
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 21);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 21);
+    }
+
+    private void makePlayer2ControlTotalOf_2_Cells() {
+        game.getBoard().setCell(3, 2, new Cell(2, 2));
+    }
+
+    private void makePlayer1ControlTotalOf_3_Cells() {
+        game.getBoard().setCell(1, 2, new Cell(1, 4));
+        game.getBoard().setCell(3, 1, new Cell(1, 19));
     }
 }

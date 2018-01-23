@@ -22,7 +22,7 @@ public class Game {
 
     public void start() {
         for (int playerId = 1; playerId <= 2; playerId++) {
-            applyReinforcements(playerId);
+            reinforce(playerId);
 //            applyAttackMoves(playerId);
         }
     }
@@ -36,13 +36,23 @@ public class Game {
         }
     }
 
-    private void applyReinforcements(int playerId) {
+    private void reinforce(int playerId) {
         Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, board.getPlayerCellCount(playerId));
-//        for (ReinforcementMove move : moves) {
-//            Cell currentCell = board.getCell(move.getCol(), move.getRow());
-//            Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
-//            board.setCell(move.getCol(), move.getRow(), newCell);
-//        }
+        if (moves != null) {
+            applyMoves(playerId, moves);
+        }
+    }
+
+    private void applyMoves(int playerId, Iterable<ReinforcementMove> moves) {
+        for (ReinforcementMove move : moves) {
+            applyMove(playerId, move);
+        }
+    }
+
+    private void applyMove(int playerId, ReinforcementMove move) {
+        Cell currentCell = board.getCell(move.getCol(), move.getRow());
+        Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
+        board.setCell(move.getCol(), move.getRow(), newCell);
     }
 
     public Board getBoard() {
