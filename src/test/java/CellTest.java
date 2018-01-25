@@ -11,7 +11,7 @@ public class CellTest {
 
     @Test
     public void neutralCell() throws Exception {
-        assertTrue(new Cell().isNeutral());
+        assertTrue(Cell.neutral().isNeutral());
     }
 
     @Test

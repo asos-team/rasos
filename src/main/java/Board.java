@@ -10,7 +10,7 @@ class Board {
         configuration = new Cell[dim][dim];
         for (int i = 0; i < configuration.length; i++) {
             for (int j = 0; j < configuration[i].length; j++) {
-                configuration[i][j] = new Cell();
+                configuration[i][j] = Cell.neutral();
             }
         }
     }

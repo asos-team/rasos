@@ -5,14 +5,14 @@ public class Cell {
     private int controllingPlayerId;
     private int numSoldiers;
 
-    Cell() {
-        this(0, 0);
-    }
-
     Cell(int controllingPlayerId, int numSoldiers) {
         validateParams(controllingPlayerId, numSoldiers);
         this.numSoldiers = numSoldiers;
         this.controllingPlayerId = decideControllingPlayerId(controllingPlayerId, numSoldiers);
+    }
+
+    static Cell neutral() {
+        return new Cell(0, 0);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -34,10 +34,6 @@ public class Cell {
         return result;
     }
 
-    boolean isControlledBy(int playerId) {
-        return controllingPlayerId == playerId;
-    }
-
     void setControllingPlayerId(int controllingPlayerId) {
         this.controllingPlayerId = controllingPlayerId;
     }
@@ -52,6 +48,10 @@ public class Cell {
 
     boolean isNeutral() {
         return controllingPlayerId == 0;
+    }
+
+    boolean isControlledBy(int playerId) {
+        return controllingPlayerId == playerId;
     }
 
     private int decideControllingPlayerId(int controllingPlayerId, int numSoldiers) {
