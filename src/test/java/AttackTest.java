@@ -43,8 +43,8 @@ public class AttackTest {
         game.start();
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 19);
-        TestUtils.assertCellContents(board.getCell(2, 1), 1, 1);
-        TestUtils.assertCellContents(board.getCell(1, 2), 2, 1);
+        TestUtils.assertCellContents(board.cellAt(2, 1), 1, 1);
+        TestUtils.assertCellContents(board.cellAt(1, 2), 2, 1);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 19);
     }
 
@@ -55,8 +55,8 @@ public class AttackTest {
         game.start();
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 15);
-        TestUtils.assertCellContents(board.getCell(2, 1), 1, 5);
-        TestUtils.assertCellContents(board.getCell(1, 2), 2, 2);
+        TestUtils.assertCellContents(board.cellAt(2, 1), 1, 5);
+        TestUtils.assertCellContents(board.cellAt(1, 2), 2, 2);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 18);
     }
 
@@ -77,8 +77,8 @@ public class AttackTest {
         Cell playerHome = playerId == 1 ? board.getHome1Cell() : board.getHome2Cell();
         Cell otherPlayerHome = playerId == 1 ? board.getHome2Cell() : board.getHome1Cell();
         TestUtils.assertCellContents(playerHome, playerId, 14);
-        TestUtils.assertCellContents(board.getCell(1, 2), playerId, 4);
-        TestUtils.assertCellContents(board.getCell(2, 1), playerId, 2);
+        TestUtils.assertCellContents(board.cellAt(1, 2), playerId, 4);
+        TestUtils.assertCellContents(board.cellAt(2, 1), playerId, 2);
         int otherPlayerId = 3 - playerId;
         TestUtils.assertCellContents(otherPlayerHome, otherPlayerId, 20);
     }

@@ -21,10 +21,17 @@ public class BoardTest {
     }
 
     @Test
+    public void retrievesCellsByCoordinates() throws Exception {
+        Cell someCell = new Cell(777, 777);
+        board.setCell(2, 4, someCell);
+        assertEquals(someCell, board.cellAt(2, 4));
+    }
+
+    @Test
     public void boardInitializesEmpty() {
         for (int i = 1; i <= dim; i++) {
             for (int j = 1; j <= dim; j++) {
-                assertTrue(board.getCell(i, j).isNeutral());
+                assertTrue(board.cellAt(i, j).isNeutral());
             }
         }
     }

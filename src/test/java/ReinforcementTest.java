@@ -126,6 +126,6 @@ public class ReinforcementTest {
         game.start();
 
         Board board = game.getBoard();
-        TestUtils.assertCellContents(board.getCell(2, 3), playerId, soldiers + 1);
+        TestUtils.assertCellContents(board.cellAt(2, 3), playerId, soldiers + 1);
     }
 }
