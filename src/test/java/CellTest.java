@@ -61,4 +61,11 @@ public class CellTest {
         cell.setNumSoldiers(13);
         assertEquals(13, cell.getNumSoldiers());
     }
+
+    @Test
+    public void setControllingPlayerId() throws Exception {
+        Cell cell = new Cell(3, 32);
+        cell.setControllingPlayerId(5);
+        assertTrue("cell should be controlled by the playerId it was set to", cell.isControlledBy(5));
+    }
 }
