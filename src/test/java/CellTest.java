@@ -54,4 +54,11 @@ public class CellTest {
     public void getNumSoldiers() throws Exception {
         assertEquals(32, new Cell(3, 32).getNumSoldiers());
     }
+
+    @Test
+    public void setNumSoldiers() throws Exception {
+        Cell cell = new Cell(3, 32);
+        cell.setNumSoldiers(13);
+        assertEquals(13, cell.getNumSoldiers());
+    }
 }

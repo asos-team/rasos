@@ -1,15 +1,15 @@
 public class Cell {
-    public static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
-    public static final String NEGATIVE_CONTROLLING_PLAYER_ID_ERROR = "Negative controlling player ID is not allowed.";
-    public static final String NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR = "Negative amount of soldiers is not allowed.";
+    static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
+    static final String NEGATIVE_CONTROLLING_PLAYER_ID_ERROR = "Negative controlling player ID is not allowed.";
+    static final String NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR = "Negative amount of soldiers is not allowed.";
     private final int controllingPlayerId;
-    private final int numSoldiers;
+    private int numSoldiers;
 
-    public Cell() {
+    Cell() {
         this(0, 0);
     }
 
-    public Cell(int controllingPlayerId, int numSoldiers) {
+    Cell(int controllingPlayerId, int numSoldiers) {
         validateParams(controllingPlayerId, numSoldiers);
         this.numSoldiers = numSoldiers;
         this.controllingPlayerId = decideControllingPlayerId(controllingPlayerId, numSoldiers);
@@ -33,15 +33,19 @@ public class Cell {
         return result;
     }
 
-    public boolean isControlledBy(int playerId) {
+    boolean isControlledBy(int playerId) {
         return controllingPlayerId == playerId;
     }
 
-    public int getNumSoldiers() {
+    int getNumSoldiers() {
         return numSoldiers;
     }
 
-    public boolean isNeutral() {
+    void setNumSoldiers(int numSoldiers) {
+        this.numSoldiers = numSoldiers;
+    }
+
+    boolean isNeutral() {
         return controllingPlayerId == 0;
     }
 
