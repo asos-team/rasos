@@ -1,9 +1,5 @@
-public class Player {
-    public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
-        return null;
-    }
+public interface Player {
+    Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement);
 
-    public Iterable<AttackMove> onAttack(Board board) {
-        return null;
-    }
+    Iterable<AttackMove> onAttack(Board board);
 }

@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
 public class Game {
     private final Map<Integer, Player> players;
@@ -37,13 +38,16 @@ public class Game {
     }
 
     private void reinforce(int playerId) {
-        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, board.getPlayerCellCount(playerId));
+        int requiredNumberOfReinforcements = board.getPlayerCellCount(playerId);
+        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, requiredNumberOfReinforcements);
         if (moves == null)
+//            throw new RuntimeException("Null reinforcement is not allowed");
             return;
-        applyMoves(playerId, moves);
-    }
-
-    private void applyMoves(int playerId, Iterable<ReinforcementMove> moves) {
+        if (StreamSupport.stream(moves.spliterator(), false)
+                .mapToInt(ReinforcementMove::getAmount)
+                .sum() > requiredNumberOfReinforcements) {
+            throw new RuntimeException("Too many soldiers in reinforcement");
+        }
         for (ReinforcementMove move : moves) {
             applyMove(playerId, move);
         }
@@ -52,7 +56,7 @@ public class Game {
     private void applyMove(int playerId, ReinforcementMove move) {
         Cell currentCell = board.getCell(move.getCol(), move.getRow());
         if (!currentCell.isControlledBy(playerId))
-            return;
+            throw new RuntimeException("You cannot reinforce a cell that you don't control");
         Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
         board.setCell(move.getCol(), move.getRow(), newCell);
     }
