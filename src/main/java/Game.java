@@ -49,7 +49,9 @@ class Game {
                 .sum() > requiredNumberOfReinforcements) {
             throw new RuntimeException("Too many soldiers in reinforcement");
         }
-        applyMove(playerId, moves.iterator().next());
+        for (ReinforcementMove move : moves) {
+            applyMove(playerId, move);
+        }
     }
 
     private void applyMove(int playerId, ReinforcementMove move) {

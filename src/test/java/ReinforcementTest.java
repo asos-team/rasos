@@ -102,7 +102,22 @@ public class ReinforcementTest {
         game.start();
     }
 
-    // allowsMultipleReinforcementMoves
+    @Test
+    public void allowsMultipleReinforcementMoves() throws Exception {
+        Board board = game.getBoard();
+        board.setCell(3, 2, new Cell(2, 7));
+        board.setCell(3, 1, new Cell(2, 3));
+        ArrayList<ReinforcementMove> moves = new ArrayList<>();
+        moves.add(new ReinforcementMove(3, 2, 1));
+        moves.add(new ReinforcementMove(3, 1, 1));
+
+        when(playerB.onReinforcement(board, 2)).thenReturn(moves);
+
+        game.start();
+
+        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
+        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
+    }
 
     private void makePlayerAControlTotalOf_3_Cells() {
         game.getBoard().setCell(1, 1, new Cell(1, 4));
