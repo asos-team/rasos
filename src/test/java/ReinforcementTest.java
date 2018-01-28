@@ -15,35 +15,35 @@ public class ReinforcementTest {
     private static final int NO_SOLDIERS = 0;
     @Rule
     public final ExpectedException expectedEx = ExpectedException.none();
-    private Player player1;
-    private Player player2;
+    private Player playerA;
+    private Player playerB;
     private Game game;
 
     @Before
     public void setUp() {
         int boardDim = 3;
-        player1 = mock(Player.class);
-        player2 = mock(Player.class);
-        game = new Game(boardDim, NO_SOLDIERS, player1, player2);
+        playerA = mock(Player.class);
+        playerB = mock(Player.class);
+        game = new Game(boardDim, NO_SOLDIERS, playerA, playerB);
     }
 
     @Test
     public void callsPlayerOnReinforcementWithGameBoard() {
         game.start();
 
-        verify(player1).onReinforcement(eq(game.getBoard()), any(int.class));
-        verify(player2).onReinforcement(eq(game.getBoard()), any(int.class));
+        verify(playerA).onReinforcement(eq(game.getBoard()), any(int.class));
+        verify(playerB).onReinforcement(eq(game.getBoard()), any(int.class));
     }
 
     @Test
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
-        makePlayer1ControlTotalOf_3_Cells();
-        makePlayer2ControlTotalOf_2_Cells();
+        makePlayerAControlTotalOf_3_Cells();
+        makePlayerBControlTotalOf_2_Cells();
 
         game.start();
 
-        verify(player1).onReinforcement(any(Board.class), eq(3));
-        verify(player2).onReinforcement(any(Board.class), eq(2));
+        verify(playerA).onReinforcement(any(Board.class), eq(3));
+        verify(playerB).onReinforcement(any(Board.class), eq(2));
     }
 
     @Test
@@ -56,20 +56,20 @@ public class ReinforcementTest {
     }
 
     @Test
-    public void appliesReinforcementSimplestCase_player1() {
-        testAppliesReinforcementSimplestCase(player1, 1);
+    public void appliesReinforcementSimplestCase_playerA() {
+        testAppliesReinforcementSimplestCase(playerA, 1);
     }
 
     @Test
-    public void appliesReinforcementSimplestCase_player2() {
-        testAppliesReinforcementSimplestCase(player2, 2);
+    public void appliesReinforcementSimplestCase_playerB() {
+        testAppliesReinforcementSimplestCase(playerB, 2);
     }
 
     @Test
     public void throwsOnTryToReinforceACellThatYouDoNotControl() throws Exception {
         Board board = game.getBoard();
         board.setCell(1, 1, new Cell(1, 4));
-        when(player1.onReinforcement(any(Board.class), any(int.class)))
+        when(playerA.onReinforcement(any(Board.class), any(int.class)))
                 .thenReturn(Collections.singleton(new ReinforcementMove(3, 1, 1)));
 
         expectedEx.expect(RuntimeException.class);
@@ -82,7 +82,7 @@ public class ReinforcementTest {
     public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
         Board board = game.getBoard();
         board.setCell(3, 1, new Cell(1, 4));
-        when(player1.onReinforcement(any(Board.class), eq(1)))
+        when(playerA.onReinforcement(any(Board.class), eq(1)))
                 .thenReturn(Collections.singleton(new ReinforcementMove(3, 1, 5)));
 
         game.start();
@@ -97,7 +97,7 @@ public class ReinforcementTest {
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(3, 1, 2));
 
-        when(player2.onReinforcement(any(Board.class), eq(2))).thenReturn(moves);
+        when(playerB.onReinforcement(any(Board.class), eq(2))).thenReturn(moves);
 
         game.start();
     }
@@ -106,13 +106,13 @@ public class ReinforcementTest {
 
     // allowsMultipleReinforcementMoves
 
-    private void makePlayer1ControlTotalOf_3_Cells() {
+    private void makePlayerAControlTotalOf_3_Cells() {
         game.getBoard().setCell(1, 1, new Cell(1, 4));
         game.getBoard().setCell(1, 3, new Cell(1, 4));
         game.getBoard().setCell(3, 1, new Cell(1, 19));
     }
 
-    private void makePlayer2ControlTotalOf_2_Cells() {
+    private void makePlayerBControlTotalOf_2_Cells() {
         game.getBoard().setCell(2, 2, new Cell(2, 2));
         game.getBoard().setCell(3, 2, new Cell(2, 2));
     }

@@ -14,32 +14,32 @@ public class AttackTest {
 
     private static final int boardDim = 2;
     private Game game;
-    private Player player1;
-    private Player player2;
+    private Player playerA;
+    private Player playerB;
 
     @Before
     public void setUp() {
-        player1 = mock(Player.class);
-        player2 = mock(Player.class);
-        when(player1.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
-        when(player2.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
-        when(player1.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
-        when(player2.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
-        game = new Game(boardDim, 20, player1, player2);
+        playerA = mock(Player.class);
+        playerB = mock(Player.class);
+        when(playerA.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
+        when(playerB.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
+        when(playerA.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
+        when(playerB.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
+        game = new Game(boardDim, 20, playerA, playerB);
     }
 
     @Test
     public void callsPlayerOnAttackWithGameBoard() {
         game.start();
 
-        verify(player1).onAttack(game.getBoard());
-        verify(player2).onAttack(game.getBoard());
+        verify(playerA).onAttack(game.getBoard());
+        verify(playerB).onAttack(game.getBoard());
     }
 
     @Test
     public void appliesAttackMoves() {
-        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, 2, 1, 1)));
-        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(2, 2, 1, 2, 1)));
+        when(playerA.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, 2, 1, 1)));
+        when(playerB.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(2, 2, 1, 2, 1)));
         game.start();
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 19);
@@ -50,8 +50,8 @@ public class AttackTest {
 
     @Test
     public void appliesAttackMovesAmount() {
-        when(player1.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, 2, 1, 5)));
-        when(player2.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(2, 2, 1, 2, 2)));
+        when(playerA.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(1, 1, 2, 1, 5)));
+        when(playerB.onAttack(any(Board.class))).thenReturn(Collections.singleton(new AttackMove(2, 2, 1, 2, 2)));
         game.start();
         Board board = game.getBoard();
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 15);
@@ -61,13 +61,13 @@ public class AttackTest {
     }
 
     @Test
-    public void appliesManyAttackMovesPlayer1() {
-        testAppliesManyAttackMoves(player1, 1, new AttackMove(1, 1, 1, 2, 4), new AttackMove(1, 1, 2, 1, 2));
+    public void appliesManyAttackMovesPlayerA() {
+        testAppliesManyAttackMoves(playerA, 1, new AttackMove(1, 1, 1, 2, 4), new AttackMove(1, 1, 2, 1, 2));
     }
 
     @Test
-    public void appliesManyAttackMovesPlayer2() {
-        testAppliesManyAttackMoves(player2, 2, new AttackMove(2, 2, 1, 2, 4), new AttackMove(2, 2, 2, 1, 2));
+    public void appliesManyAttackMovesPlayerB() {
+        testAppliesManyAttackMoves(playerB, 2, new AttackMove(2, 2, 1, 2, 4), new AttackMove(2, 2, 2, 1, 2));
     }
 
     private void testAppliesManyAttackMoves(Player player, int playerId, AttackMove move1, AttackMove move2) {

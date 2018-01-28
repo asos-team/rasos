@@ -6,15 +6,15 @@ class Game {
     private final Map<Integer, Player> players;
     private Board board;
 
-    Game(int dim, int numSoldiers, Player player1, Player player2) {
-        this(new Board(dim), player1, player2);
+    Game(int dim, int numSoldiers, Player playerA, Player playerB) {
+        this(new Board(dim), playerA, playerB);
         this.board.populateHomeBases(numSoldiers);
     }
 
-    Game(Board board, Player player1, Player player2) {
+    Game(Board board, Player playerA, Player playerB) {
         this.players = new HashMap<>(2);
-        players.put(1, player1);
-        players.put(2, player2);
+        players.put(1, playerA);
+        players.put(2, playerB);
         if (board == null) {
             throw new RuntimeException("Game cannot initialize with null configuration.");
         }
