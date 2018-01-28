@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 class Board {
@@ -49,7 +48,7 @@ class Board {
     }
 
     private Stream<Cell> getBoardCellStream() {
-        return Arrays.stream(configuration)
-                .flatMap(Arrays::stream);
+        return Stream.of(configuration)
+                .flatMap(Stream::of);
     }
 }

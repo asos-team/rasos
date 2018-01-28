@@ -28,7 +28,7 @@ public class BoardTest {
     }
 
     @Test
-    public void boardInitializesEmpty() {
+    public void boardInitializesNeutral() {
         for (int i = 1; i <= dim; i++) {
             for (int j = 1; j <= dim; j++) {
                 assertTrue(board.cellAt(i, j).isNeutral());
