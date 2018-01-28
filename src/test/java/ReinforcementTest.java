@@ -69,7 +69,7 @@ public class ReinforcementTest {
     public void throwsOnTryToReinforceACellThatYouDoNotControl() throws Exception {
         Board board = game.getBoard();
         board.setCell(1, 1, new Cell(1, 4));
-        when(playerA.onReinforcement(any(Board.class), any(int.class)))
+        when(playerA.onReinforcement(board, 1))
                 .thenReturn(Collections.singleton(new ReinforcementMove(3, 1, 1)));
 
         expectedEx.expect(RuntimeException.class);
@@ -82,7 +82,7 @@ public class ReinforcementTest {
     public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
         Board board = game.getBoard();
         board.setCell(3, 1, new Cell(1, 4));
-        when(playerA.onReinforcement(any(Board.class), eq(1)))
+        when(playerA.onReinforcement(board, 1))
                 .thenReturn(Collections.singleton(new ReinforcementMove(3, 1, 5)));
 
         game.start();
@@ -97,7 +97,7 @@ public class ReinforcementTest {
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(3, 1, 2));
 
-        when(playerB.onReinforcement(any(Board.class), eq(2))).thenReturn(moves);
+        when(playerB.onReinforcement(board, 2)).thenReturn(moves);
 
         game.start();
     }
@@ -132,13 +132,13 @@ public class ReinforcementTest {
 
     private void testAppliesReinforcementSimplestCase(Player player, int playerId) {
         int soldiers = 13;
-        game.getBoard().setCell(2, 3, new Cell(playerId, soldiers));
-        when(player.onReinforcement(any(Board.class), any(int.class)))
+        Board board = game.getBoard();
+        board.setCell(2, 3, new Cell(playerId, soldiers));
+        when(player.onReinforcement(board, 1))
                 .thenReturn(Collections.singleton(new ReinforcementMove(2, 3, 1)));
 
         game.start();
 
-        Board board = game.getBoard();
         TestUtils.assertCellContents(board.cellAt(2, 3), playerId, soldiers + 1);
     }
 }
