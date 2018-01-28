@@ -102,8 +102,6 @@ public class ReinforcementTest {
         game.start();
     }
 
-    // doesNotAllowReinforcementOfNonEligibleSoldiers (but does reinforce the eligible amount as long as valid)
-
     // allowsMultipleReinforcementMoves
 
     private void makePlayerAControlTotalOf_3_Cells() {
