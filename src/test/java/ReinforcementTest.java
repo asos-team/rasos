@@ -48,7 +48,7 @@ public class ReinforcementTest {
 
     @Test
     @Ignore
-    public void throwsOnNullReinforcementMoves(){
+    public void throwsOnNullReinforcementMoves() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage("Null reinforcement is not allowed");
 

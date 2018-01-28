@@ -30,10 +30,11 @@ class Game {
 
     private void applyAttackMoves(int playerId) {
         for (AttackMove move : players.get(playerId).onAttack(board)) {
-            Cell newOriginCell = new Cell(playerId, board.cellAt(move.getOriginCol(), move.getOriginRow()).getNumSoldiers() - move.getAmount());
-            Cell newDestinationCell = new Cell(playerId, board.cellAt(move.getDestCol(), move.getDestRow()).getNumSoldiers() + move.getAmount());
-            board.setCell(move.getOriginCol(), move.getOriginRow(), newOriginCell);
-            board.setCell(move.getDestCol(), move.getDestRow(), newDestinationCell);
+            Cell originCell = board.cellAt(move.getOriginCol(), move.getOriginRow());
+            Cell destCell = board.cellAt(move.getDestCol(), move.getDestRow());
+            int amount = move.getAmount();
+            originCell.setNumSoldiers(originCell.getNumSoldiers() - amount);
+            destCell.setNumSoldiers(destCell.getNumSoldiers() + amount);
         }
     }
 
@@ -54,11 +55,10 @@ class Game {
     }
 
     private void applyMove(int playerId, ReinforcementMove move) {
-        Cell currentCell = board.cellAt(move.getCol(), move.getRow());
-        if (!currentCell.isControlledBy(playerId))
+        Cell cell = board.cellAt(move.getCol(), move.getRow());
+        if (!cell.isControlledBy(playerId))
             throw new RuntimeException("You cannot reinforce a cell that you don't control");
-        Cell newCell = new Cell(playerId, currentCell.getNumSoldiers() + move.getAmount());
-        board.setCell(move.getCol(), move.getRow(), newCell);
+        cell.setNumSoldiers(cell.getNumSoldiers() + move.getAmount());
     }
 
     Board getBoard() {
