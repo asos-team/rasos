@@ -1,6 +1,4 @@
 public class Attacker {
-    public Attacker() {
-    }
 
     public void apply(Iterable<AttackMove> attackMoves, Board board) {
         for (AttackMove move : attackMoves) {
