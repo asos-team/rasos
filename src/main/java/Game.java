@@ -1,17 +1,17 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.StreamSupport;
 
 class Game {
     private final Map<Integer, Player> players;
+    private final ReinforcementHandler reinforcementHandler;
     private Board board;
 
     Game(int dim, int numSoldiers, Player playerA, Player playerB) {
-        this(new Board(dim), playerA, playerB);
+        this(new Board(dim), playerA, playerB, new ReinforcementHandler());
         this.board.populateHomeBases(numSoldiers);
     }
 
-    Game(Board board, Player playerA, Player playerB) {
+    Game(Board board, Player playerA, Player playerB, ReinforcementHandler reinforcementHandler) {
         this.players = new HashMap<>(2);
         players.put(1, playerA);
         players.put(2, playerB);
@@ -19,6 +19,7 @@ class Game {
             throw new RuntimeException("Game cannot initialize with null configuration.");
         }
         this.board = board;
+        this.reinforcementHandler = reinforcementHandler;
     }
 
     void start() {
@@ -41,24 +42,8 @@ class Game {
     private void reinforce(int playerId) {
         int requiredNumberOfReinforcements = board.getPlayerCellCount(playerId);
         Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, requiredNumberOfReinforcements);
-        if (moves == null)
-//            throw new RuntimeException("Null reinforcement is not allowed");
-            return;
-        if (StreamSupport.stream(moves.spliterator(), false)
-                .mapToInt(ReinforcementMove::getAmount)
-                .sum() > requiredNumberOfReinforcements) {
-            throw new RuntimeException("Too many soldiers in reinforcement");
-        }
-        for (ReinforcementMove move : moves) {
-            applyMove(playerId, move);
-        }
-    }
-
-    private void applyMove(int playerId, ReinforcementMove move) {
-        Cell cell = board.cellAt(move.getCol(), move.getRow());
-        if (!cell.isControlledBy(playerId))
-            throw new RuntimeException("You cannot reinforce a cell that you don't control");
-        cell.setNumSoldiers(cell.getNumSoldiers() + move.getAmount());
+        Board board = this.board;
+        reinforcementHandler.reinforce(playerId, requiredNumberOfReinforcements, moves, board);
     }
 
     Board getBoard() {

@@ -36,6 +36,6 @@ public class GameInitTest {
     }
 
     private Game createGame(Board board) {
-        return new Game(board, mock(Player.class), mock(Player.class));
+        return new Game(board, mock(Player.class), mock(Player.class), new ReinforcementHandler());
     }
 }
