@@ -1,17 +1,20 @@
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 class Game {
     private final Map<Integer, Player> players;
     private final ReinforcementHandler reinforcementHandler;
+    private final Attacker attacker;
     private Board board;
 
     Game(int dim, int numSoldiers, Player playerA, Player playerB) {
-        this(new Board(dim), playerA, playerB, new ReinforcementHandler());
+        this(new Board(dim), playerA, playerB, new ReinforcementHandler(), new Attacker());
         this.board.populateHomeBases(numSoldiers);
     }
 
-    Game(Board board, Player playerA, Player playerB, ReinforcementHandler reinforcementHandler) {
+    Game(Board board, Player playerA, Player playerB, ReinforcementHandler reinforcementHandler, Attacker attacker) {
         this.players = new HashMap<>(2);
         players.put(1, playerA);
         players.put(2, playerB);
@@ -20,23 +23,18 @@ class Game {
         }
         this.board = board;
         this.reinforcementHandler = reinforcementHandler;
+        this.attacker = attacker;
     }
 
     void start() {
         for (int playerId = 1; playerId <= 2; playerId++) {
             reinforce(playerId);
-//            applyAttackMoves(playerId);
+            attack(playerId);
         }
     }
 
-    private void applyAttackMoves(int playerId) {
-        for (AttackMove move : players.get(playerId).onAttack(board)) {
-            Cell originCell = board.cellAt(move.getOriginCol(), move.getOriginRow());
-            Cell destCell = board.cellAt(move.getDestCol(), move.getDestRow());
-            int amount = move.getAmount();
-            originCell.setNumSoldiers(originCell.getNumSoldiers() - amount);
-            destCell.setNumSoldiers(destCell.getNumSoldiers() + amount);
-        }
+    Board getBoard() {
+        return board;
     }
 
     private void reinforce(int playerId) {
@@ -46,7 +44,15 @@ class Game {
         reinforcementHandler.reinforce(playerId, requiredNumberOfReinforcements, moves, board);
     }
 
-    Board getBoard() {
-        return board;
+    private void attack(int playerId) {
+        Player player = players.get(playerId);
+        Iterable<AttackMove> attackMoves = getAttackMoves(player);
+        attacker.apply(attackMoves, getBoard());
+    }
+
+    private Iterable<AttackMove> getAttackMoves(Player player) {
+        Iterable<AttackMove> attackMoves = player.onAttack(getBoard());
+        attackMoves = attackMoves != null ? attackMoves : Collections.emptyList();
+        return attackMoves;
     }
 }
