@@ -1,12 +1,12 @@
 import java.util.stream.StreamSupport;
 
-public class ReinforcementHandler {
-    void reinforce(int playerId, int requiredNumberOfReinforcements, Iterable<ReinforcementMove> moves, Board board) {
+public class Reinforcer {
+    void apply(int playerId, int requiredNumberOfSoldiers, Iterable<ReinforcementMove> moves, Board board) {
         if (moves == null)
             return;
         if (StreamSupport.stream(moves.spliterator(), false)
                 .mapToInt(ReinforcementMove::getAmount)
-                .sum() > requiredNumberOfReinforcements) {
+                .sum() > requiredNumberOfSoldiers) {
             throw new RuntimeException("Too many soldiers in reinforcement");
         }
         for (ReinforcementMove move : moves) {

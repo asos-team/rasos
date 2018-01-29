@@ -5,16 +5,16 @@ import java.util.Optional;
 
 class Game {
     private final Map<Integer, Player> players;
-    private final ReinforcementHandler reinforcementHandler;
+    private final Reinforcer reinforcer;
     private final Attacker attacker;
     private Board board;
 
     Game(int dim, int numSoldiers, Player playerA, Player playerB) {
-        this(new Board(dim), playerA, playerB, new ReinforcementHandler(), new Attacker());
+        this(new Board(dim), playerA, playerB, new Reinforcer(), new Attacker());
         this.board.populateHomeBases(numSoldiers);
     }
 
-    Game(Board board, Player playerA, Player playerB, ReinforcementHandler reinforcementHandler, Attacker attacker) {
+    Game(Board board, Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker) {
         this.players = new HashMap<>(2);
         players.put(1, playerA);
         players.put(2, playerB);
@@ -22,7 +22,7 @@ class Game {
             throw new RuntimeException("Game cannot initialize with null configuration.");
         }
         this.board = board;
-        this.reinforcementHandler = reinforcementHandler;
+        this.reinforcer = reinforcer;
         this.attacker = attacker;
     }
 
@@ -38,10 +38,10 @@ class Game {
     }
 
     private void reinforce(int playerId) {
-        int requiredNumberOfReinforcements = board.getPlayerCellCount(playerId);
-        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, requiredNumberOfReinforcements);
+        int requiredNumberOfSoldiers = board.getPlayerCellCount(playerId);
+        Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, requiredNumberOfSoldiers);
         Board board = this.board;
-        reinforcementHandler.reinforce(playerId, requiredNumberOfReinforcements, moves, board);
+        reinforcer.apply(playerId, requiredNumberOfSoldiers, moves, board);
     }
 
     private void attack(int playerId) {
