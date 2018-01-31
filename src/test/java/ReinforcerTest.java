@@ -1,11 +1,12 @@
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static org.junit.Assert.assertTrue;
 
 public class ReinforcerTest {
 
@@ -21,9 +22,8 @@ public class ReinforcerTest {
     }
 
     @Test
-    @Ignore
     public void ignoresNullReinforcementMoves() {
-        reinforcer.apply(7, 52, null, new Board(16));
+        reinforcer.apply(7, 52, null, board);
     }
 
     @Test
@@ -40,20 +40,21 @@ public class ReinforcerTest {
     public void throwsOnTryToReinforceACellThatYouDoNotControl() throws Exception {
         board.setCell(1, 1, new Cell(1, 4));
 
-        expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage("You cannot reinforce a cell that you don't control");
-
         reinforcer.apply(1, 1, Collections.singleton(new ReinforcementMove(3, 1, 1)), board);
+
+        assertTrue("Cell was reinforced although not controlled by the reinforcing player",
+                board.cellAt(3, 1).isNeutral());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
         board.setCell(3, 1, new Cell(1, 4));
         reinforcer.apply(1, 1, Collections.singleton(new ReinforcementMove(3, 1, 5)), board);
+        TestUtils.assertCellContents(board.cellAt(3, 1), 1, 4);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void sumOfReinforcementsPerTurnIsCoherentWithPredefinedAmount() throws Exception {
+    @Test
+    public void moveThatRequireMoreSoldiersThanLeftToPlayerToReinforceIsOmitted() throws Exception {
         board.setCell(3, 2, new Cell(2, 7));
         board.setCell(3, 1, new Cell(2, 3));
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
@@ -61,6 +62,9 @@ public class ReinforcerTest {
         moves.add(new ReinforcementMove(3, 1, 2));
 
         reinforcer.apply(2, 2, moves, board);
+
+        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
+        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 3);
     }
 
     @Test

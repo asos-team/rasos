@@ -1,11 +1,7 @@
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -46,79 +42,6 @@ public class ReinforcementTest {
         verify(playerB).onReinforcement(any(Board.class), eq(2));
     }
 
-    @Test
-    @Ignore
-    public void throwsOnNullReinforcementMoves() {
-        expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage("Null reinforcement is not allowed");
-
-        game.start();
-    }
-
-    @Test
-    public void appliesReinforcementSimplestCase_playerA() {
-        testAppliesReinforcementSimplestCase(playerA, 1);
-    }
-
-    @Test
-    public void appliesReinforcementSimplestCase_playerB() {
-        testAppliesReinforcementSimplestCase(playerB, 2);
-    }
-
-    @Test
-    public void throwsOnTryToReinforceACellThatYouDoNotControl() throws Exception {
-        Board board = game.getBoard();
-        board.setCell(1, 1, new Cell(1, 4));
-        when(playerA.onReinforcement(board, 1))
-                .thenReturn(Collections.singleton(new ReinforcementMove(3, 1, 1)));
-
-        expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage("You cannot reinforce a cell that you don't control");
-
-        game.start();
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
-        Board board = game.getBoard();
-        board.setCell(3, 1, new Cell(1, 4));
-        when(playerA.onReinforcement(board, 1))
-                .thenReturn(Collections.singleton(new ReinforcementMove(3, 1, 5)));
-
-        game.start();
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void sumOfReinforcementsPerTurnIsCoherentWithPredefinedAmount() throws Exception {
-        Board board = game.getBoard();
-        board.setCell(3, 2, new Cell(2, 7));
-        board.setCell(3, 1, new Cell(2, 3));
-        ArrayList<ReinforcementMove> moves = new ArrayList<>();
-        moves.add(new ReinforcementMove(3, 2, 1));
-        moves.add(new ReinforcementMove(3, 1, 2));
-
-        when(playerB.onReinforcement(board, 2)).thenReturn(moves);
-
-        game.start();
-    }
-
-    @Test
-    public void allowsMultipleReinforcementMoves() throws Exception {
-        Board board = game.getBoard();
-        board.setCell(3, 2, new Cell(2, 7));
-        board.setCell(3, 1, new Cell(2, 3));
-        ArrayList<ReinforcementMove> moves = new ArrayList<>();
-        moves.add(new ReinforcementMove(3, 2, 1));
-        moves.add(new ReinforcementMove(3, 1, 1));
-
-        when(playerB.onReinforcement(board, 2)).thenReturn(moves);
-
-        game.start();
-
-        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
-        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
-    }
-
     private void makePlayerAControlTotalOf_3_Cells() {
         game.getBoard().setCell(1, 1, new Cell(1, 4));
         game.getBoard().setCell(1, 3, new Cell(1, 4));
@@ -128,17 +51,5 @@ public class ReinforcementTest {
     private void makePlayerBControlTotalOf_2_Cells() {
         game.getBoard().setCell(2, 2, new Cell(2, 2));
         game.getBoard().setCell(3, 2, new Cell(2, 2));
-    }
-
-    private void testAppliesReinforcementSimplestCase(Player player, int playerId) {
-        int soldiers = 13;
-        Board board = game.getBoard();
-        board.setCell(2, 3, new Cell(playerId, soldiers));
-        when(player.onReinforcement(board, 1))
-                .thenReturn(Collections.singleton(new ReinforcementMove(2, 3, 1)));
-
-        game.start();
-
-        TestUtils.assertCellContents(board.cellAt(2, 3), playerId, soldiers + 1);
     }
 }
