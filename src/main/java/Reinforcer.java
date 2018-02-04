@@ -3,11 +3,14 @@ public class Reinforcer {
         if (moves == null)
             return;
         for (ReinforcementMove move : moves) {
-            Cell cell = board.cellAt(move.getCol(), move.getRow());
-            int amount = move.getAmount();
-            if (cell.isControlledBy(playerId) && !exceedingQuota(quota, amount)) {
-                cell.setNumSoldiers(cell.getNumSoldiers() + amount);
-                quota -= amount;
+            try {
+                Cell cell = board.cellAt(move.getCol(), move.getRow());
+                int amount = move.getAmount();
+                if (cell.isControlledBy(playerId) && !exceedingQuota(quota, amount)) {
+                    cell.setNumSoldiers(cell.getNumSoldiers() + amount);
+                    quota -= amount;
+                }
+            } catch (Exception ignored) {
             }
         }
     }

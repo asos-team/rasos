@@ -98,6 +98,13 @@ public class ReinforcerTest {
         TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
     }
 
+    @Test
+    public void performReinforcementWithInvalidCoordinates() throws Exception {
+        board.setCell(3, 2, new Cell(2, 7));
+
+        reinforcer.apply(2, 2, Collections.singleton(new ReinforcementMove(3, 0, 1)), board);
+    }
+
     private void testAppliesReinforcementSimplestCase(int playerId) {
         int soldiers = 13;
         board.setCell(2, 3, new Cell(playerId, soldiers));
