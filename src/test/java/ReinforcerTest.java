@@ -37,7 +37,7 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void throwsOnTryToReinforceACellThatYouDoNotControl() throws Exception {
+    public void ignoreReinforcementToCellThatYouDoNotControl() throws Exception {
         board.setCell(1, 1, new Cell(1, 4));
 
         reinforcer.apply(1, 1, Collections.singleton(new ReinforcementMove(3, 1, 1)), board);
@@ -48,23 +48,11 @@ public class ReinforcerTest {
 
     @Test
     public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
-        board.setCell(3, 1, new Cell(1, 4));
-        reinforcer.apply(1, 1, Collections.singleton(new ReinforcementMove(3, 1, 5)), board);
-        TestUtils.assertCellContents(board.cellAt(3, 1), 1, 4);
-    }
+        board.setCell(3, 1, new Cell(2, 4));
 
-    @Test
-    public void moveThatRequireMoreSoldiersThanLeftToPlayerToReinforceIsOmitted() throws Exception {
-        board.setCell(3, 2, new Cell(2, 7));
-        board.setCell(3, 1, new Cell(2, 3));
-        ArrayList<ReinforcementMove> moves = new ArrayList<>();
-        moves.add(new ReinforcementMove(3, 2, 1));
-        moves.add(new ReinforcementMove(3, 1, 2));
+        reinforcer.apply(2, 1, Collections.singleton(new ReinforcementMove(3, 1, 5)), board);
 
-        reinforcer.apply(2, 2, moves, board);
-
-        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
-        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 3);
+        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
     }
 
     @Test
@@ -73,6 +61,21 @@ public class ReinforcerTest {
         board.setCell(3, 1, new Cell(2, 3));
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
         moves.add(new ReinforcementMove(3, 2, 1));
+        moves.add(new ReinforcementMove(3, 1, 1));
+
+        reinforcer.apply(2, 2, moves, board);
+
+        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
+        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
+    }
+
+    @Test
+    public void omitsOnlyExceedingReinforcementMoves() throws Exception {
+        board.setCell(3, 2, new Cell(2, 7));
+        board.setCell(3, 1, new Cell(2, 3));
+        ArrayList<ReinforcementMove> moves = new ArrayList<>();
+        moves.add(new ReinforcementMove(3, 2, 1));
+        moves.add(new ReinforcementMove(3, 1, 2));
         moves.add(new ReinforcementMove(3, 1, 1));
 
         reinforcer.apply(2, 2, moves, board);

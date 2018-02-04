@@ -1,5 +1,5 @@
 public class Reinforcer {
-    void apply(int playerId, int requiredNumberOfSoldiers, Iterable<ReinforcementMove> moves, Board board) {
+    void apply(int playerId, int quota, Iterable<ReinforcementMove> moves, Board board) {
         if (moves == null)
             return;
         for (ReinforcementMove move : moves) {
@@ -7,9 +7,9 @@ public class Reinforcer {
             if (!cell.isControlledBy(playerId))
                 return;
             int amount = move.getAmount();
-            if (amount <= requiredNumberOfSoldiers) {
+            if (amount <= quota) {
                 cell.setNumSoldiers(cell.getNumSoldiers() + amount);
-                requiredNumberOfSoldiers -= amount;
+                quota -= amount;
             }
         }
     }
