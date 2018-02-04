@@ -39,7 +39,6 @@ class Game {
     private void reinforce(int playerId) {
         int requiredNumberOfSoldiers = board.getPlayerCellCount(playerId);
         Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, requiredNumberOfSoldiers);
-        Board board = this.board;
         reinforcer.apply(playerId, requiredNumberOfSoldiers, moves, board);
     }
 
