@@ -46,7 +46,7 @@ class Game {
     private void attack(int playerId) {
         Player player = players.get(playerId);
         Iterable<AttackMove> attackMoves = getAttackMoves(player);
-        attacker.apply(attackMoves, getBoard());
+        attacker.apply(playerId, attackMoves, getBoard());
     }
 
     private Iterable<AttackMove> getAttackMoves(Player player) {

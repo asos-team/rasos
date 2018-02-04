@@ -1,6 +1,6 @@
 public class Attacker {
 
-    public void apply(Iterable<AttackMove> attackMoves, Board board) {
+    public void apply(int playerId, Iterable<AttackMove> attackMoves, Board board) {
         for (AttackMove move : attackMoves) {
             if (move != null) {
                 Cell originCell = board.cellAt(move.getOriginCol(), move.getOriginRow());
@@ -8,6 +8,7 @@ public class Attacker {
                 int amount = move.getAmount();
                 originCell.setNumSoldiers(originCell.getNumSoldiers() - amount);
                 destCell.setNumSoldiers(destCell.getNumSoldiers() + amount);
+                destCell.setControllingPlayerId(playerId);
             }
         }
     }
