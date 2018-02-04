@@ -5,7 +5,7 @@ public class Reinforcer {
         for (ReinforcementMove move : moves) {
             Cell cell = board.cellAt(move.getCol(), move.getRow());
             if (!cell.isControlledBy(playerId))
-                return;
+                continue;
             int amount = move.getAmount();
             if (amount <= quota) {
                 cell.setNumSoldiers(cell.getNumSoldiers() + amount);

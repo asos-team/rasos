@@ -47,6 +47,20 @@ public class ReinforcerTest {
     }
 
     @Test
+    public void ignoreReinforcementToCellThatYouDoNotControlButContinues() throws Exception {
+        board.setCell(1, 1, new Cell(2, 4));
+        ArrayList<ReinforcementMove> moves = new ArrayList<>();
+        moves.add(new ReinforcementMove(3, 2, 1));
+        moves.add(new ReinforcementMove(1, 1, 1));
+
+        reinforcer.apply(2, 1, moves, board);
+
+        assertTrue("Cell was reinforced although not controlled by the reinforcing player",
+                board.cellAt(3, 2).isNeutral());
+        TestUtils.assertCellContents(board.cellAt(1, 1), 2, 5);
+    }
+
+    @Test
     public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
         board.setCell(3, 1, new Cell(2, 4));
 
@@ -92,6 +106,4 @@ public class ReinforcerTest {
 
         TestUtils.assertCellContents(board.cellAt(2, 3), playerId, soldiers + 1);
     }
-
-
 }
