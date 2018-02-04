@@ -4,13 +4,15 @@ public class Reinforcer {
             return;
         for (ReinforcementMove move : moves) {
             Cell cell = board.cellAt(move.getCol(), move.getRow());
-            if (!cell.isControlledBy(playerId))
-                continue;
             int amount = move.getAmount();
-            if (amount <= quota) {
+            if (cell.isControlledBy(playerId) && !exceedingQuota(quota, amount)) {
                 cell.setNumSoldiers(cell.getNumSoldiers() + amount);
                 quota -= amount;
             }
         }
+    }
+
+    private boolean exceedingQuota(int quota, int amount) {
+        return amount > quota;
     }
 }

@@ -47,7 +47,7 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void ignoreReinforcementToCellThatYouDoNotControlButContinues() throws Exception {
+    public void omitsReinforcementMovesOfCellsYouDoNotControl() throws Exception {
         board.setCell(1, 1, new Cell(2, 4));
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
         moves.add(new ReinforcementMove(3, 2, 1));
@@ -61,7 +61,7 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void reinforceOnlyTheAmountOfSoldiersYouAreAllowed() throws Exception {
+    public void doesNotApplyExceedingReinforcementMove() throws Exception {
         board.setCell(3, 1, new Cell(2, 4));
 
         reinforcer.apply(2, 1, Collections.singleton(new ReinforcementMove(3, 1, 5)), board);
