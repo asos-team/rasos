@@ -47,6 +47,19 @@ class Board {
         return cellAt(dim, dim);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Cell[] row : configuration) {
+            for (Cell cell : row) {
+                sb.append(cell.toString());
+            }
+            sb.append(System.lineSeparator());
+        }
+
+        return sb.toString().trim();
+    }
+
     private Stream<Cell> getBoardCellStream() {
         return Stream.of(configuration)
                 .flatMap(Stream::of);

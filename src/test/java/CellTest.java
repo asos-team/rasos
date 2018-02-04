@@ -2,6 +2,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class CellTest {
@@ -67,5 +68,14 @@ public class CellTest {
         Cell cell = new Cell(3, 32);
         cell.setControllingPlayerId(5);
         assertTrue("cell should be controlled by the playerId it was set to", cell.isControlledBy(5));
+    }
+
+    @Test
+    public void humanReadableToString() {
+        Cell player1Cell = new Cell(1, 10);
+        Cell neutralCell = Cell.neutral();
+
+        assertThat(player1Cell.toString(), is("[10,1]"));
+        assertThat(neutralCell.toString(), is("[0,0]"));
     }
 }

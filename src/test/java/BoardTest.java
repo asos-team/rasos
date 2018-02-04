@@ -1,8 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class BoardTest {
 
@@ -75,5 +75,15 @@ public class BoardTest {
         board.setCell(3, 2, new Cell(7, 0));
 
         assertEquals(3, board.getPlayerCellCount(7));
+    }
+
+    @Test
+    public void toStringHumanReadable() {
+        Board b = new Board(2);
+        b.populateHomeBases(10);
+
+        String toString = b.toString();
+
+        assertThat(toString, is("[10,1][0,0]" + System.lineSeparator() + "[0,0][10,2]"));
     }
 }

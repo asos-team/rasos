@@ -34,6 +34,11 @@ public class Cell {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%d,%d]", numSoldiers, controllingPlayerId);
+    }
+
     void setControllingPlayerId(int controllingPlayerId) {
         this.controllingPlayerId = controllingPlayerId;
     }
