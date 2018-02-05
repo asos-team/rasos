@@ -6,34 +6,17 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.Set;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-
 public class AttackTest {
 
     private static final int boardDim = 2;
-    private Game game;
-    private Player playerA;
-    private Player playerB;
     private Attacker attacker;
     private Board board;
 
     @Before
     public void setUp() {
-
-
         attacker = new Attacker();
         board = new Board(boardDim);
         board.populateHomeBases(20);
-    }
-
-
-
-    @Test
-    public void callsAttackerWithAttackMoves() {
-//        game.start();
-
-//        verify(attacker).apply();
     }
 
     @Test

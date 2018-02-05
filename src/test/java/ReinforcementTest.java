@@ -20,7 +20,7 @@ public class ReinforcementTest {
         int boardDim = 3;
         playerA = mock(Player.class);
         playerB = mock(Player.class);
-        game = new Game(boardDim, NO_SOLDIERS, playerA, playerB);
+        game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
     }
 
     @Test

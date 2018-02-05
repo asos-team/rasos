@@ -8,6 +8,9 @@ public class Attacker {
         }
     }
 
+    public void apply(Board board, Iterable<AttackMove>... moves) {
+    }
+
     private void apply(int playerId, Board board, AttackMove move) {
         if (isValidMove(playerId, board, move)) {
             executeMove(playerId, board, move);

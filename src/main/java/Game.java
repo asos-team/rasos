@@ -8,28 +8,30 @@ class Game {
     private final Attacker attacker;
     private Board board;
 
-    Game(int dim, int numSoldiers, Player playerA, Player playerB) {
-        this(new Board(dim), playerA, playerB, new Reinforcer(), new Attacker());
-        this.board.populateHomeBases(numSoldiers);
-    }
-
-    Game(Board board, Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker) {
+    Game(int dim, int numSoldiers, Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer) {
+        Board board = new Board(dim);
         this.players = new HashMap<>(2);
         players.put(1, playerA);
         players.put(2, playerB);
-        if (board == null) {
-            throw new RuntimeException("Game cannot initialize with null configuration.");
-        }
         this.board = board;
         this.reinforcer = reinforcer;
         this.attacker = attacker;
+        this.board.populateHomeBases(numSoldiers);
     }
 
     void start() {
+        reinforce();
+        attack();
+    }
+
+    private void reinforce() {
         for (int playerId = 1; playerId <= 2; playerId++) {
             reinforce(playerId);
-            attack(playerId);
         }
+    }
+
+    private void attack() {
+        attacker.apply(getBoard(), getAttackMoves(players.get(1)), getAttackMoves(players.get(2)));
     }
 
     Board getBoard() {
@@ -40,12 +42,6 @@ class Game {
         int requiredNumberOfSoldiers = board.getPlayerCellCount(playerId);
         Iterable<ReinforcementMove> moves = players.get(playerId).onReinforcement(board, requiredNumberOfSoldiers);
         reinforcer.apply(playerId, requiredNumberOfSoldiers, moves, board);
-    }
-
-    private void attack(int playerId) {
-        Player player = players.get(playerId);
-        Iterable<AttackMove> attackMoves = getAttackMoves(player);
-        attacker.apply(playerId, attackMoves, getBoard());
     }
 
     private Iterable<AttackMove> getAttackMoves(Player player) {
