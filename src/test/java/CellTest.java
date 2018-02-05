@@ -57,9 +57,9 @@ public class CellTest {
     }
 
     @Test
-    public void setNumSoldiers() {
+    public void updateNumSoldiers() {
         Cell cell = new Cell(3, 32);
-        cell.setNumSoldiers(13);
+        cell.updateNumSoldiers(13);
         assertEquals(13, cell.getNumSoldiers());
     }
 
@@ -68,13 +68,13 @@ public class CellTest {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         Cell cell = new Cell(3, 32);
-        cell.setNumSoldiers(-43);
+        cell.updateNumSoldiers(-43);
     }
 
     @Test
-    public void setControllingPlayerId() {
+    public void updateControllingPlayerId() {
         Cell cell = new Cell(3, 32);
-        cell.setControllingPlayerId(5);
+        cell.updateControllingPlayerId(5);
         assertTrue("cell should be controlled by the playerId it was set to", cell.isControlledBy(5));
     }
 
@@ -83,7 +83,14 @@ public class CellTest {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
         Cell cell = new Cell(5, 12);
-        cell.setControllingPlayerId(-8);
+        cell.updateControllingPlayerId(-8);
+    }
+
+    @Test
+    public void whenNumSoldiersSetToZeroCellBecomesNeutral() {
+        Cell cell = new Cell(5, 12);
+        cell.updateNumSoldiers(0);
+        assertTrue(cell.isNeutral());
     }
 
     @Test

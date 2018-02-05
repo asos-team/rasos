@@ -7,7 +7,7 @@ public class Reinforcer {
                 Cell cell = board.cellAt(move.getCol(), move.getRow());
                 int amount = move.getAmount();
                 if (cell.isControlledBy(playerId) && !exceedingQuota(quota, amount)) {
-                    cell.setNumSoldiers(cell.getNumSoldiers() + amount);
+                    cell.updateNumSoldiers(cell.getNumSoldiers() + amount);
                     quota -= amount;
                 }
             } catch (Exception ignored) {

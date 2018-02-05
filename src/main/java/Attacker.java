@@ -25,9 +25,9 @@ public class Attacker {
 
         int amount = attackMove.getAmount();
 
-        originCell.setNumSoldiers(originCell.getNumSoldiers() - amount);
-        destCell.setNumSoldiers(destCell.getNumSoldiers() + amount);
-        destCell.setControllingPlayerId(playerId);
+        originCell.updateNumSoldiers(originCell.getNumSoldiers() - amount);
+        destCell.updateNumSoldiers(destCell.getNumSoldiers() + amount);
+        destCell.updateControllingPlayerId(playerId);
     }
 
     private Cell getDestCell(Board board, AttackMove attackMove) {

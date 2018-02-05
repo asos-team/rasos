@@ -61,7 +61,7 @@ public class AttackTest {
     public void conqueringAttackMove() {
         Board b = new Board(2);
         b.populateHomeBases(10);
-        b.cellAt(1, 1).setNumSoldiers(20);
+        b.cellAt(1, 1).updateNumSoldiers(20);
         AttackMove am = new AttackMove(1, 1, 2, 2, 15);
 
         attacker.apply(b, Collections.singleton(am));
