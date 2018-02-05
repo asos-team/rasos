@@ -40,29 +40,42 @@ public class Cell {
         return String.format("[%d,%d]", numSoldiers, controllingPlayerId);
     }
 
-    void updateControllingPlayerId(int controllingPlayerId) {
-        if (controllingPlayerId < 0)
-            throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        this.controllingPlayerId = controllingPlayerId;
-    }
-
     int getNumSoldiers() {
         return numSoldiers;
     }
 
-    void updateNumSoldiers(int numSoldiers) {
-        if (numSoldiers < 0)
-            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
-        this.numSoldiers = numSoldiers;
-        if (numSoldiers == 0)
-            controllingPlayerId = 0;
+    public int getControllingPlayerId() {
+        return controllingPlayerId;
+    }
+
+    boolean isControlledBy(int playerId) {
+        return controllingPlayerId == playerId;
     }
 
     boolean isNeutral() {
         return controllingPlayerId == 0;
     }
 
-    boolean isControlledBy(int playerId) {
-        return controllingPlayerId == playerId;
+    void updateNumSoldiers(int numSoldiers) {
+        if (numSoldiers < 0)
+            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+        if (numSoldiers == 0)
+            makeNeutral();
+        else
+            this.numSoldiers = numSoldiers;
+    }
+
+    void updateControllingPlayerId(int controllingPlayerId) {
+        if (controllingPlayerId < 0)
+            throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
+        if (controllingPlayerId == 0)
+            makeNeutral();
+        else
+            this.controllingPlayerId = controllingPlayerId;
+    }
+
+    private void makeNeutral() {
+        numSoldiers = 0;
+        controllingPlayerId = 0;
     }
 }

@@ -47,13 +47,18 @@ public class CellTest {
     }
 
     @Test
-    public void isControlledBy() {
-        assertTrue(new Cell(12, 456).isControlledBy(12));
+    public void getNumSoldiers() {
+        assertEquals(32, new Cell(3, 32).getNumSoldiers());
     }
 
     @Test
-    public void getNumSoldiers() {
-        assertEquals(32, new Cell(3, 32).getNumSoldiers());
+    public void getControllingPlayerId() {
+        assertEquals(3, new Cell(3, 32).getControllingPlayerId());
+    }
+
+    @Test
+    public void isControlledBy() {
+        assertTrue(new Cell(12, 456).isControlledBy(12));
     }
 
     @Test
@@ -91,6 +96,21 @@ public class CellTest {
         Cell cell = new Cell(5, 12);
         cell.updateNumSoldiers(0);
         assertTrue(cell.isNeutral());
+    }
+
+    @Test
+    public void whenControllingPlayerIdSetToZeroCellBecomesNeutral() {
+        Cell cell = new Cell(5, 12);
+        cell.updateControllingPlayerId(0);
+        assertTrue(cell.isNeutral());
+    }
+
+    @Test
+    public void whenCellBecomesNeutralItNoLongerContainSoldiers() {
+        Cell cell = new Cell(5, 12);
+        cell.updateControllingPlayerId(0);
+        assertTrue(cell.isNeutral());
+        assertTrue("Neutral cell shouldn't contain any soldiers.", cell.getNumSoldiers() == 0);
     }
 
     @Test
