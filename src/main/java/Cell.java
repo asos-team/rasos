@@ -40,6 +40,7 @@ public class Cell {
     }
 
     void setControllingPlayerId(int controllingPlayerId) {
+        validateControllingPlayer(controllingPlayerId);
         this.controllingPlayerId = controllingPlayerId;
     }
 
@@ -50,11 +51,6 @@ public class Cell {
     void setNumSoldiers(int numSoldiers) {
         validateNumSoldiers(numSoldiers);
         this.numSoldiers = numSoldiers;
-    }
-
-    private void validateNumSoldiers(int numSoldiers) {
-        if (numSoldiers < 0)
-            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
     }
 
     boolean isNeutral() {
@@ -74,10 +70,17 @@ public class Cell {
     }
 
     private void validateParams(int controllingPlayerId, int numSoldiers) {
+        validateNumSoldiers(numSoldiers);
+        validateControllingPlayer(controllingPlayerId);
         if (controllingPlayerId == 0 && numSoldiers != 0)
             throw new RuntimeException(NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
-        else if (controllingPlayerId < 0)
-            throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        else validateNumSoldiers(numSoldiers);
+    }
+
+    private void validateNumSoldiers(int numSoldiers) {
+        if (numSoldiers < 0) throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+    }
+
+    private void validateControllingPlayer(int controllingPlayerId) {
+        if (controllingPlayerId < 0) throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
     }
 }

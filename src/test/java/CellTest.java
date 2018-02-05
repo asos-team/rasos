@@ -79,6 +79,14 @@ public class CellTest {
     }
 
     @Test
+    public void cannotSetControllingPlayerToANegativeNumber() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
+        Cell cell = new Cell(5, 12);
+        cell.setControllingPlayerId(-8);
+    }
+
+    @Test
     public void humanReadableToString() {
         Cell player1Cell = new Cell(1, 10);
         Cell neutralCell = Cell.neutral();
