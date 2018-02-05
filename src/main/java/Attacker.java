@@ -1,23 +1,17 @@
 public class Attacker {
 
-    public void apply(int playerId, Iterable<AttackMove> attackMoves, Board board) {
-        for (AttackMove move : attackMoves) {
-            if (move != null) {
-                apply(playerId, board, move);
+    public void apply(Board board, Iterable<AttackMove>... moves) {
+        for (Iterable<AttackMove> playerMoves : moves) {
+            int playerId = 1;
+            for (AttackMove playerMove : playerMoves) {
+                if (isValidMove(board, playerMove)) {
+                    executeMove(playerId, board, playerMove);
+                }
             }
         }
     }
 
-    public void apply(Board board, Iterable<AttackMove>... moves) {
-    }
-
-    private void apply(int playerId, Board board, AttackMove move) {
-        if (isValidMove(playerId, board, move)) {
-            executeMove(playerId, board, move);
-        }
-    }
-
-    private boolean isValidMove(int playerId, Board board, AttackMove move) {
+    private boolean isValidMove(Board board, AttackMove move) {
         return move.getAmount() <= getOriginCell(board, move).getNumSoldiers();
     }
 

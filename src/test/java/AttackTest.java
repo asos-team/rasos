@@ -24,7 +24,7 @@ public class AttackTest {
         AttackMove attackMove = new AttackMove(1, 1, 2, 1, 2);
         Set<AttackMove> attackMoves = Collections.singleton(attackMove);
 
-        attacker.apply(1, attackMoves, board);
+        attacker.apply(board, attackMoves);
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 18);
         TestUtils.assertCellContents(board.cellAt(2, 1), 1, 2);
@@ -34,7 +34,7 @@ public class AttackTest {
     public void ignoresExceedingAttackMove() {
         AttackMove am = new AttackMove(1, 1, 2, 2, 300);
 
-        attacker.apply(1, Collections.singleton(am), board);
+        attacker.apply(board, Collections.singleton(am));
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 20);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 20);
@@ -46,7 +46,7 @@ public class AttackTest {
         AttackMove illegal = new AttackMove(1, 1, 2, 2, 12);
         AttackMove legal2 = new AttackMove(1, 1, 1, 2, 5);
 
-        attacker.apply(1, Lists.newArrayList(legal, illegal, legal2), board);
+        attacker.apply(board, Lists.newArrayList(legal, illegal, legal2));
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 5);
         TestUtils.assertCellContents(board.cellAt(2, 1), 1, 10);
@@ -64,7 +64,7 @@ public class AttackTest {
         b.cellAt(1, 1).setNumSoldiers(20);
         AttackMove am = new AttackMove(1, 1, 2, 2, 15);
 
-        attacker.apply(1, Collections.singleton(am), b);
+        attacker.apply(b, Collections.singleton(am));
 
         TestUtils.assertCellContents(b.getHome1Cell(), 1, 5);
         TestUtils.assertCellContents(b.getHome2Cell(), 1, 5);
