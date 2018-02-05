@@ -13,32 +13,27 @@ public class AttackTest {
 
     private static final int boardDim = 2;
     private Game game;
-    private Attacker attacker;
     private Player playerA;
     private Player playerB;
+    private Attacker attacker;
     private Board board;
 
     @Before
     public void setUp() {
-        playerA = mock(Player.class);
-        playerB = mock(Player.class);
-        when(playerA.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
-        when(playerB.onReinforcement(any(Board.class), any(int.class))).thenReturn(Lists.newArrayList());
-        when(playerA.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
-        when(playerB.onAttack(any(Board.class))).thenReturn(Lists.newArrayList());
-        game = new Game(boardDim, 20, playerA, playerB);
+
 
         attacker = new Attacker();
         board = new Board(boardDim);
         board.populateHomeBases(20);
     }
 
-    @Test
-    public void callsPlayerOnAttackWithGameBoard() {
-        game.start();
 
-        verify(playerA).onAttack(game.getBoard());
-        verify(playerB).onAttack(game.getBoard());
+
+    @Test
+    public void callsAttackerWithAttackMoves() {
+//        game.start();
+
+//        verify(attacker).apply();
     }
 
     @Test

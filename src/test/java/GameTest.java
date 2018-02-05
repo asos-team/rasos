@@ -3,8 +3,9 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-public class GameInitTest {
+public class GameTest {
 
     @Test
     public void initializesWithSpecifiedDimension() {
@@ -34,6 +35,20 @@ public class GameInitTest {
     public void throwsWhenInitializedWithNullBoard() throws Exception {
         createGame(null);
     }
+
+    @Test
+    public void callsPlayerOnAttackWithGameBoard() {
+        Player playerA = mock(Player.class);
+        Player playerB = mock(Player.class);
+        Game game = new Game(2, 20, playerA, playerB);
+
+        game.start();
+
+        verify(playerA).onAttack(game.getBoard());
+        verify(playerB).onAttack(game.getBoard());
+    }
+
+
 
     private Game createGame(Board board) {
         return new Game(board, mock(Player.class), mock(Player.class), new Reinforcer(), new Attacker());
