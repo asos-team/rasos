@@ -1,5 +1,5 @@
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,6 +9,14 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
+
+    private static final int NO_SOLDIERS = 0;
+    private int boardDim;
+
+    @Before
+    public void setUp() throws Exception {
+        boardDim = 7;
+    }
 
     @Test
     public void initializesWithSpecifiedDimension() {
@@ -26,6 +34,32 @@ public class GameTest {
         TestUtils.assertCellContents(game.getBoard().getHome2Cell(), 2, soldiers);
     }
 
+    @Test
+    public void callsPlayerOnReinforcementWithGameBoard() {
+
+        Player playerA = mock(Player.class);
+        Player playerB = mock(Player.class);
+        Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
+
+        game.start();
+
+        verify(playerA).onReinforcement(eq(game.getBoard()), any(int.class));
+        verify(playerB).onReinforcement(eq(game.getBoard()), any(int.class));
+    }
+
+    @Test
+    public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
+        Player playerA = mock(Player.class);
+        Player playerB = mock(Player.class);
+        Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
+        makePlayerAControlTotalOf_3_Cells(game);
+        makePlayerBControlTotalOf_2_Cells(game);
+
+        game.start();
+
+        verify(playerA).onReinforcement(any(Board.class), eq(3));
+        verify(playerB).onReinforcement(any(Board.class), eq(2));
+    }
 
     @Test
     public void callsPlayerOnAttackWithGameBoard() {
@@ -58,5 +92,16 @@ public class GameTest {
         game.start();
 
         verify(attacker).apply(game.getBoard(), movesA, movesB);
+    }
+
+    private void makePlayerAControlTotalOf_3_Cells(Game game) {
+        game.getBoard().setCell(1, 1, new Cell(1, 4));
+        game.getBoard().setCell(1, 3, new Cell(1, 4));
+        game.getBoard().setCell(3, 1, new Cell(1, 19));
+    }
+
+    private void makePlayerBControlTotalOf_2_Cells(Game game) {
+        game.getBoard().setCell(2, 2, new Cell(2, 2));
+        game.getBoard().setCell(3, 2, new Cell(2, 2));
     }
 }
