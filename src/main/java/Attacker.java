@@ -60,7 +60,7 @@ public class Attacker {
     }
 
     private boolean isNonConqueringAttackMove(Cell destCell, int amount) {
-        return amount < destCell.getNumSoldiers();
+        return amount <= destCell.getNumSoldiers();
     }
 
     private void executeNonConqueringAttackMove(Cell destCell, int amount) {

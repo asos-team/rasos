@@ -76,4 +76,15 @@ public class AttackTest {
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 10);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 10);
     }
+
+    @Test
+    public void totalDemolitionAttackMove() {
+        AttackMove am = new AttackMove(1, 1, 2, 2, 20);
+
+        attacker.apply(board, Collections.singleton(am));
+
+        TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
+        TestUtils.assertCellContents(board.getHome2Cell(), 0, 0);
+
+    }
 }
