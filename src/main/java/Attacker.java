@@ -1,13 +1,14 @@
 public class Attacker {
 
     public void apply(Board board, Iterable<AttackMove>... moves) {
+        int playerId = 1;
         for (Iterable<AttackMove> playerMoves : moves) {
-            int playerId = 1;
             for (AttackMove playerMove : playerMoves) {
                 if (isValidMove(board, playerMove)) {
                     executeMove(playerId, board, playerMove);
                 }
             }
+            playerId++;
         }
     }
 

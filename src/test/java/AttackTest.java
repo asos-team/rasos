@@ -21,13 +21,15 @@ public class AttackTest {
 
     @Test
     public void appliesAttackMoves() {
-        AttackMove attackMove = new AttackMove(1, 1, 2, 1, 2);
-        Set<AttackMove> attackMoves = Collections.singleton(attackMove);
+        AttackMove aAttackMove = new AttackMove(1, 1, 2, 1, 2);
+        AttackMove bAttackMove = new AttackMove(2,2,1,2,3);
 
-        attacker.apply(board, attackMoves);
+        attacker.apply(board, Collections.singleton(aAttackMove), Collections.singleton(bAttackMove));
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 18);
         TestUtils.assertCellContents(board.cellAt(2, 1), 1, 2);
+        TestUtils.assertCellContents(board.cellAt(2,2), 2, 17);
+        TestUtils.assertCellContents(board.cellAt(1,2), 2, 3);
     }
 
     @Test
@@ -52,8 +54,6 @@ public class AttackTest {
         TestUtils.assertCellContents(board.cellAt(2, 1), 1, 10);
         TestUtils.assertCellContents(board.cellAt(1, 2), 1, 5);
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 20);
-
-
     }
 
     @Ignore
