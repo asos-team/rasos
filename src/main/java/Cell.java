@@ -57,21 +57,35 @@ public class Cell {
     }
 
     void updateNumSoldiers(int numSoldiers) {
-        if (numSoldiers < 0)
-            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
-        if (numSoldiers == 0)
-            makeNeutral();
-        else
+        boolean isValidUpdate = isPositiveNumSoldiersUpdate(numSoldiers);
+        if (isValidUpdate)
             this.numSoldiers = numSoldiers;
     }
 
+    private boolean isPositiveNumSoldiersUpdate(int numSoldiers) {
+        if (numSoldiers < 0)
+            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+        if (numSoldiers == 0) {
+            makeNeutral();
+            return false;
+        }
+        return true;
+    }
+
     void updateControllingPlayerId(int controllingPlayerId) {
+        boolean isValidUpdate = isNonPlayerSpecificControllingPlayerUpdate(controllingPlayerId);
+        if (isValidUpdate)
+            this.controllingPlayerId = controllingPlayerId;
+    }
+
+    private boolean isNonPlayerSpecificControllingPlayerUpdate(int controllingPlayerId) {
         if (controllingPlayerId < 0)
             throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        if (controllingPlayerId == 0)
+        if (controllingPlayerId == 0) {
             makeNeutral();
-        else
-            this.controllingPlayerId = controllingPlayerId;
+            return false;
+        }
+        return true;
     }
 
     private void makeNeutral() {
