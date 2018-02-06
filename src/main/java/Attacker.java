@@ -27,6 +27,20 @@ public class Attacker {
         int amount = attackMove.getAmount();
 
         originCell.updateNumSoldiers(originCell.getNumSoldiers() - amount);
+
+        if (destCell.isControlledBy(playerId)) {
+            executeReinforcementAttackMove(playerId, destCell, amount);
+        } else {
+            executeConqueringAttackMove(playerId, destCell, amount);
+        }
+    }
+
+    private void executeConqueringAttackMove(int playerId, Cell destCell, int amount) {
+        destCell.updateControllingPlayerId(playerId);
+        destCell.updateNumSoldiers(amount - destCell.getNumSoldiers());
+    }
+
+    private void executeReinforcementAttackMove(int playerId, Cell destCell, int amount) {
         destCell.updateNumSoldiers(destCell.getNumSoldiers() + amount);
         destCell.updateControllingPlayerId(playerId);
     }
