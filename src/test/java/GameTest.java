@@ -12,23 +12,26 @@ public class GameTest {
 
     private static final int NO_SOLDIERS = 0;
     private int boardDim;
+    private Player playerA;
+    private Player playerB;
 
     @Before
     public void setUp() throws Exception {
         boardDim = 7;
+        playerA = mock(Player.class);
+        playerB = mock(Player.class);
     }
 
     @Test
     public void initializesWithSpecifiedDimension() {
-        int boardDim = 7;
-        Game game = new Game(boardDim, 20, mock(Player.class), mock(Player.class), new Attacker(), new Reinforcer());
+        Game game = new Game(boardDim, 20, playerA, playerB, new Attacker(), new Reinforcer());
         assertThat(game.getBoard().getDim(), is(boardDim));
     }
 
     @Test
     public void populatesHomeBasesWithSpecifiedNumberOfSoldiers() throws Exception {
         int soldiers = 99;
-        Game game = new Game(7, soldiers, mock(Player.class), mock(Player.class), new Attacker(), new Reinforcer());
+        Game game = new Game(boardDim, soldiers, playerA, playerB, new Attacker(), new Reinforcer());
 
         TestUtils.assertCellContents(game.getBoard().getHome1Cell(), 1, soldiers);
         TestUtils.assertCellContents(game.getBoard().getHome2Cell(), 2, soldiers);
@@ -36,9 +39,6 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnReinforcementWithGameBoard() {
-
-        Player playerA = mock(Player.class);
-        Player playerB = mock(Player.class);
         Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
 
         game.start();
@@ -49,8 +49,6 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
-        Player playerA = mock(Player.class);
-        Player playerB = mock(Player.class);
         Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
         makePlayerAControlTotalOf_3_Cells(game);
         makePlayerBControlTotalOf_2_Cells(game);
@@ -63,8 +61,6 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnAttackWithGameBoard() {
-        Player playerA = mock(Player.class);
-        Player playerB = mock(Player.class);
         Game game = new Game(2, 20, playerA, playerB, new Attacker(), new Reinforcer());
 
         game.start();
@@ -75,8 +71,6 @@ public class GameTest {
 
     @Test
     public void callsAttackerWithAttackMoves() {
-        Player playerA = mock(Player.class);
-        Player playerB = mock(Player.class);
         Attacker attacker = mock(Attacker.class);
 
         AttackMove am1 = mock(AttackMove.class);
