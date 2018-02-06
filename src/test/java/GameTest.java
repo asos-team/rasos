@@ -59,6 +59,24 @@ public class GameTest {
         verify(playerB).onReinforcement(any(Board.class), eq(2));
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void callsReinforcerWithReinforcementMoves() {
+        Reinforcer reinforcer = mock(Reinforcer.class);
+        Iterable<ReinforcementMove> movesA = mock(Iterable.class);
+        when(playerA.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesA);
+        Iterable<ReinforcementMove> movesB = mock(Iterable.class);
+        when(playerB.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesB);
+        Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), reinforcer);
+        makePlayerAControlTotalOf_3_Cells(game);
+        makePlayerBControlTotalOf_2_Cells(game);
+
+        game.start();
+
+        verify(reinforcer).apply(1, 3, movesA, game.getBoard());
+        verify(reinforcer).apply(2, 2, movesB, game.getBoard());
+    }
+
     @Test
     public void callsPlayerOnAttackWithGameBoard() {
         Game game = new Game(2, 20, playerA, playerB, new Attacker(), new Reinforcer());
