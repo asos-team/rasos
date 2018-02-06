@@ -21,13 +21,23 @@ public class Attacker {
     }
 
     private void executeMove(int playerId, Board board, AttackMove attackMove) {
-        Cell originCell = getOriginCell(board, attackMove);
-        Cell destCell = getDestCell(board, attackMove);
+        executeMove(playerId, getOriginCell(board, attackMove), getDestCell(board, attackMove), attackMove.getAmount());
+    }
 
-        int amount = attackMove.getAmount();
+    private Cell getDestCell(Board board, AttackMove attackMove) {
+        return board.cellAt(attackMove.getDestCol(), attackMove.getDestRow());
+    }
 
+    private void executeMove(int playerId, Cell originCell, Cell destCell, int amount) {
+        changeOriginCell(originCell, amount);
+        changeDestCell(playerId, destCell, amount);
+    }
+
+    private void changeOriginCell(Cell originCell, int amount) {
         originCell.updateNumSoldiers(originCell.getNumSoldiers() - amount);
+    }
 
+    private void changeDestCell(int playerId, Cell destCell, int amount) {
         if (isReinforcementAttackMove(playerId, destCell)) {
             executeReinforcementAttackMove(playerId, destCell, amount);
         } else if (isConqueringAttackMove(destCell, amount)) {
@@ -35,10 +45,6 @@ public class Attacker {
         } else if (isNonConqueringAttackMove(destCell, amount)) {
             executeNonConqueringAttackMove(destCell, amount);
         }
-    }
-
-    private Cell getDestCell(Board board, AttackMove attackMove) {
-        return board.cellAt(attackMove.getDestCol(), attackMove.getDestRow());
     }
 
     private boolean isReinforcementAttackMove(int playerId, Cell destCell) {
