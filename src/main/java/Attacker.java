@@ -28,16 +28,21 @@ public class Attacker {
 
         originCell.updateNumSoldiers(originCell.getNumSoldiers() - amount);
 
-        if (destCell.isControlledBy(playerId)) {
+        if (isReinforcementAttackMove(playerId, destCell)) {
             executeReinforcementAttackMove(playerId, destCell, amount);
-        } else {
+        } else if (isConqueringAttackMove(destCell, amount)) {
             executeConqueringAttackMove(playerId, destCell, amount);
+        } else if (isNonConqueringAttackMove(destCell, amount)) {
+            executeNonConqueringAttackMove(destCell, amount);
         }
     }
 
-    private void executeConqueringAttackMove(int playerId, Cell destCell, int amount) {
-        destCell.updateControllingPlayerId(playerId);
-        destCell.updateNumSoldiers(amount - destCell.getNumSoldiers());
+    private Cell getDestCell(Board board, AttackMove attackMove) {
+        return board.cellAt(attackMove.getDestCol(), attackMove.getDestRow());
+    }
+
+    private boolean isReinforcementAttackMove(int playerId, Cell destCell) {
+        return destCell.isControlledBy(playerId);
     }
 
     private void executeReinforcementAttackMove(int playerId, Cell destCell, int amount) {
@@ -45,7 +50,20 @@ public class Attacker {
         destCell.updateControllingPlayerId(playerId);
     }
 
-    private Cell getDestCell(Board board, AttackMove attackMove) {
-        return board.cellAt(attackMove.getDestCol(), attackMove.getDestRow());
+    private boolean isConqueringAttackMove(Cell destCell, int amount) {
+        return amount > destCell.getNumSoldiers();
+    }
+
+    private void executeConqueringAttackMove(int playerId, Cell destCell, int amount) {
+        destCell.updateControllingPlayerId(playerId);
+        destCell.updateNumSoldiers(amount - destCell.getNumSoldiers());
+    }
+
+    private boolean isNonConqueringAttackMove(Cell destCell, int amount) {
+        return amount < destCell.getNumSoldiers();
+    }
+
+    private void executeNonConqueringAttackMove(Cell destCell, int amount) {
+        destCell.updateNumSoldiers(destCell.getNumSoldiers() - amount);
     }
 }

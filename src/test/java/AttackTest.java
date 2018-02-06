@@ -66,4 +66,14 @@ public class AttackTest {
         TestUtils.assertCellContents(b.getHome1Cell(), 1, 5);
         TestUtils.assertCellContents(b.getHome2Cell(), 1, 5);
     }
+
+    @Test
+    public void nonConqueringAttackMove() {
+        AttackMove am = new AttackMove(1, 1, 2, 2, 10);
+
+        attacker.apply(board, Collections.singleton(am));
+
+        TestUtils.assertCellContents(board.getHome1Cell(), 1, 10);
+        TestUtils.assertCellContents(board.getHome2Cell(), 2, 10);
+    }
 }
