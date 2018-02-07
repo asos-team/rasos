@@ -89,6 +89,7 @@ public class Cell {
         return true;
     }
 
+    @Deprecated
     void updateControllingPlayerId(int controllingPlayerId) {
         boolean isValidUpdate = isNonPlayerSpecificControllingPlayerUpdate(controllingPlayerId);
         if (isValidUpdate)
@@ -112,5 +113,10 @@ public class Cell {
     private void makeNeutral() {
         numSoldiers = 0;
         controllingPlayerId = 0;
+    }
+
+    public void setValues(int controllingPlayerId, int numSoldiers) {
+        this.controllingPlayerId=controllingPlayerId;
+        this.numSoldiers=numSoldiers;
     }
 }

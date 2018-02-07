@@ -79,6 +79,21 @@ public class CellTest {
     }
 
     @Test
+    public void whenNumSoldiersSetToZeroCellBecomesNeutral() {
+        Cell cell = new Cell(5, 12);
+        cell.updateNumSoldiers(0);
+        assertTrue(cell.isNeutral());
+    }
+
+    @Test
+    public void setValues(){
+        Cell cell = new Cell(3,5);
+        cell.setValues(2,4);
+        TestUtils.assertCellContents(cell,2,4);
+    }
+
+
+    @Test
     public void updateControllingPlayerId() {
         Cell cell = new Cell(3, 32);
         cell.updateControllingPlayerId(5);
@@ -91,13 +106,6 @@ public class CellTest {
         expectedEx.expectMessage(Cell.NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
         Cell cell = new Cell(5, 12);
         cell.updateControllingPlayerId(0);
-    }
-
-    @Test
-    public void whenNumSoldiersSetToZeroCellBecomesNeutral() {
-        Cell cell = new Cell(5, 12);
-        cell.updateNumSoldiers(0);
-        assertTrue(cell.isNeutral());
     }
 
     @Test
