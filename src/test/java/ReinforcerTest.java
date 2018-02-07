@@ -22,22 +22,40 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void ignoresNullReinforcementMoves() {
+    public void nullReinforcementMoves_areIgnored() {
         reinforcer.apply(7, 52, null, board);
     }
 
     @Test
-    public void appliesReinforcementSimplestCase_playerA() {
-        testAppliesReinforcementSimplestCase(1);
+    public void reinforcementMove_isApplied_playerA() {
+        int id = 1;
+        int soldiers = 13;
+        int quota = 1;
+        int col = 4;
+        int row = 1;
+        board.setCell(col, row, new Cell(id, soldiers));
+
+        reinforcer.apply(id, quota, Collections.singleton(new ReinforcementMove(col, row, quota)), board);
+
+        TestUtils.assertCellContents(board.cellAt(col, row), id, soldiers + quota);
     }
 
     @Test
-    public void appliesReinforcementSimplestCase_playerB() {
-        testAppliesReinforcementSimplestCase(2);
+    public void reinforcementMove_isApplied_playerB() {
+        int id = 2;
+        int soldiers = 56;
+        int quota = 1;
+        int col = 2;
+        int row = 6;
+        board.setCell(col, row, new Cell(id, soldiers));
+
+        reinforcer.apply(id, quota, Collections.singleton(new ReinforcementMove(col, row, quota)), board);
+
+        TestUtils.assertCellContents(board.cellAt(col, row), id, soldiers + quota);
     }
 
     @Test
-    public void ignoreReinforcementToCellThatYouDoNotControl() throws Exception {
+    public void reinforcementMove_toCellYouDoNotControl_isIgnored() throws Exception {
         board.setCell(1, 1, new Cell(1, 4));
 
         reinforcer.apply(1, 1, Collections.singleton(new ReinforcementMove(3, 1, 1)), board);
@@ -47,7 +65,37 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void omitsReinforcementMovesOfCellsYouDoNotControl() throws Exception {
+    public void reinforcementMove_withExceedingAmount_isIgnored() throws Exception {
+        board.setCell(3, 1, new Cell(2, 4));
+
+        reinforcer.apply(2, 1, Collections.singleton(new ReinforcementMove(3, 1, 5)), board);
+
+        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
+    }
+
+    @Test
+    public void reinforcementMove_withInvalidCoordinates_isIgnored() throws Exception {
+        board.setCell(3, 2, new Cell(2, 7));
+
+        reinforcer.apply(2, 2, Collections.singleton(new ReinforcementMove(3, 0, 1)), board);
+    }
+
+    @Test
+    public void manyReinforcementMoves_areAllApplied() throws Exception {
+        board.setCell(3, 2, new Cell(2, 7));
+        board.setCell(3, 1, new Cell(2, 3));
+        ArrayList<ReinforcementMove> moves = new ArrayList<>();
+        moves.add(new ReinforcementMove(3, 2, 1));
+        moves.add(new ReinforcementMove(3, 1, 1));
+
+        reinforcer.apply(2, 2, moves, board);
+
+        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
+        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
+    }
+
+    @Test
+    public void amongValidAndInvalidReinforcementMoves_validMovesAreStillApplied() throws Exception {
         board.setCell(1, 1, new Cell(2, 4));
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
         moves.add(new ReinforcementMove(3, 2, 1));
@@ -61,30 +109,7 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void doesNotApplyExceedingReinforcementMove() throws Exception {
-        board.setCell(3, 1, new Cell(2, 4));
-
-        reinforcer.apply(2, 1, Collections.singleton(new ReinforcementMove(3, 1, 5)), board);
-
-        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
-    }
-
-    @Test
-    public void allowsMultipleReinforcementMoves() throws Exception {
-        board.setCell(3, 2, new Cell(2, 7));
-        board.setCell(3, 1, new Cell(2, 3));
-        ArrayList<ReinforcementMove> moves = new ArrayList<>();
-        moves.add(new ReinforcementMove(3, 2, 1));
-        moves.add(new ReinforcementMove(3, 1, 1));
-
-        reinforcer.apply(2, 2, moves, board);
-
-        TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
-        TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
-    }
-
-    @Test
-    public void omitsOnlyExceedingReinforcementMoves() throws Exception {
+    public void manyReinforcementMoves_areAppliedToTheAllowedQuota() throws Exception {
         board.setCell(3, 2, new Cell(2, 7));
         board.setCell(3, 1, new Cell(2, 3));
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
@@ -98,19 +123,4 @@ public class ReinforcerTest {
         TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
     }
 
-    @Test
-    public void performReinforcementWithInvalidCoordinates() throws Exception {
-        board.setCell(3, 2, new Cell(2, 7));
-
-        reinforcer.apply(2, 2, Collections.singleton(new ReinforcementMove(3, 0, 1)), board);
-    }
-
-    private void testAppliesReinforcementSimplestCase(int playerId) {
-        int soldiers = 13;
-        board.setCell(2, 3, new Cell(playerId, soldiers));
-
-        reinforcer.apply(playerId, 1, Collections.singleton(new ReinforcementMove(2, 3, 1)), board);
-
-        TestUtils.assertCellContents(board.cellAt(2, 3), playerId, soldiers + 1);
-    }
 }
