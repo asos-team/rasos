@@ -1,10 +1,8 @@
 import com.google.common.collect.Lists;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
-import java.util.Set;
 
 public class AttackTest {
 
@@ -22,14 +20,14 @@ public class AttackTest {
     @Test
     public void appliesAttackMoves() {
         AttackMove aAttackMove = new AttackMove(1, 1, 2, 1, 2);
-        AttackMove bAttackMove = new AttackMove(2,2,1,2,3);
+        AttackMove bAttackMove = new AttackMove(2, 2, 1, 2, 3);
 
         attacker.apply(board, Collections.singleton(aAttackMove), Collections.singleton(bAttackMove));
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 18);
         TestUtils.assertCellContents(board.cellAt(2, 1), 1, 2);
-        TestUtils.assertCellContents(board.cellAt(2,2), 2, 17);
-        TestUtils.assertCellContents(board.cellAt(1,2), 2, 3);
+        TestUtils.assertCellContents(board.cellAt(2, 2), 2, 17);
+        TestUtils.assertCellContents(board.cellAt(1, 2), 2, 3);
     }
 
     @Test
@@ -56,7 +54,6 @@ public class AttackTest {
         TestUtils.assertCellContents(board.getHome2Cell(), 2, 20);
     }
 
-    @Ignore
     @Test
     public void conqueringAttackMove() {
         Board b = new Board(2);
@@ -68,5 +65,26 @@ public class AttackTest {
 
         TestUtils.assertCellContents(b.getHome1Cell(), 1, 5);
         TestUtils.assertCellContents(b.getHome2Cell(), 1, 5);
+    }
+
+    @Test
+    public void nonConqueringAttackMove() {
+        AttackMove am = new AttackMove(1, 1, 2, 2, 10);
+
+        attacker.apply(board, Collections.singleton(am));
+
+        TestUtils.assertCellContents(board.getHome1Cell(), 1, 10);
+        TestUtils.assertCellContents(board.getHome2Cell(), 2, 10);
+    }
+
+    @Test
+    public void totalDemolitionAttackMove() {
+        AttackMove am = new AttackMove(1, 1, 2, 2, 20);
+
+        attacker.apply(board, Collections.singleton(am));
+
+        TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
+        TestUtils.assertCellContents(board.getHome2Cell(), 0, 0);
+
     }
 }

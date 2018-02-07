@@ -1,8 +1,5 @@
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,14 +21,14 @@ public class GameTest {
 
     @Test
     public void initializesWithSpecifiedDimension() {
-        Game game = new Game(boardDim, 20, playerA, playerB, new Attacker(), new Reinforcer());
+        Game game = createSimpleGame();
         assertThat(game.getBoard().getDim(), is(boardDim));
     }
 
     @Test
     public void populatesHomeBasesWithSpecifiedNumberOfSoldiers() throws Exception {
         int soldiers = 99;
-        Game game = new Game(boardDim, soldiers, playerA, playerB, new Attacker(), new Reinforcer());
+        Game game = createSimpleGame(soldiers);
 
         TestUtils.assertCellContents(game.getBoard().getHome1Cell(), 1, soldiers);
         TestUtils.assertCellContents(game.getBoard().getHome2Cell(), 2, soldiers);
@@ -39,7 +36,7 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnReinforcementWithGameBoard() {
-        Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
+        Game game = createSimpleGame();
 
         game.start();
 
@@ -49,7 +46,7 @@ public class GameTest {
 
     @Test
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
-        Game game = new Game(boardDim, NO_SOLDIERS, playerA, playerB, new Attacker(), new Reinforcer());
+        Game game = createSimpleGame();
         makePlayerAControlTotalOf_3_Cells(game);
         makePlayerBControlTotalOf_2_Cells(game);
 
@@ -59,9 +56,29 @@ public class GameTest {
         verify(playerB).onReinforcement(any(Board.class), eq(2));
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void callsReinforcerWithReinforcementMoves() {
+        Reinforcer reinforcer = mock(Reinforcer.class);
+
+        Iterable<ReinforcementMove> movesA = mock(Iterable.class);
+        Iterable<ReinforcementMove> movesB = mock(Iterable.class);
+        when(playerA.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesA);
+        when(playerB.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesB);
+
+        Game game = createSimpleGame(reinforcer, new Attacker());
+        makePlayerAControlTotalOf_3_Cells(game);
+        makePlayerBControlTotalOf_2_Cells(game);
+
+        game.start();
+
+        verify(reinforcer).apply(1, 3, movesA, game.getBoard());
+        verify(reinforcer).apply(2, 2, movesB, game.getBoard());
+    }
+
     @Test
     public void callsPlayerOnAttackWithGameBoard() {
-        Game game = new Game(2, 20, playerA, playerB, new Attacker(), new Reinforcer());
+        Game game = createSimpleGame();
 
         game.start();
 
@@ -69,23 +86,37 @@ public class GameTest {
         verify(playerB).onAttack(game.getBoard());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void callsAttackerWithAttackMoves() {
         Attacker attacker = mock(Attacker.class);
 
-        AttackMove am1 = mock(AttackMove.class);
-        AttackMove am2 = mock(AttackMove.class);
-        AttackMove am3 = mock(AttackMove.class);
-        AttackMove am4 = mock(AttackMove.class);
-        ArrayList<AttackMove> movesA = Lists.newArrayList(am1, am2);
+        Iterable<AttackMove> movesA = mock(Iterable.class);
+        Iterable<AttackMove> movesB = mock(Iterable.class);
         when(playerA.onAttack(any(Board.class))).thenReturn(movesA);
-        ArrayList<AttackMove> movesB = Lists.newArrayList(am3, am4);
         when(playerB.onAttack(any(Board.class))).thenReturn(movesB);
-        Game game = new Game(2, 20, playerA, playerB, attacker, new Reinforcer());
+
+        Game game = createSimpleGame(new Reinforcer(), attacker);
 
         game.start();
 
         verify(attacker).apply(game.getBoard(), movesA, movesB);
+    }
+
+    private Game createSimpleGame() {
+        return createSimpleGame(new Reinforcer(), new Attacker());
+    }
+
+    private Game createSimpleGame(int soldiers) {
+        return createSimpleGame(new Reinforcer(), new Attacker(), soldiers);
+    }
+
+    private Game createSimpleGame(Reinforcer reinforcer, Attacker attacker) {
+        return createSimpleGame(reinforcer, attacker, NO_SOLDIERS);
+    }
+
+    private Game createSimpleGame(Reinforcer reinforcer, Attacker attacker, int soldiers) {
+        return new Game(boardDim, soldiers, playerA, playerB, attacker, reinforcer);
     }
 
     private void makePlayerAControlTotalOf_3_Cells(Game game) {
