@@ -10,7 +10,7 @@ public class Cell {
     Cell(int controllingPlayerId, int numSoldiers) {
         throwOnInvalidConstructorParams(controllingPlayerId, numSoldiers);
 
-        if (isZeroUpdate(numSoldiers)) {
+        if (numSoldiers == 0) {
             makeNeutral();
         } else {
             this.controllingPlayerId = controllingPlayerId;
@@ -19,13 +19,13 @@ public class Cell {
     }
 
     private void throwOnInvalidConstructorParams(int controllingPlayerId, int numSoldiers) {
-        if (isZeroUpdate(controllingPlayerId) && !isZeroUpdate(numSoldiers))
+        if (controllingPlayerId == 0 && numSoldiers != 0)
             throw new RuntimeException(NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
-        if (!isZeroUpdate(controllingPlayerId) && isZeroUpdate(numSoldiers))
+        if (controllingPlayerId != 0 && numSoldiers == 0)
             throw new RuntimeException(CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
-        if (isNegativeUpdate(controllingPlayerId))
+        if (controllingPlayerId < 0)
             throw new RuntimeException(NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
-        if (isNegativeUpdate(numSoldiers))
+        if (numSoldiers < 0)
             throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
     }
 
@@ -97,17 +97,9 @@ public class Cell {
     }
 
     private boolean isNonPlayerSpecificControllingPlayerUpdate(int controllingPlayerId) {
-        if (isNegativeUpdate(controllingPlayerId) || isZeroUpdate(controllingPlayerId))
+        if (controllingPlayerId <= 0)
             throw new IllegalArgumentException(NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
         return true;
-    }
-
-    private boolean isNegativeUpdate(int newValue) {
-        return newValue < 0;
-    }
-
-    private boolean isZeroUpdate(int newValue) {
-        return newValue == 0;
     }
 
     private void makeNeutral() {
@@ -116,7 +108,7 @@ public class Cell {
     }
 
     public void setValues(int controllingPlayerId, int numSoldiers) {
-        this.controllingPlayerId=controllingPlayerId;
-        this.numSoldiers=numSoldiers;
+        this.controllingPlayerId = controllingPlayerId;
+        this.numSoldiers = numSoldiers;
     }
 }

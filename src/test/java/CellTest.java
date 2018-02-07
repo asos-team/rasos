@@ -1,3 +1,4 @@
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -86,10 +87,19 @@ public class CellTest {
     }
 
     @Test
-    public void setValues(){
-        Cell cell = new Cell(3,5);
-        cell.setValues(2,4);
-        TestUtils.assertCellContents(cell,2,4);
+    public void setValues() {
+        Cell cell = new Cell(3, 5);
+        cell.setValues(2, 4);
+        TestUtils.assertCellContents(cell, 2, 4);
+    }
+
+    @Ignore
+    @Test
+    public void cantSetValuesWithNegativeSoldiers() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+        Cell cell = new Cell(6, 7);
+        cell.setValues(5, -1);
     }
 
 
