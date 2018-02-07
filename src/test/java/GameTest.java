@@ -1,8 +1,5 @@
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -87,17 +84,14 @@ public class GameTest {
         verify(playerB).onAttack(game.getBoard());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void callsAttackerWithAttackMoves() {
         Attacker attacker = mock(Attacker.class);
 
-        AttackMove am1 = mock(AttackMove.class);
-        AttackMove am2 = mock(AttackMove.class);
-        AttackMove am3 = mock(AttackMove.class);
-        AttackMove am4 = mock(AttackMove.class);
-        ArrayList<AttackMove> movesA = Lists.newArrayList(am1, am2);
+        Iterable<AttackMove> movesA = mock(Iterable.class);
         when(playerA.onAttack(any(Board.class))).thenReturn(movesA);
-        ArrayList<AttackMove> movesB = Lists.newArrayList(am3, am4);
+        Iterable<AttackMove> movesB = mock(Iterable.class);
         when(playerB.onAttack(any(Board.class))).thenReturn(movesB);
         Game game = new Game(2, 20, playerA, playerB, attacker, new Reinforcer());
 
