@@ -21,11 +21,6 @@ public class CellTest {
     }
 
     @Test
-    public void cellWithoutSoldiersIsNeutral() {
-        assertTrue(new Cell(5, 0).isNeutral());
-    }
-
-    @Test
     public void impossibleToCreateNeutralCellWithSoldiers() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
@@ -33,9 +28,16 @@ public class CellTest {
     }
 
     @Test
+    public void impossibleToCreateControlledCellWithNoSoldiers() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
+        new Cell(5, 0);
+    }
+
+    @Test
     public void controllingPlayerMustBeAPositiveNumber() {
         expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
+        expectedEx.expectMessage(Cell.NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
         new Cell(-5, 12);
     }
 
@@ -84,11 +86,11 @@ public class CellTest {
     }
 
     @Test
-    public void cannotSetControllingPlayerToANegativeNumber() {
+    public void cannotSetControllingPlayerToANonPositiveNumber() {
         expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
+        expectedEx.expectMessage(Cell.NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
         Cell cell = new Cell(5, 12);
-        cell.updateControllingPlayerId(-8);
+        cell.updateControllingPlayerId(0);
     }
 
     @Test
@@ -96,21 +98,6 @@ public class CellTest {
         Cell cell = new Cell(5, 12);
         cell.updateNumSoldiers(0);
         assertTrue(cell.isNeutral());
-    }
-
-    @Test
-    public void whenControllingPlayerIdSetToZeroCellBecomesNeutral() {
-        Cell cell = new Cell(5, 12);
-        cell.updateControllingPlayerId(0);
-        assertTrue(cell.isNeutral());
-    }
-
-    @Test
-    public void whenCellBecomesNeutralItNoLongerContainSoldiers() {
-        Cell cell = new Cell(5, 12);
-        cell.updateControllingPlayerId(0);
-        assertTrue(cell.isNeutral());
-        assertTrue("Neutral cell shouldn't contain any soldiers.", cell.getNumSoldiers() == 0);
     }
 
     @Test

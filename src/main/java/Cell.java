@@ -1,10 +1,9 @@
-import org.omg.SendingContext.RunTime;
-
 public class Cell {
     static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
-    static final String NEGATIVE_CONTROLLING_PLAYER_ID_ERROR = "Negative controlling player ID is not allowed.";
+    static final String CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR = "A cell can't be controlled by a player without having any soldiers in it";
+    static final String NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR = "Non-positive controlling player ID is not allowed.";
     static final String NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR = "Negative amount of soldiers is not allowed.";
-    static final String NON_NEUTRAL_CELL_CONTAINING_SOLDIERS = "A cell cannot be created with a controlling player but without soldiers";
+
     private int controllingPlayerId;
     private int numSoldiers;
 
@@ -17,14 +16,15 @@ public class Cell {
             this.controllingPlayerId = controllingPlayerId;
             this.numSoldiers = numSoldiers;
         }
-
     }
 
     private void throwOnInvalidConstructorParams(int controllingPlayerId, int numSoldiers) {
         if (isZeroUpdate(controllingPlayerId) && !isZeroUpdate(numSoldiers))
             throw new RuntimeException(NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
+        if (!isZeroUpdate(controllingPlayerId) && isZeroUpdate(numSoldiers))
+            throw new RuntimeException(CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
         if (isNegativeUpdate(controllingPlayerId))
-            throw new RuntimeException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
+            throw new RuntimeException(NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
         if (isNegativeUpdate(numSoldiers))
             throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
     }
@@ -96,12 +96,8 @@ public class Cell {
     }
 
     private boolean isNonPlayerSpecificControllingPlayerUpdate(int controllingPlayerId) {
-        if (isNegativeUpdate(controllingPlayerId))
-            throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        if (isZeroUpdate(controllingPlayerId)) {
-            makeNeutral();
-            return false;
-        }
+        if (isNegativeUpdate(controllingPlayerId) || isZeroUpdate(controllingPlayerId))
+            throw new IllegalArgumentException(NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
         return true;
     }
 

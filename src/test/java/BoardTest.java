@@ -60,6 +60,14 @@ public class BoardTest {
         TestUtils.assertCellContents(board.getHome2Cell(), 2, soldiers);
     }
 
+    @Test
+    public void populateHomeBasesReturnsBoardWithNeutralHomes() {
+        board.populateHomeBases(0);
+
+        TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
+        TestUtils.assertCellContents(board.getHome2Cell(), 0, 0);
+    }
+
     @Test(expected = RuntimeException.class)
     public void cannotSetCellsToNull() {
         board.setCell(4, 3, null);
