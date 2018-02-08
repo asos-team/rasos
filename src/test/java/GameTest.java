@@ -13,7 +13,7 @@ public class GameTest {
     private Player playerB;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         boardDim = 7;
         playerA = mock(Player.class);
         playerB = mock(Player.class);
@@ -26,7 +26,7 @@ public class GameTest {
     }
 
     @Test
-    public void populatesHomeBasesWithSpecifiedNumberOfSoldiers() throws Exception {
+    public void populatesHomeBasesWithSpecifiedNumberOfSoldiers() {
         int soldiers = 99;
         Game game = createSimpleGame(soldiers);
 
@@ -72,8 +72,8 @@ public class GameTest {
 
         game.start();
 
-        verify(reinforcer).apply(1, 3, movesA, game.getBoard());
-        verify(reinforcer).apply(2, 2, movesB, game.getBoard());
+        verify(reinforcer).apply(game.getBoard(), movesA, 3, 1);
+        verify(reinforcer).apply(game.getBoard(), movesB, 2, 2);
     }
 
     @Test
