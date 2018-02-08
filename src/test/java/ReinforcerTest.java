@@ -28,22 +28,12 @@ public class ReinforcerTest {
 
     @Test
     public void reinforcementMove_isApplied_playerA() {
-        int id = 1;
-        int soldiers = 13;
-        int quota = 1;
-        int col = 4;
-        int row = 1;
-        test_reinforcementMove_isApplied(id, soldiers, quota, col, row);
+        test_reinforcementMove_isApplied(1, 13, 1, 4, 1);
     }
 
     @Test
     public void reinforcementMove_isApplied_playerB() {
-        int id = 2;
-        int soldiers = 56;
-        int quota = 1;
-        int col = 2;
-        int row = 6;
-        test_reinforcementMove_isApplied(id, soldiers, quota, col, row);
+        test_reinforcementMove_isApplied(2, 56, 1, 2, 6);
     }
 
     @Test
