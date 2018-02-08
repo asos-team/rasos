@@ -147,21 +147,6 @@ public class CellTest {
     }
 
     @Test
-    public void updateControllingPlayerId() {
-        Cell cell = new Cell(3, 32);
-        cell.updateControllingPlayerId(5);
-        assertTrue("cell should be controlled by the playerId it was set to", cell.isControlledBy(5));
-    }
-
-    @Test
-    public void cannotSetControllingPlayerToANonPositiveNumber() {
-        expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        Cell cell = new Cell(5, 12);
-        cell.updateControllingPlayerId(0);
-    }
-
-    @Test
     public void humanReadableToString() {
         Cell player1Cell = new Cell(1, 10);
         Cell neutralCell = Cell.neutral();

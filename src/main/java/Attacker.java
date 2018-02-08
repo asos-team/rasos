@@ -52,8 +52,7 @@ public class Attacker {
     }
 
     private void executeReinforcementAttackMove(int playerId, Cell destCell, int amount) {
-        destCell.updateNumSoldiers(destCell.getNumSoldiers() + amount);
-        destCell.updateControllingPlayerId(playerId);
+        destCell.setValues(playerId, destCell.getNumSoldiers() + amount);
     }
 
     private boolean isConqueringAttackMove(Cell destCell, int amount) {
@@ -61,8 +60,7 @@ public class Attacker {
     }
 
     private void executeConqueringAttackMove(int playerId, Cell destCell, int amount) {
-        destCell.updateControllingPlayerId(playerId);
-        destCell.updateNumSoldiers(amount - destCell.getNumSoldiers());
+        destCell.setValues(playerId,amount-destCell.getNumSoldiers());
     }
 
     private boolean isNonConqueringAttackMove(Cell destCell, int amount) {

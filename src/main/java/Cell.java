@@ -82,19 +82,6 @@ public class Cell {
         return true;
     }
 
-    @Deprecated
-    void updateControllingPlayerId(int controllingPlayerId) {
-        boolean isValidUpdate = isNonPlayerSpecificControllingPlayerUpdate(controllingPlayerId);
-        if (isValidUpdate)
-            this.controllingPlayerId = controllingPlayerId;
-    }
-
-    private boolean isNonPlayerSpecificControllingPlayerUpdate(int controllingPlayerId) {
-        if (controllingPlayerId <= 0)
-            throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        return true;
-    }
-
     private void makeNeutral() {
         numSoldiers = 0;
         controllingPlayerId = 0;
