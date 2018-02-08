@@ -1,30 +1,23 @@
 public class Cell {
     static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
     static final String CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR = "A cell can't be controlled by a player without having any soldiers in it";
-    static final String NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR = "Non-positive controlling player ID is not allowed.";
+    static final String NEGATIVE_CONTROLLING_PLAYER_ID_ERROR = "Non-positive controlling player ID is not allowed.";
     static final String NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR = "Negative amount of soldiers is not allowed.";
 
     private int controllingPlayerId;
     private int numSoldiers;
 
     Cell(int controllingPlayerId, int numSoldiers) {
-        throwOnInvalidConstructorParams(controllingPlayerId, numSoldiers);
-
-        if (numSoldiers == 0) {
-            makeNeutral();
-        } else {
-            this.controllingPlayerId = controllingPlayerId;
-            this.numSoldiers = numSoldiers;
-        }
+        setValues(controllingPlayerId, numSoldiers);
     }
 
-    private void throwOnInvalidConstructorParams(int controllingPlayerId, int numSoldiers) {
+    private void throwOnInvalidSetParams(int controllingPlayerId, int numSoldiers) {
         if (controllingPlayerId == 0 && numSoldiers != 0)
             throw new RuntimeException(NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
         if (controllingPlayerId != 0 && numSoldiers == 0)
             throw new RuntimeException(CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
         if (controllingPlayerId < 0)
-            throw new RuntimeException(NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
+            throw new RuntimeException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
         if (numSoldiers < 0)
             throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
     }
@@ -98,7 +91,7 @@ public class Cell {
 
     private boolean isNonPlayerSpecificControllingPlayerUpdate(int controllingPlayerId) {
         if (controllingPlayerId <= 0)
-            throw new IllegalArgumentException(NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
+            throw new IllegalArgumentException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
         return true;
     }
 
@@ -108,6 +101,7 @@ public class Cell {
     }
 
     public void setValues(int controllingPlayerId, int numSoldiers) {
+        throwOnInvalidSetParams(controllingPlayerId, numSoldiers);
         this.controllingPlayerId = controllingPlayerId;
         this.numSoldiers = numSoldiers;
     }

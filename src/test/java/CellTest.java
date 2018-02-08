@@ -1,4 +1,3 @@
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,6 +21,19 @@ public class CellTest {
     }
 
     @Test
+    public void validatesConstructorParamsOnCellCreation() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+        new Cell(9, -9);
+    }
+
+    @Test
+    public void createsCellWithCorrectValuesOnConstruction() {
+        Cell cell = new Cell(5, 5);
+        TestUtils.assertCellContents(cell, 5, 5);
+    }
+
+    @Test
     public void impossibleToCreateNeutralCellWithSoldiers() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
@@ -38,7 +50,7 @@ public class CellTest {
     @Test
     public void controllingPlayerMustBeAPositiveNumber() {
         expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage(Cell.NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
+        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
         new Cell(-5, 12);
     }
 
@@ -47,6 +59,39 @@ public class CellTest {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         new Cell(2, -70);
+    }
+
+    @Test
+    public void throwOnInvalidConstructorParamsThrowsOnNeutralCellContainingSoldiers() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
+        Cell cell = new Cell(0, 0);
+        cell.setValues(0, 12);
+    }
+
+    @Test
+    public void throwOnInvalidConstructorParamsThrowsOnControlledCellWithZeroSoldiers() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
+        Cell cell = new Cell(0, 0);
+        cell.setValues(5, 0);
+    }
+
+    @Test
+    public void throwOnInvalidConstructorParamsThrowsOnNegativeControllingPlayerId() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
+        Cell cell = new Cell(0, 0);
+        cell.setValues(-5, 12);
+
+    }
+
+    @Test
+    public void throwOnInvalidConstructorParamsThrowsOnNegativeAmountOfSoldiers() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+        Cell cell = new Cell(0, 0);
+        cell.setValues(2, -70);
     }
 
     @Test
@@ -93,15 +138,13 @@ public class CellTest {
         TestUtils.assertCellContents(cell, 2, 4);
     }
 
-    @Ignore
     @Test
-    public void cantSetValuesWithNegativeSoldiers() {
+    public void cantSetValuesWithInvalidParams() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         Cell cell = new Cell(6, 7);
         cell.setValues(5, -1);
     }
-
 
     @Test
     public void updateControllingPlayerId() {
@@ -113,7 +156,7 @@ public class CellTest {
     @Test
     public void cannotSetControllingPlayerToANonPositiveNumber() {
         expectedEx.expect(RuntimeException.class);
-        expectedEx.expectMessage(Cell.NON_POSITIVE_CONTROLLING_PLAYER_ID_ERROR);
+        expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
         Cell cell = new Cell(5, 12);
         cell.updateControllingPlayerId(0);
     }
