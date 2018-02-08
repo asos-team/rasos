@@ -62,7 +62,7 @@ public class CellTest {
     }
 
     @Test
-    public void throwOnInvalidConstructorParamsThrowsOnNeutralCellContainingSoldiers() {
+    public void setValuesThrowsOnNeutralCellContainingSoldiers() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
         Cell cell = new Cell(0, 0);
@@ -70,7 +70,7 @@ public class CellTest {
     }
 
     @Test
-    public void throwOnInvalidConstructorParamsThrowsOnControlledCellWithZeroSoldiers() {
+    public void setValuesThrowsOnControlledCellWithZeroSoldiers() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
         Cell cell = new Cell(0, 0);
@@ -78,7 +78,7 @@ public class CellTest {
     }
 
     @Test
-    public void throwOnInvalidConstructorParamsThrowsOnNegativeControllingPlayerId() {
+    public void setValuesThrowsOnNegativeControllingPlayerId() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
         Cell cell = new Cell(0, 0);
@@ -87,7 +87,7 @@ public class CellTest {
     }
 
     @Test
-    public void throwOnInvalidConstructorParamsThrowsOnNegativeAmountOfSoldiers() {
+    public void setValuesThrowsOnNegativeAmountOfSoldiers() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         Cell cell = new Cell(0, 0);
