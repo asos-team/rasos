@@ -7,8 +7,9 @@ class Game {
     private final Reinforcer reinforcer;
     private final Attacker attacker;
     private Board board;
+    private RiskLogger logger;
 
-    Game(int dim, int numSoldiers, Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer) {
+    Game(int dim, int numSoldiers, Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer,RiskLogger logger) {
         Board board = new Board(dim);
         this.players = new HashMap<>(2);
         players.put(1, playerA);
@@ -17,9 +18,11 @@ class Game {
         this.reinforcer = reinforcer;
         this.attacker = attacker;
         this.board.populateHomeBases(numSoldiers);
+        this.logger=logger;
     }
 
     void start() {
+        logger.logStart();
         reinforce();
         attack();
     }

@@ -11,12 +11,14 @@ public class GameTest {
     private int boardDim;
     private Player playerA;
     private Player playerB;
+    private RiskLogger logger;
 
     @Before
     public void setUp() {
         boardDim = 7;
         playerA = mock(Player.class);
         playerB = mock(Player.class);
+        logger = mock(RiskLogger.class);
     }
 
     @Test
@@ -103,6 +105,13 @@ public class GameTest {
         verify(attacker).apply(game.getBoard(), movesA, movesB);
     }
 
+    @Test
+    public void gameCallsLogStartOnMatchStart(){
+        Game game = createSimpleGame();
+        game.start();
+        verify(logger).logStart();
+    }
+
     private Game createSimpleGame() {
         return createSimpleGame(new Reinforcer(), new Attacker());
     }
@@ -116,7 +125,7 @@ public class GameTest {
     }
 
     private Game createSimpleGame(Reinforcer reinforcer, Attacker attacker, int soldiers) {
-        return new Game(boardDim, soldiers, playerA, playerB, attacker, reinforcer);
+        return new Game(boardDim, soldiers, playerA, playerB, attacker, reinforcer,logger);
     }
 
     private void makePlayerAControlTotalOf_3_Cells(Game game) {
