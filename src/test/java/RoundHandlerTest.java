@@ -42,7 +42,6 @@ public class RoundHandlerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @Ignore
     public void callsReinforcerWithReinforcementMoves() {
         Reinforcer reinforcer = mock(Reinforcer.class);
 
