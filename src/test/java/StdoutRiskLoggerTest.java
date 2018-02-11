@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

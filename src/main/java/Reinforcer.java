@@ -1,4 +1,10 @@
 public class Reinforcer {
+    private RiskLogger logger;
+
+    Reinforcer(RiskLogger logger) {
+        this.logger = logger;
+    }
+
     void apply(Board board, Iterable<ReinforcementMove> moves, int quota, int playerId) {
         if (moves == null) return;
         for (ReinforcementMove move : moves) {
@@ -8,6 +14,7 @@ public class Reinforcer {
                 if (cell.isControlledBy(playerId) && !(amount > quota)) {
                     cell.updateNumSoldiers(cell.getNumSoldiers() + amount);
                     quota -= amount;
+                    logger.logSuccessfulReinforcement(playerId, move);
                 }
             } catch (Exception ignored) {
             }

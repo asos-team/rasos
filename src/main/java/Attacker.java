@@ -60,7 +60,7 @@ public class Attacker {
     }
 
     private void executeConqueringAttackMove(int playerId, Cell destCell, int amount) {
-        destCell.setValues(playerId,amount-destCell.getNumSoldiers());
+        destCell.setValues(playerId, amount - destCell.getNumSoldiers());
     }
 
     private boolean isNonConqueringAttackMove(Cell destCell, int amount) {

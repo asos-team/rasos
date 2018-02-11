@@ -1,3 +1,4 @@
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -5,8 +6,11 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class ReinforcerTest {
 
@@ -14,10 +18,12 @@ public class ReinforcerTest {
     public final ExpectedException expectedEx = ExpectedException.none();
     private Reinforcer reinforcer;
     private Board board;
+    private RiskLogger logger;
 
     @Before
     public void setUp() {
-        reinforcer = new Reinforcer();
+        logger = mock(RiskLogger.class);
+        reinforcer = new Reinforcer(logger);
         board = new Board(18);
     }
 
@@ -103,6 +109,19 @@ public class ReinforcerTest {
 
         TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
         TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
+    }
+
+    @Test
+    public void appliedPlayerReinforcementMovesAreLogged() {
+        HashSet<ReinforcementMove> appliedMoves = Sets.newHashSet(new ReinforcementMove(4, 1, 1), new ReinforcementMove(4, 1, 1));
+        board.cellAt(4, 1).setValues(1, 1);
+        int playerId = 1;
+
+        reinforcer.apply(board, appliedMoves, 2, playerId);
+
+        for (ReinforcementMove move : appliedMoves) {
+            verify(logger).logSuccessfulReinforcement(playerId,move);
+        }
     }
 
     private void test_reinforcementMove_isApplied(int id, int soldiers, int quota, int col, int row) {
