@@ -33,8 +33,8 @@ public class RoundHandlerTest {
 
     @Test
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
-        makePlayerAControlTotalOf_3_Cells(board);
-        makePlayerBControlTotalOf_2_Cells(board);
+        makePlayerAControlTotalOf_3_Cells();
+        makePlayerBControlTotalOf_2_Cells();
 
         roundHandler.playOneRound(board);
 
@@ -50,8 +50,8 @@ public class RoundHandlerTest {
         when(playerA.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesA);
         when(playerB.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesB);
 
-        makePlayerAControlTotalOf_3_Cells(board);
-        makePlayerBControlTotalOf_2_Cells(board);
+        makePlayerAControlTotalOf_3_Cells();
+        makePlayerBControlTotalOf_2_Cells();
 
         roundHandler.playOneRound(board);
 
@@ -80,13 +80,13 @@ public class RoundHandlerTest {
         verify(attacker).apply(board, movesA, movesB);
     }
 
-    private void makePlayerAControlTotalOf_3_Cells(Board board) {
+    private void makePlayerAControlTotalOf_3_Cells() {
         board.setCell(1, 1, new Cell(1, 4));
         board.setCell(1, 3, new Cell(1, 4));
         board.setCell(3, 1, new Cell(1, 19));
     }
 
-    private void makePlayerBControlTotalOf_2_Cells(Board board) {
+    private void makePlayerBControlTotalOf_2_Cells() {
         board.setCell(2, 2, new Cell(2, 2));
         board.setCell(3, 2, new Cell(2, 2));
     }
