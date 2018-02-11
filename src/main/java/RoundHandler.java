@@ -1,14 +1,16 @@
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RoundHandler {
-    private final Player playerA;
-    private final Player playerB;
+    private final Map<Integer, Player> players;
     private final Attacker attacker;
     private final Reinforcer reinforcer;
 
     public RoundHandler(Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer) {
-        this.playerA = playerA;
-        this.playerB = playerB;
+        this.players = new HashMap<>(2);
+        players.put(1, playerA);
+        players.put(2, playerB);
         this.attacker = attacker;
         this.reinforcer = reinforcer;
     }
@@ -18,20 +20,19 @@ public class RoundHandler {
         attack(board);
     }
 
-    private void attack(Board board) {
-        Iterable<AttackMove> movesA = getAttackMoves(playerA, board);
-        Iterable<AttackMove> movesB = getAttackMoves(playerB, board);
-        //noinspection unchecked
-        attacker.apply(board, movesA, movesB);
+    private void reinforce(Board board) {
+        for (int id = 1; id <= 2; id++) {
+            int quota = board.getPlayerCellCount(id);
+            Iterable<ReinforcementMove> moves = players.get(id).onReinforcement(board, quota);
+            reinforcer.apply(board, moves, quota, id);
+        }
     }
 
-    private void reinforce(Board board) {
-        int quotaA = board.getPlayerCellCount(1);
-        int quotaB = board.getPlayerCellCount(2);
-        Iterable<ReinforcementMove> movesA = playerA.onReinforcement(board, quotaA);
-        Iterable<ReinforcementMove> movesB = playerB.onReinforcement(board, quotaB);
-        reinforcer.apply(board, movesA, quotaA, 1);
-        reinforcer.apply(board, movesB, quotaB, 2);
+    private void attack(Board board) {
+        Iterable<AttackMove> movesA = getAttackMoves(players.get(1), board);
+        Iterable<AttackMove> movesB = getAttackMoves(players.get(2), board);
+        //noinspection unchecked
+        attacker.apply(board, movesA, movesB);
     }
 
     private Iterable<AttackMove> getAttackMoves(Player player, Board board) {
