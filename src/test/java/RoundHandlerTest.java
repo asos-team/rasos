@@ -61,7 +61,6 @@ public class RoundHandlerTest {
     }
 
     @Test
-    @Ignore
     public void callsPlayerOnAttackWithGameBoard() {
         RoundHandler roundHandler = createRoundHandler();
 

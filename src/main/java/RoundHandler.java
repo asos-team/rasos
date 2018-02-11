@@ -16,5 +16,8 @@ public class RoundHandler {
         Iterable<ReinforcementMove> movesB = playerB.onReinforcement(board, quotaB);
         reinforcer.apply(board, movesA, quotaA, 1);
         reinforcer.apply(board, movesB, quotaB, 2);
+
+        playerA.onAttack(board);
+        playerB.onAttack(board);
     }
 }
