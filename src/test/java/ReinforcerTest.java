@@ -124,6 +124,19 @@ public class ReinforcerTest {
         }
     }
 
+    @Test
+    public void unappliedPlayerReinforcementMovesAreLogged(){
+        HashSet<ReinforcementMove> appliedMoves = Sets.newHashSet(new ReinforcementMove(4, 1, 1), new ReinforcementMove(4, 1, 1));
+        board.cellAt(4, 1).setValues(1, 1);
+        int playerId = 1;
+
+        reinforcer.apply(board, appliedMoves, 0, playerId);
+
+        for (ReinforcementMove move : appliedMoves) {
+            verify(logger).logFailedReinforcement(playerId,move);
+        }
+    }
+
     private void test_reinforcementMove_isApplied(int id, int soldiers, int quota, int col, int row) {
         board.setCell(col, row, new Cell(id, soldiers));
 

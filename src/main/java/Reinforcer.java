@@ -15,6 +15,8 @@ public class Reinforcer {
                     cell.updateNumSoldiers(cell.getNumSoldiers() + amount);
                     quota -= amount;
                     logger.logSuccessfulReinforcement(playerId, move);
+                } else{
+                    logger.logFailedReinforcement(playerId, move);
                 }
             } catch (Exception ignored) {
             }
