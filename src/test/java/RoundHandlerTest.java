@@ -9,18 +9,22 @@ public class RoundHandlerTest {
     private Board board;
     private Player playerA;
     private Player playerB;
+    private Reinforcer reinforcer;
+    private Attacker attacker;
+    private RoundHandler roundHandler;
 
     @Before
     public void setUp() {
         board = new Board(7);
         playerA = mock(Player.class);
         playerB = mock(Player.class);
+        reinforcer = mock(Reinforcer.class);
+        attacker = mock(Attacker.class);
+        roundHandler = new RoundHandler(playerA, playerB, attacker, reinforcer);
     }
 
     @Test
     public void callsPlayerOnReinforcementWithGameBoard() {
-        RoundHandler roundHandler = createRoundHandler();
-
         roundHandler.playOneRound(board);
 
         verify(playerA).onReinforcement(eq(board), any(int.class));
@@ -29,7 +33,6 @@ public class RoundHandlerTest {
 
     @Test
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
-        RoundHandler roundHandler = createRoundHandler();
         makePlayerAControlTotalOf_3_Cells(board);
         makePlayerBControlTotalOf_2_Cells(board);
 
@@ -42,14 +45,11 @@ public class RoundHandlerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void callsReinforcerWithReinforcementMoves() {
-        Reinforcer reinforcer = mock(Reinforcer.class);
-
         Iterable<ReinforcementMove> movesA = mock(Iterable.class);
         Iterable<ReinforcementMove> movesB = mock(Iterable.class);
         when(playerA.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesA);
         when(playerB.onReinforcement(any(Board.class), any(int.class))).thenReturn(movesB);
 
-        RoundHandler roundHandler = createRoundHandler(reinforcer, new Attacker());
         makePlayerAControlTotalOf_3_Cells(board);
         makePlayerBControlTotalOf_2_Cells(board);
 
@@ -61,8 +61,6 @@ public class RoundHandlerTest {
 
     @Test
     public void callsPlayerOnAttackWithGameBoard() {
-        RoundHandler roundHandler = createRoundHandler();
-
         roundHandler.playOneRound(board);
 
         verify(playerA).onAttack(board);
@@ -72,26 +70,14 @@ public class RoundHandlerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void callsAttackerWithAttackMoves() {
-        Attacker attacker = mock(Attacker.class);
-
         Iterable<AttackMove> movesA = mock(Iterable.class);
         Iterable<AttackMove> movesB = mock(Iterable.class);
         when(playerA.onAttack(any(Board.class))).thenReturn(movesA);
         when(playerB.onAttack(any(Board.class))).thenReturn(movesB);
 
-        RoundHandler roundHandler = createRoundHandler(new Reinforcer(), attacker);
-
         roundHandler.playOneRound(board);
 
         verify(attacker).apply(board, movesA, movesB);
-    }
-
-    private RoundHandler createRoundHandler() {
-        return createRoundHandler(new Reinforcer(), new Attacker());
-    }
-
-    private RoundHandler createRoundHandler(Reinforcer reinforcer, Attacker attacker) {
-        return new RoundHandler(playerA, playerB, attacker, reinforcer);
     }
 
     private void makePlayerAControlTotalOf_3_Cells(Board board) {
