@@ -14,15 +14,24 @@ public class RoundHandler {
     }
 
     public void playOneRound(Board board) {
+        reinforce(board);
+        attack(board);
+    }
+
+    private void attack(Board board) {
+        Iterable<AttackMove> movesA = getAttackMoves(playerA, board);
+        Iterable<AttackMove> movesB = getAttackMoves(playerB, board);
+        //noinspection unchecked
+        attacker.apply(board, movesA, movesB);
+    }
+
+    private void reinforce(Board board) {
         int quotaA = board.getPlayerCellCount(1);
         int quotaB = board.getPlayerCellCount(2);
         Iterable<ReinforcementMove> movesA = playerA.onReinforcement(board, quotaA);
         Iterable<ReinforcementMove> movesB = playerB.onReinforcement(board, quotaB);
         reinforcer.apply(board, movesA, quotaA, 1);
         reinforcer.apply(board, movesB, quotaB, 2);
-
-        //noinspection unchecked
-        attacker.apply(board, getAttackMoves(playerA, board), getAttackMoves(playerB, board));
     }
 
     private Iterable<AttackMove> getAttackMoves(Player player, Board board) {
