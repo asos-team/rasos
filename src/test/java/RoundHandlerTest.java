@@ -1,5 +1,4 @@
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.mockito.Matchers.any;
@@ -72,7 +71,6 @@ public class RoundHandlerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    @Ignore
     public void callsAttackerWithAttackMoves() {
         Attacker attacker = mock(Attacker.class);
 
