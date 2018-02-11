@@ -1,5 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,11 +16,12 @@ public class StdoutRiskLoggerTest {
     private StdoutRiskLogger logger;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         logger = new StdoutRiskLogger();
     }
+
     @Test
     public void newLoggerIsNotNull() {
         assertThat(logger, notNullValue());
@@ -29,7 +31,7 @@ public class StdoutRiskLoggerTest {
     public void logStartPrintsGameStarted() {
         logger.logStart();
 
-        assertEquals("Game started\r\n",outContent.toString());
+        assertEquals("Game started" + System.lineSeparator(), outContent.toString());
     }
 
 
