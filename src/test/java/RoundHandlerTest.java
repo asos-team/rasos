@@ -29,7 +29,6 @@ public class RoundHandlerTest {
     }
 
     @Test
-    @Ignore
     public void callsPlayerOnReinforcementWithNumberOfSoldiers() {
         RoundHandler roundHandler = createRoundHandler();
         makePlayerAControlTotalOf_3_Cells(board);

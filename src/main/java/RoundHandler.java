@@ -8,7 +8,9 @@ public class RoundHandler {
     }
 
     public void playOneRound(Board board) {
-        playerA.onReinforcement(board, -5481);
-        playerB.onReinforcement(board, 1699);
+        int quotaA = board.getPlayerCellCount(1);
+        int quotaB = board.getPlayerCellCount(2);
+        playerA.onReinforcement(board, quotaA);
+        playerB.onReinforcement(board, quotaB);
     }
 }
