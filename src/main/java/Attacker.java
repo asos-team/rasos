@@ -13,7 +13,17 @@ public class Attacker {
     }
 
     private boolean isValidMove(Board board, AttackMove move) {
+        return isValidAmount(board, move) &&
+                isBetweenNeighbouringCells(move);
+    }
+
+    private boolean isValidAmount(Board board, AttackMove move) {
         return move.getAmount() <= getOriginCell(board, move).getNumSoldiers();
+    }
+
+    private boolean isBetweenNeighbouringCells(AttackMove move) {
+        return Math.abs(move.getOriginCol() - move.getDestCol()) <= 1 &&
+                Math.abs(move.getOriginRow() - move.getDestRow()) <= 1;
     }
 
     private Cell getOriginCell(Board board, AttackMove move) {
