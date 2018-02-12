@@ -9,14 +9,16 @@ public class GameTest {
 
     private static final int NO_SOLDIERS = 0;
     private int boardDim;
-    private RiskLogger logger;
     private Game game;
     private RoundHandler handler;
+    private GameEndChecker checker;
+    private RiskLogger logger;
 
     @Before
     public void setUp() {
         boardDim = 7;
         handler = mock(RoundHandler.class);
+        checker = mock(GameEndChecker.class);
         logger = mock(RiskLogger.class);
         game = createSimpleGame(NO_SOLDIERS);
     }
@@ -44,9 +46,17 @@ public class GameTest {
     @Test
     public void gameEndsAfterDesiredNumberOfRounds() {
         int rounds = 13;
-        Game game = createSimpleGame(NO_SOLDIERS, rounds);
+        Game game = createLongGame(rounds);
         game.start();
         verify(handler, times(rounds)).playOneRound(game.getBoard());
+    }
+
+    @Test
+    public void gameChecksForGameEndingEachRound() {
+        int rounds = 13;
+        Game game = createLongGame(rounds);
+        game.start();
+        verify(checker, times(rounds)).isEndOfGame(game.getBoard());
     }
 
     @Test
@@ -56,10 +66,14 @@ public class GameTest {
     }
 
     private Game createSimpleGame(int soldiers) {
-        return createSimpleGame(soldiers, 1);
+        return createConfigurableGame(soldiers, 1);
     }
 
-    private Game createSimpleGame(int soldiers, int rounds) {
-        return new Game(boardDim, soldiers, rounds, handler, logger);
+    private Game createLongGame(int rounds) {
+        return createConfigurableGame(NO_SOLDIERS, rounds);
+    }
+
+    private Game createConfigurableGame(int soldiers, int rounds) {
+        return new Game(boardDim, soldiers, rounds, handler, checker, logger);
     }
 }
