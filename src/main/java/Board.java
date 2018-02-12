@@ -15,7 +15,10 @@ class Board {
     }
 
     void populateHomeBases(int numSoldiers) {
-        if (numSoldiers != 0) {
+        if (numSoldiers == 0) {
+            setCell(1, 1, Cell.neutral());
+            setCell(dim, dim, Cell.neutral());
+        } else {
             setCell(1, 1, new Cell(1, numSoldiers));
             setCell(dim, dim, new Cell(2, numSoldiers));
         }

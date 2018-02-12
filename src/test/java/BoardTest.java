@@ -62,10 +62,11 @@ public class BoardTest {
 
     @Test
     public void populateHomeBasesReturnsBoardWithNeutralHomes() {
+        board.populateHomeBases(17);
         board.populateHomeBases(0);
 
-        TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
-        TestUtils.assertCellContents(board.getHome2Cell(), 0, 0);
+        assertTrue("Home base A should be neutral", board.getHome1Cell().isNeutral());
+        assertTrue("Home base B should be neutral", board.getHome2Cell().isNeutral());
     }
 
     @Test(expected = RuntimeException.class)
