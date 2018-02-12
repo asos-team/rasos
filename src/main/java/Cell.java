@@ -82,7 +82,7 @@ public class Cell {
         return true;
     }
 
-    private void makeNeutral() {
+    public void makeNeutral() {
         numSoldiers = 0;
         controllingPlayerId = 0;
     }

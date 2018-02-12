@@ -139,6 +139,13 @@ public class CellTest {
     }
 
     @Test
+    public void makeNeutral() {
+        Cell cell = new Cell(3, 5);
+        cell.makeNeutral();
+        assertTrue("Cell should be neutral.", cell.isNeutral());
+    }
+
+    @Test
     public void cantSetValuesWithInvalidParams() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
