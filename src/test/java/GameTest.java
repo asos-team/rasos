@@ -60,6 +60,15 @@ public class GameTest {
     }
 
     @Test
+    public void whenGameEndsItNoLongerPlayRounds() {
+        int rounds = 8;
+        when(checker.isEndOfGame(any(Board.class))).thenReturn(false, false, false, true);
+        Game game = createLongGame(rounds);
+        game.start();
+        verify(handler, times(3)).playOneRound(game.getBoard());
+    }
+
+    @Test
     public void gameCallsLogStartOnMatchStart() {
         game.start();
         verify(logger).logStart();
