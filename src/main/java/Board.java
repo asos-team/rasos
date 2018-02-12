@@ -16,14 +16,18 @@ class Board {
 
     void populateHomeBases(int numSoldiers) {
         if (numSoldiers == 0) {
-            setCell(1, 1, Cell.neutral());
-            setCell(dim, dim, Cell.neutral());
+            cellAt(1, 1).setValues(0, 0);
+            cellAt(dim, dim).setValues(0, 0);
         } else {
-            setCell(1, 1, new Cell(1, numSoldiers));
-            setCell(dim, dim, new Cell(2, numSoldiers));
+            cellAt(1, 1).setValues(1, numSoldiers);
+            cellAt(dim, dim).setValues(2, numSoldiers);
         }
     }
 
+    /**
+     * @deprecated Use {@link #cellAt(int, int)} with {@link Cell#setValues(int, int)}
+     */
+    @Deprecated
     void setCell(int col, int row, Cell cell) {
         if (cell == null)
             throw new RuntimeException("Cell cannot hold null value.");
