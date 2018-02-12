@@ -3,8 +3,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class GameTest {
 
@@ -43,12 +42,24 @@ public class GameTest {
     }
 
     @Test
+    public void gameEndsAfterDesiredNumberOfRounds() {
+        int rounds = 13;
+        Game game = createSimpleGame(NO_SOLDIERS, rounds);
+        game.start();
+        verify(handler, times(rounds)).playOneRound(game.getBoard());
+    }
+
+    @Test
     public void gameCallsLogStartOnMatchStart() {
         game.start();
         verify(logger).logStart();
     }
 
     private Game createSimpleGame(int soldiers) {
-        return new Game(boardDim, soldiers, handler, logger);
+        return createSimpleGame(soldiers, 1);
+    }
+
+    private Game createSimpleGame(int soldiers, int rounds) {
+        return new Game(boardDim, soldiers, rounds, handler, logger);
     }
 }
