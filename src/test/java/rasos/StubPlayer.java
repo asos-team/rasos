@@ -1,3 +1,5 @@
+package rasos;
+
 import java.util.Collections;
 
 public class StubPlayer implements Player {

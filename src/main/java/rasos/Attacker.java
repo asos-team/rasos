@@ -1,3 +1,5 @@
+package rasos;
+
 public class Attacker {
 
     public void apply(Board board, Iterable<AttackMove>... moves) {

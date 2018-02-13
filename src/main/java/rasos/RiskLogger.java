@@ -1,3 +1,5 @@
+package rasos;
+
 public interface RiskLogger {
     void logStart();
 

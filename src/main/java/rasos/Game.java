@@ -1,3 +1,5 @@
+package rasos;
+
 class Game {
     private final Board board;
     private final int rounds;

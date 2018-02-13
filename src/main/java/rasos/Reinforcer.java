@@ -1,3 +1,5 @@
+package rasos;
+
 public class Reinforcer {
     private RiskLogger logger;
 

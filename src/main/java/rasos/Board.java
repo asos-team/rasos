@@ -1,3 +1,5 @@
+package rasos;
+
 import java.util.stream.Stream;
 
 class Board {

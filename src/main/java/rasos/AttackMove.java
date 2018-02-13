@@ -1,3 +1,5 @@
+package rasos;
+
 public class AttackMove {
     private final int originCol;
     private final int originRow;

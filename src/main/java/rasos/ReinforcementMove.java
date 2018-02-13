@@ -1,3 +1,5 @@
+package rasos;
+
 public class ReinforcementMove {
     private final int col;
     private final int row;
