@@ -65,4 +65,8 @@ class Board {
         return Stream.of(configuration)
                 .flatMap(Stream::of);
     }
+
+    public boolean isEmpty() {
+        return true;
+    }
 }

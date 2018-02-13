@@ -39,6 +39,11 @@ public class BoardTest {
     }
 
     @Test
+    public void isEmpty() {
+        assertTrue("Board should be empty.", new Board(12).isEmpty());
+    }
+
+    @Test
     public void retrievesHome1Cell() {
         board.cellAt(1, 1).setValues(1, 7);
 
