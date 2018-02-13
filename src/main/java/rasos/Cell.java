@@ -76,8 +76,10 @@ public class Cell {
 
     private boolean isPositiveNumSoldiersUpdate(int numSoldiers) {
         if (numSoldiers < 0)
+            // FIXME: 13/02/18 throwing an exception is unpredictable behaviour of a boolean method
             throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
         if (numSoldiers == 0) {
+            // FIXME: 13/02/18 you shouldn't do any state-changing operations on value-returning method
             makeNeutral();
             return false;
         }
