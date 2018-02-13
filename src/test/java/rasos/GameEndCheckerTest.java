@@ -1,6 +1,5 @@
 package rasos;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -14,8 +13,9 @@ public class GameEndCheckerTest {
     }
 
     @Test
-    @Ignore
     public void gameIsContinuedWhenBoardIsNotEmpty() {
-        assertFalse("Game should continue when the board is not empty.", new GameEndChecker().isEndOfGame(new Board(5)));
+        Board board = new Board(5);
+        board.populateHomeBases(11);
+        assertFalse("Game should continue when the board is not empty.", new GameEndChecker().isEndOfGame(board));
     }
 }
