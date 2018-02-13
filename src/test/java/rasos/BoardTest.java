@@ -44,6 +44,13 @@ public class BoardTest {
     }
 
     @Test
+    public void isNotEmpty() {
+        Board board = new Board(12);
+        board.populateHomeBases(33);
+        assertFalse("Board shouldn't be empty.", board.isEmpty());
+    }
+
+    @Test
     public void retrievesHome1Cell() {
         board.cellAt(1, 1).setValues(1, 7);
 

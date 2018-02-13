@@ -34,6 +34,10 @@ class Board {
         return dim;
     }
 
+    public boolean isEmpty() {
+        return getBoardCellStream().allMatch(Cell::isNeutral);
+    }
+
     int getPlayerCellCount(int playerId) {
         return (int) getBoardCellStream()
                 .filter(cell -> cell.isControlledBy(playerId))
@@ -64,9 +68,5 @@ class Board {
     private Stream<Cell> getBoardCellStream() {
         return Stream.of(configuration)
                 .flatMap(Stream::of);
-    }
-
-    public boolean isEmpty() {
-        return true;
     }
 }
