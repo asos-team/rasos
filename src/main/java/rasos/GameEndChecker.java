@@ -2,6 +2,10 @@ package rasos;
 
 public class GameEndChecker {
     public boolean isEndOfGame(Board board) {
-        return board.getPlayerCellCount(1) == 0 || board.getPlayerCellCount(2) == 0 || board.isEmpty();
+        return playerHaveNoSoldiers(board, 1) || playerHaveNoSoldiers(board, 2);
+    }
+
+    private boolean playerHaveNoSoldiers(Board board, int id) {
+        return board.getPlayerCellCount(id) == 0;
     }
 }
