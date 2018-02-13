@@ -83,13 +83,13 @@ public class RoundHandlerTest {
     }
 
     private void makePlayerAControlTotalOf_3_Cells() {
-        board.setCell(1, 1, new Cell(1, 4));
-        board.setCell(1, 3, new Cell(1, 4));
-        board.setCell(3, 1, new Cell(1, 19));
+        board.cellAt(1, 1).setValues(1, 4);
+        board.cellAt(1, 3).setValues(1, 4);
+        board.cellAt(3, 1).setValues(1, 19);
     }
 
     private void makePlayerBControlTotalOf_2_Cells() {
-        board.setCell(2, 2, new Cell(2, 2));
-        board.setCell(3, 2, new Cell(2, 2));
+        board.cellAt(2, 2).setValues(2, 2);
+        board.cellAt(3, 2).setValues(2, 2);
     }
 }

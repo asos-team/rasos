@@ -46,7 +46,7 @@ public class ReinforcerTest {
 
     @Test
     public void reinforcementMove_toCellYouDoNotControl_isIgnored() {
-        board.setCell(1, 1, new Cell(1, 4));
+        board.cellAt(1, 1).setValues(1, 4);
 
         reinforcer.apply(board, Collections.singleton(new ReinforcementMove(3, 1, 1)), 1, 1);
 
@@ -56,7 +56,7 @@ public class ReinforcerTest {
 
     @Test
     public void reinforcementMove_withExceedingAmount_isIgnored() {
-        board.setCell(3, 1, new Cell(2, 4));
+        board.cellAt(3, 1).setValues(2, 4);
 
         reinforcer.apply(board, Collections.singleton(new ReinforcementMove(3, 1, 5)), 1, 2);
 
@@ -65,15 +65,15 @@ public class ReinforcerTest {
 
     @Test
     public void reinforcementMove_withInvalidCoordinates_isIgnored() {
-        board.setCell(3, 2, new Cell(2, 7));
+        board.cellAt(3, 2).setValues(2, 7);
 
         reinforcer.apply(board, Collections.singleton(new ReinforcementMove(3, 0, 1)), 2, 2);
     }
 
     @Test
     public void manyReinforcementMoves_areAllApplied() {
-        board.setCell(3, 2, new Cell(2, 7));
-        board.setCell(3, 1, new Cell(2, 3));
+        board.cellAt(3, 2).setValues(2, 7);
+        board.cellAt(3, 1).setValues(2, 3);
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(3, 1, 1));
@@ -86,7 +86,7 @@ public class ReinforcerTest {
 
     @Test
     public void amongValidAndInvalidReinforcementMoves_validMovesAreStillApplied() {
-        board.setCell(1, 1, new Cell(2, 4));
+        board.cellAt(1, 1).setValues(2, 4);
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(1, 1, 1));
@@ -100,8 +100,8 @@ public class ReinforcerTest {
 
     @Test
     public void manyReinforcementMoves_areAppliedToTheAllowedQuota() {
-        board.setCell(3, 2, new Cell(2, 7));
-        board.setCell(3, 1, new Cell(2, 3));
+        board.cellAt(3, 2).setValues(2, 7);
+        board.cellAt(3, 1).setValues(2, 3);
         ArrayList<ReinforcementMove> moves = new ArrayList<>();
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(3, 1, 2));
@@ -122,12 +122,12 @@ public class ReinforcerTest {
         reinforcer.apply(board, appliedMoves, 2, playerId);
 
         for (ReinforcementMove move : appliedMoves) {
-            verify(logger).logSuccessfulReinforcement(playerId,move);
+            verify(logger).logSuccessfulReinforcement(playerId, move);
         }
     }
 
     @Test
-    public void unappliedPlayerReinforcementMovesAreLogged(){
+    public void unappliedPlayerReinforcementMovesAreLogged() {
         HashSet<ReinforcementMove> appliedMoves = Sets.newHashSet(new ReinforcementMove(4, 1, 1), new ReinforcementMove(4, 1, 1));
         board.cellAt(4, 1).setValues(1, 1);
         int playerId = 1;
@@ -135,12 +135,12 @@ public class ReinforcerTest {
         reinforcer.apply(board, appliedMoves, 0, playerId);
 
         for (ReinforcementMove move : appliedMoves) {
-            verify(logger).logFailedReinforcement(playerId,move);
+            verify(logger).logFailedReinforcement(playerId, move);
         }
     }
 
     private void test_reinforcementMove_isApplied(int id, int soldiers, int quota, int col, int row) {
-        board.setCell(col, row, new Cell(id, soldiers));
+        board.cellAt(col, row).setValues(id, soldiers);
 
         reinforcer.apply(board, Collections.singleton(new ReinforcementMove(col, row, quota)), quota, id);
 

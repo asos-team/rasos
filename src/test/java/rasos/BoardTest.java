@@ -24,9 +24,9 @@ public class BoardTest {
 
     @Test
     public void retrievesCellsByCoordinates() {
-        Cell someCell = new Cell(777, 777);
-        board.setCell(2, 4, someCell);
-        assertEquals(someCell, board.cellAt(2, 4));
+        board.cellAt(2, 4).setValues(777, 777);
+
+        TestUtils.assertCellContents(board.cellAt(2, 4), 777, 777);
     }
 
     @Test
@@ -40,14 +40,14 @@ public class BoardTest {
 
     @Test
     public void retrievesHome1Cell() {
-        board.setCell(1, 1, new Cell(1, 7));
+        board.cellAt(1, 1).setValues(1, 7);
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 7);
     }
 
     @Test
     public void retrievesHome2Cell() {
-        board.setCell(dim, dim, new Cell(78, 11));
+        board.cellAt(dim, dim).setValues(78, 11);
 
         TestUtils.assertCellContents(board.getHome2Cell(), 78, 11);
     }
@@ -71,16 +71,11 @@ public class BoardTest {
         assertTrue("Home base B should be neutral", board.getHome2Cell().isNeutral());
     }
 
-    @Test(expected = RuntimeException.class)
-    public void cannotSetCellsToNull() {
-        board.setCell(4, 3, null);
-    }
-
     @Test
     public void getPlayerCellCount() {
-        board.setCell(2, 4, new Cell(7, 12));
-        board.setCell(6, 1, new Cell(7, 57));
-        board.setCell(3, 7, new Cell(7, 7));
+        board.cellAt(2, 4).setValues(7, 12);
+        board.cellAt(6, 1).setValues(7, 57);
+        board.cellAt(3, 7).setValues(7, 7);
 
         assertEquals(3, board.getPlayerCellCount(7));
     }

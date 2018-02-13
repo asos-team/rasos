@@ -26,16 +26,6 @@ class Board {
         }
     }
 
-    /**
-     * @deprecated Use {@link #cellAt(int, int)} with {@link Cell#setValues(int, int)}
-     */
-    @Deprecated
-    void setCell(int col, int row, Cell cell) {
-        if (cell == null)
-            throw new RuntimeException("Cell cannot hold null value.");
-        configuration[col - 1][row - 1] = cell;
-    }
-
     Cell cellAt(int col, int row) {
         return configuration[col - 1][row - 1];
     }
