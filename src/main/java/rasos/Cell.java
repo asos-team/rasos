@@ -13,6 +13,10 @@ public class Cell {
         setValues(controllingPlayerId, numSoldiers);
     }
 
+    static Cell neutral() {
+        return new Cell(0, 0);
+    }
+
     private void throwOnInvalidSetParams(int controllingPlayerId, int numSoldiers) {
         if (controllingPlayerId == 0 && numSoldiers != 0)
             throw new RuntimeException(NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
@@ -20,12 +24,7 @@ public class Cell {
             throw new RuntimeException(CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR);
         if (controllingPlayerId < 0)
             throw new RuntimeException(NEGATIVE_CONTROLLING_PLAYER_ID_ERROR);
-        if (numSoldiers < 0)
-            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
-    }
-
-    static Cell neutral() {
-        return new Cell(0, 0);
+        checkNotNegative(numSoldiers);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -69,21 +68,8 @@ public class Cell {
     }
 
     void updateNumSoldiers(int numSoldiers) {
-        boolean isValidUpdate = isPositiveNumSoldiersUpdate(numSoldiers);
-        if (isValidUpdate)
-            this.numSoldiers = numSoldiers;
-    }
-
-    private boolean isPositiveNumSoldiersUpdate(int numSoldiers) {
-        if (numSoldiers < 0)
-            // FIXME: 13/02/18 throwing an exception is unpredictable behaviour of a boolean method
-            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
-        if (numSoldiers == 0) {
-            // FIXME: 13/02/18 you shouldn't do any state-changing operations on value-returning method
-            makeNeutral();
-            return false;
-        }
-        return true;
+        checkNotNegative(numSoldiers);
+        setNumSoldiersAccordingToValue(numSoldiers);
     }
 
     public void makeNeutral() {
@@ -95,5 +81,18 @@ public class Cell {
         throwOnInvalidSetParams(controllingPlayerId, numSoldiers);
         this.controllingPlayerId = controllingPlayerId;
         this.numSoldiers = numSoldiers;
+    }
+
+    private void checkNotNegative(int numSoldiers) {
+        if (numSoldiers < 0)
+            throw new RuntimeException(NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR);
+    }
+
+    private void setNumSoldiersAccordingToValue(int numSoldiers) {
+        if (numSoldiers == 0) {
+            makeNeutral();
+        } else {
+            this.numSoldiers = numSoldiers;
+        }
     }
 }
