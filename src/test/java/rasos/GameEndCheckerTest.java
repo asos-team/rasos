@@ -2,8 +2,7 @@ package rasos;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GameEndCheckerTest {
 
@@ -24,5 +23,19 @@ public class GameEndCheckerTest {
         Board board = new Board(5);
         board.cellAt(2, 4).setValues(1, 9);
         assertTrue("Game should end when a player does not have soldiers.", new GameEndChecker().isEndOfGame(board));
+    }
+
+    @Test
+    public void emptyBoardHasNoWinner() {
+        assertEquals("WinnerId should be zero for an empty board.", 0, new GameEndChecker().getWinnerId(new Board(5)));
+    }
+
+    @Test
+    public void whenAPlayerDoesNotHaveSoldiersLeftHeLoses() {
+        int id = 2;
+        Board board = new Board(5);
+        board.cellAt(3, 1).setValues(id, 12);
+        String message = String.format("WinnerId should be %d.", id);
+        assertEquals(message, id, new GameEndChecker().getWinnerId(board));
     }
 }

@@ -8,4 +8,10 @@ public class GameEndChecker {
     private boolean playerHaveNoSoldiers(Board board, int id) {
         return board.getPlayerCellCount(id) == 0;
     }
+
+    public int getWinnerId(Board board) {
+        if (!board.isEmpty())
+            return board.getPlayerCellCount(1) > 0 ? 1 : 2;
+        return 0;
+    }
 }
