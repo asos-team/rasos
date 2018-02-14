@@ -18,6 +18,11 @@ public class StdoutRiskLogger implements RiskLogger {
 
     @Override
     public void logSuccessfulAttack(int playerId, AttackMove move) {
-        
+
+    }
+
+    @Override
+    public void logFailedAttack(int playerId, AttackMove move) {
+
     }
 }

@@ -148,6 +148,15 @@ public class AttackTest {
         for (AttackMove move : movesToLog) {
             verify(logger).logSuccessfulAttack(1, move);
         }
+    }
 
+    @Test
+    public void unappliedAttackMovesAreLogged(){
+        Iterable<AttackMove> movesToLog = Collections.singleton(new AttackMove(1, 1, 2, 1, 909));
+        attacker.apply(board, movesToLog);
+
+        for (AttackMove move : movesToLog) {
+            verify(logger).logFailedAttack(1, move);
+        }
     }
 }

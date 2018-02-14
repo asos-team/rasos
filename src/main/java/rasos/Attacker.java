@@ -14,7 +14,9 @@ public class Attacker {
             for (AttackMove playerMove : playerMoves) {
                 if (isValidMove(board, playerMove)) {
                     executeMove(playerId, board, playerMove);
-                    logger.logSuccessfulAttack(playerId,playerMove);
+                    logger.logSuccessfulAttack(playerId, playerMove);
+                } else {
+                    logger.logFailedAttack(playerId, playerMove);
                 }
             }
             playerId++;

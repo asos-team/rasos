@@ -8,4 +8,6 @@ public interface RiskLogger {
     void logFailedReinforcement(int playerId, ReinforcementMove move);
 
     void logSuccessfulAttack(int playerId, AttackMove move);
+
+    void logFailedAttack(int playerId, AttackMove move);
 }
