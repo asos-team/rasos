@@ -73,7 +73,7 @@ public class GameTest {
     @Test
     public void gameCallsLogStartOnMatchStart() {
         game.start();
-        verify(logger).logStart();
+        verify(logger).logGameStart();
     }
 
     private Game createSimpleGame(int soldiers) {

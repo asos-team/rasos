@@ -8,16 +8,19 @@ public class RoundHandler {
     private final Map<Integer, Player> players;
     private final Attacker attacker;
     private final Reinforcer reinforcer;
+    private final RiskLogger logger;
 
-    public RoundHandler(Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer) {
+    RoundHandler(Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer, RiskLogger logger) {
         this.players = new HashMap<>(2);
         players.put(1, playerA);
         players.put(2, playerB);
         this.attacker = attacker;
         this.reinforcer = reinforcer;
+        this.logger = logger;
     }
 
     public void playOneRound(Board board) {
+        logger.logRoundStart();
         reinforce(board);
         attack(board);
     }

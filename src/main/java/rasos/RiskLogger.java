@@ -1,7 +1,7 @@
 package rasos;
 
 public interface RiskLogger {
-    void logStart();
+    void logGameStart();
 
     void logSuccessfulReinforcement(int playerId, ReinforcementMove movesToLog);
 
@@ -10,4 +10,6 @@ public interface RiskLogger {
     void logSuccessfulAttack(int playerId, AttackMove move);
 
     void logFailedAttack(int playerId, AttackMove move);
+
+    void logRoundStart();
 }

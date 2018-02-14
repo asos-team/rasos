@@ -2,7 +2,7 @@ package rasos;
 
 public class StdoutRiskLogger implements RiskLogger {
     @Override
-    public void logStart() {
+    public void logGameStart() {
         System.out.print("Game started" + System.lineSeparator());
     }
 
@@ -23,6 +23,11 @@ public class StdoutRiskLogger implements RiskLogger {
 
     @Override
     public void logFailedAttack(int playerId, AttackMove move) {
+
+    }
+
+    @Override
+    public void logRoundStart() {
 
     }
 }

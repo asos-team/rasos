@@ -17,7 +17,7 @@ class Game {
     }
 
     void start() {
-        logger.logStart();
+        logger.logGameStart();
         for (int i = 0; i < rounds && !checker.isEndOfGame(board); i++) {
             handler.playOneRound(board);
         }

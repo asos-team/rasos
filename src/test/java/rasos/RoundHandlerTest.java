@@ -2,6 +2,13 @@ package rasos;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -14,15 +21,17 @@ public class RoundHandlerTest {
     private Reinforcer reinforcer;
     private Attacker attacker;
     private RoundHandler roundHandler;
+    private RiskLogger logger;
 
     @Before
     public void setUp() {
+        logger = mock(RiskLogger.class);
         board = new Board(7);
         playerA = mock(Player.class);
         playerB = mock(Player.class);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
-        roundHandler = new RoundHandler(playerA, playerB, attacker, reinforcer);
+        roundHandler = new RoundHandler(playerA, playerB, attacker, reinforcer,logger);
     }
 
     @Test
@@ -80,6 +89,15 @@ public class RoundHandlerTest {
         roundHandler.playOneRound(board);
 
         verify(attacker).apply(board, movesA, movesB);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void loggerLogsOnRoundStart() {
+        roundHandler.playOneRound(board);
+        InOrder inOrder = inOrder(logger, reinforcer);
+        inOrder.verify(logger).logRoundStart();
+        inOrder.verify(reinforcer,atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
     }
 
     private void makePlayerAControlTotalOf_3_Cells() {

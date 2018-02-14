@@ -30,7 +30,7 @@ public class StdoutRiskLoggerTest {
 
     @Test
     public void logStartPrintsGameStarted() {
-        logger.logStart();
+        logger.logGameStart();
 
         assertEquals("Game started" + System.lineSeparator(), outContent.toString());
     }
