@@ -1,20 +1,27 @@
 package rasos;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.HashSet;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class AttackTest {
 
     private static final int boardDim = 2;
     private Attacker attacker;
     private Board board;
+    private RiskLogger logger;
 
     @Before
     public void setUp() {
-        attacker = new Attacker();
+        logger = mock(RiskLogger.class);
+        attacker = new Attacker(logger);
         board = new Board(boardDim);
         board.populateHomeBases(20);
     }
@@ -131,5 +138,16 @@ public class AttackTest {
         TestUtils.assertCellContents(b.cellAt(1, 2), 1, 5);
         TestUtils.assertCellContents(b.cellAt(2, 1), 1, 5);
         TestUtils.assertCellContents(b.cellAt(1, 3), 0, 0);
+    }
+
+    @Test
+    public void appliedAttackMovesAreLogged() {
+        Iterable<AttackMove> movesToLog = Collections.singleton(new AttackMove(1, 1, 2, 1, 2));
+        attacker.apply(board, movesToLog);
+
+        for (AttackMove move : movesToLog) {
+            verify(logger).logSuccessfulAttack(1, move);
+        }
+
     }
 }

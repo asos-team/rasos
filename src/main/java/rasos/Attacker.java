@@ -2,12 +2,19 @@ package rasos;
 
 public class Attacker {
 
+    Attacker(RiskLogger logger) {
+        this.logger = logger;
+    }
+
+    private RiskLogger logger;
+
     public void apply(Board board, Iterable<AttackMove>... moves) {
         int playerId = 1;
         for (Iterable<AttackMove> playerMoves : moves) {
             for (AttackMove playerMove : playerMoves) {
                 if (isValidMove(board, playerMove)) {
                     executeMove(playerId, board, playerMove);
+                    logger.logSuccessfulAttack(playerId,playerMove);
                 }
             }
             playerId++;

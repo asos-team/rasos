@@ -15,4 +15,9 @@ public class StdoutRiskLogger implements RiskLogger {
     public void logFailedReinforcement(int playerId, ReinforcementMove move) {
 
     }
+
+    @Override
+    public void logSuccessfulAttack(int playerId, AttackMove move) {
+        
+    }
 }
