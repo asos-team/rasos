@@ -141,6 +141,22 @@ public class AttackTest {
     }
 
     @Test
+    public void concurrentMoveToSameCellFromDifferentPlayers() {
+        Board b = new Board(3);
+        b.populateHomeBases(20);
+
+        AttackMove amA = new AttackMove(1,1,2,2,10);
+        AttackMove amB = new AttackMove(3,3,2,2,8);
+
+        attacker.apply(b, Lists.newArrayList(amA),Lists.newArrayList(amB));
+
+        TestUtils.assertCellContents(b.cellAt(1,1), 1, 10);
+        TestUtils.assertCellContents(b.cellAt(2, 2), 1, 2);
+        TestUtils.assertCellContents(b.cellAt(3, 3), 2, 12);
+
+    }
+
+    @Test
     public void appliedAttackMovesAreLogged() {
         Iterable<AttackMove> movesToLog = Collections.singleton(new AttackMove(1, 1, 2, 1, 2));
         attacker.apply(board, movesToLog);
