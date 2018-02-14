@@ -1,10 +1,14 @@
 package rasos;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 
 public class GameEndCheckerTest {
+    @Rule
+    public final ExpectedException expectedEx = ExpectedException.none();
 
     @Test
     public void emptyBoardIsEndingTheGame() {
@@ -37,5 +41,15 @@ public class GameEndCheckerTest {
         board.cellAt(3, 1).setValues(id, 12);
         String message = String.format("WinnerId should be %d.", id);
         assertEquals(message, id, new GameEndChecker().getWinnerId(board));
+    }
+
+    @Test
+    public void getWinnerIdThrowsWhenItIsNotEndOfGame() {
+        String message = "Should throw an exception when trying to get winnerId for an ongoing game.";
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.reportMissingExceptionWithMessage(message);
+        Board board = new Board(5);
+        board.populateHomeBases(6);
+        new GameEndChecker().getWinnerId(board);
     }
 }
