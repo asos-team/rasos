@@ -1,5 +1,8 @@
 package rasos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Attacker {
 
     Attacker(RiskLogger logger) {
@@ -9,11 +12,20 @@ public class Attacker {
     private RiskLogger logger;
 
     public void apply(Board board, Iterable<AttackMove>... moves) {
+        Board[] intermediateBoards = generateIntermediateBoards(board, moves);
+        Board reduced = reduce(intermediateBoards);
+        copy(board, reduced);
+    }
+
+    private Board[] generateIntermediateBoards(Board board, Iterable<AttackMove>[] moves) {
+        Board[] intermediateBoards = generateProjectedBoards(board);
+
         int playerId = 1;
         for (Iterable<AttackMove> playerMoves : moves) {
+            Board playerIB = intermediateBoards[playerId - 1];
             for (AttackMove playerMove : playerMoves) {
-                if (isValidMove(board, playerMove)) {
-                    executeMove(playerId, board, playerMove);
+                if (isValidMove(playerIB, playerMove)) {
+                    executeMove(playerId, playerIB, playerMove);
                     logger.logSuccessfulAttack(playerId, playerMove);
                 } else {
                     logger.logFailedAttack(playerId, playerMove);
@@ -21,6 +33,110 @@ public class Attacker {
             }
             playerId++;
         }
+        return intermediateBoards;
+    }
+
+    private Board[] generateProjectedBoards(Board board) {
+        List<Integer> playerIds = getPlayerIds(board);
+
+
+        Board[] iBoards = new Board[playerIds.size()];
+
+        for (int i = 0; i < playerIds.size(); i++) {
+            iBoards[i] = project(board, playerIds.get(i));
+        }
+
+        return iBoards;
+    }
+
+    private List<Integer> getPlayerIds(Board board) {
+        List<Integer> playerIds = new ArrayList<>();
+        for (int colIdx = 1; colIdx <= board.getDim(); colIdx++) {
+            for (int rowIdx = 1; rowIdx <= board.getDim(); rowIdx++) {
+                int controllingPlayerId = board.cellAt(colIdx, rowIdx).getControllingPlayerId();
+                if (controllingPlayerId != 0 && !playerIds.contains(controllingPlayerId)) {
+                    playerIds.add(controllingPlayerId);
+                }
+            }
+        }
+        playerIds.sort(Integer::compareTo);
+        return playerIds;
+    }
+
+    private Board project(Board board, int playerId) {
+        int dim = board.getDim();
+        Board b = new Board(dim);
+        for (int colIdx = 1; colIdx <= dim; colIdx++) {
+            for (int rowIdx = 1; rowIdx <= dim; rowIdx++) {
+                Cell cell = getCell(colIdx, rowIdx, board);
+                if (cell.isControlledBy(playerId)) {
+                    getCell(colIdx, rowIdx, b).setValues(playerId, cell.getNumSoldiers());
+                }
+            }
+        }
+        return b;
+    }
+
+    private void executeMove(int playerId, Board playerIB, AttackMove playerMove) {
+        int amount = playerMove.getAmount();
+
+        Cell originCell = getOriginCell(playerIB, playerMove);
+        Cell destCell = getDestCell(playerIB, playerMove);
+
+        originCell.updateNumSoldiers(originCell.getNumSoldiers() - amount);
+        destCell.setValues(playerId, destCell.getNumSoldiers() + amount);
+    }
+
+    private void copy(Board target, Board source) {
+        for (int colIdx = 1; colIdx <= target.getDim(); colIdx++) {
+            for (int rowIdx = 1; rowIdx <= target.getDim(); rowIdx++) {
+                Cell cell = source.cellAt(colIdx, rowIdx);
+                target.cellAt(colIdx, rowIdx).setValues(cell.getControllingPlayerId(), cell.getNumSoldiers());
+            }
+        }
+    }
+
+    private Board reduce(Board[] intermediateBoards) {
+        Board emptyBoard = new Board(intermediateBoards[0].getDim());
+        Board reduced = reduce(emptyBoard, intermediateBoards[0]);
+        for (int i = 1; i < intermediateBoards.length; i++) {
+            reduced = reduce(reduced, intermediateBoards[i]);
+        }
+        return reduced;
+    }
+
+    private Board reduce(Board a, Board b) {
+        int dim = a.getDim();
+        Board res = new Board(dim);
+        for (int colIdx = 1; colIdx <= dim; colIdx++) {
+            for (int rowIdx = 1; rowIdx <= dim; rowIdx++) {
+                int controllingPlayerId = getReducedControllingPlayerId(colIdx, rowIdx, a, b);
+                int numSoldiers = getReducedNumSoldiers(colIdx, rowIdx, a, b);
+                res.cellAt(colIdx, rowIdx).setValues(controllingPlayerId, numSoldiers);
+            }
+        }
+        return res;
+    }
+
+    private int getReducedControllingPlayerId(int colIdx, int rowIdx, Board a, Board b) {
+
+        int soldiersA = getCell(colIdx, rowIdx, a).getNumSoldiers();
+        int soldiersB = getCell(colIdx, rowIdx, b).getNumSoldiers();
+        if (soldiersA < soldiersB) {
+            return getCell(colIdx, rowIdx, b).getControllingPlayerId();
+        } else if (soldiersA > soldiersB) {
+            return getCell(colIdx, rowIdx, a).getControllingPlayerId();
+        } else {
+            return 0;
+        }
+    }
+
+    private Cell getCell(int colIdx, int rowIdx, Board a) {
+        return a.cellAt(colIdx, rowIdx);
+    }
+
+    private int getReducedNumSoldiers(int colIdx, int rowIdx, Board a, Board b) {
+        return Math.abs(getCell(colIdx, rowIdx, a).getNumSoldiers() - getCell(colIdx, rowIdx, b).getNumSoldiers());
     }
 
     private boolean isValidMove(Board board, AttackMove move) {
@@ -38,57 +154,10 @@ public class Attacker {
     }
 
     private Cell getOriginCell(Board board, AttackMove move) {
-        return board.cellAt(move.getOriginCol(), move.getOriginRow());
-    }
-
-    private void executeMove(int playerId, Board board, AttackMove attackMove) {
-        executeMove(playerId, getOriginCell(board, attackMove), getDestCell(board, attackMove), attackMove.getAmount());
+        return getCell(move.getOriginCol(), move.getOriginRow(), board);
     }
 
     private Cell getDestCell(Board board, AttackMove attackMove) {
-        return board.cellAt(attackMove.getDestCol(), attackMove.getDestRow());
-    }
-
-    private void executeMove(int playerId, Cell originCell, Cell destCell, int amount) {
-        changeOriginCell(originCell, amount);
-        changeDestCell(playerId, destCell, amount);
-    }
-
-    private void changeOriginCell(Cell originCell, int amount) {
-        originCell.updateNumSoldiers(originCell.getNumSoldiers() - amount);
-    }
-
-    private void changeDestCell(int playerId, Cell destCell, int amount) {
-        if (isReinforcementAttackMove(playerId, destCell)) {
-            executeReinforcementAttackMove(playerId, destCell, amount);
-        } else if (isConqueringAttackMove(destCell, amount)) {
-            executeConqueringAttackMove(playerId, destCell, amount);
-        } else if (isNonConqueringAttackMove(destCell, amount)) {
-            executeNonConqueringAttackMove(destCell, amount);
-        }
-    }
-
-    private boolean isReinforcementAttackMove(int playerId, Cell destCell) {
-        return destCell.isControlledBy(playerId);
-    }
-
-    private void executeReinforcementAttackMove(int playerId, Cell destCell, int amount) {
-        destCell.setValues(playerId, destCell.getNumSoldiers() + amount);
-    }
-
-    private boolean isConqueringAttackMove(Cell destCell, int amount) {
-        return amount > destCell.getNumSoldiers();
-    }
-
-    private void executeConqueringAttackMove(int playerId, Cell destCell, int amount) {
-        destCell.setValues(playerId, amount - destCell.getNumSoldiers());
-    }
-
-    private boolean isNonConqueringAttackMove(Cell destCell, int amount) {
-        return amount <= destCell.getNumSoldiers();
-    }
-
-    private void executeNonConqueringAttackMove(Cell destCell, int amount) {
-        destCell.updateNumSoldiers(destCell.getNumSoldiers() - amount);
+        return getCell(attackMove.getDestCol(), attackMove.getDestRow(), board);
     }
 }
