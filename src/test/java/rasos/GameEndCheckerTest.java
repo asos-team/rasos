@@ -29,4 +29,13 @@ public class GameEndCheckerTest {
     public void emptyBoardHasNoWinner() {
         assertEquals("WinnerId should be zero for an empty board.", 0, new GameEndChecker().getWinnerId(new Board(5)));
     }
+
+    @Test
+    public void whenAPlayerDoesNotHaveSoldiersLeftHeLoses() {
+        int id = 2;
+        Board board = new Board(5);
+        board.cellAt(3, 1).setValues(id, 12);
+        String message = String.format("WinnerId should be %d.", id);
+        assertEquals(message, id, new GameEndChecker().getWinnerId(board));
+    }
 }

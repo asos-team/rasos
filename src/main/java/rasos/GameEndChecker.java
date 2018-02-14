@@ -10,6 +10,8 @@ public class GameEndChecker {
     }
 
     public int getWinnerId(Board board) {
+        if (!board.isEmpty())
+            return board.getPlayerCellCount(1) > 0 ? 1 : 2;
         return 0;
     }
 }
