@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Attacker {
 
+    private RiskLogger logger;
+
     Attacker(RiskLogger logger) {
         this.logger = logger;
     }
-
-    private RiskLogger logger;
 
     public void apply(Board board, Iterable<AttackMove>... moves) {
         Board[] intermediateBoards = generateIntermediateBoards(board, moves);
@@ -18,34 +18,17 @@ public class Attacker {
     }
 
     private Board[] generateIntermediateBoards(Board board, Iterable<AttackMove>[] moves) {
-        Board[] intermediateBoards = generateProjectedBoards(board);
-
-        int playerId = 1;
-        for (Iterable<AttackMove> playerMoves : moves) {
-            Board playerIB = intermediateBoards[playerId - 1];
-            for (AttackMove playerMove : playerMoves) {
-                if (isValidMove(playerIB, playerMove)) {
-                    executeMove(playerId, playerIB, playerMove);
-                    logger.logSuccessfulAttack(playerId, playerMove);
-                } else {
-                    logger.logFailedAttack(playerId, playerMove);
-                }
-            }
-            playerId++;
-        }
-        return intermediateBoards;
+        Board[] projectedBoards = createProjectedBoards(board);
+        fillIntermediateBoards(moves, projectedBoards);
+        return projectedBoards;
     }
 
-    private Board[] generateProjectedBoards(Board board) {
+    private Board[] createProjectedBoards(Board board) {
         List<Integer> playerIds = getPlayerIds(board);
-
-
         Board[] iBoards = new Board[playerIds.size()];
-
         for (int i = 0; i < playerIds.size(); i++) {
             iBoards[i] = project(board, playerIds.get(i));
         }
-
         return iBoards;
     }
 
@@ -77,7 +60,48 @@ public class Attacker {
         return b;
     }
 
-    private void executeMove(int playerId, Board playerIB, AttackMove playerMove) {
+    private Cell getCell(int colIdx, int rowIdx, Board a) {
+        return a.cellAt(colIdx, rowIdx);
+    }
+
+    private void fillIntermediateBoards(Iterable<AttackMove>[] moves, Board[] intermediateBoards) {
+        int playerId = 1;
+        for (Iterable<AttackMove> playerMoves : moves) {
+            fillIntermediateBoard(intermediateBoards[playerId - 1], playerId, playerMoves);
+            playerId++;
+        }
+    }
+
+    private void fillIntermediateBoard(Board intermediateBoard, int playerId, Iterable<AttackMove> playerMoves) {
+        for (AttackMove playerMove : playerMoves) {
+            if (isValidMove(intermediateBoard, playerMove)) {
+                applyMove(intermediateBoard, playerId, playerMove);
+                logger.logSuccessfulAttack(playerId, playerMove);
+            } else {
+                logger.logFailedAttack(playerId, playerMove);
+            }
+        }
+    }
+
+    private boolean isValidMove(Board board, AttackMove move) {
+        return isValidAmount(board, move) &&
+                isBetweenNeighbouringCells(move);
+    }
+
+    private boolean isValidAmount(Board board, AttackMove move) {
+        return move.getAmount() <= getOriginCell(board, move).getNumSoldiers();
+    }
+
+    private Cell getOriginCell(Board board, AttackMove move) {
+        return getCell(move.getOriginCol(), move.getOriginRow(), board);
+    }
+
+    private boolean isBetweenNeighbouringCells(AttackMove move) {
+        return Math.abs(move.getOriginCol() - move.getDestCol()) <= 1 &&
+                Math.abs(move.getOriginRow() - move.getDestRow()) <= 1;
+    }
+
+    private void applyMove(Board playerIB, int playerId, AttackMove playerMove) {
         int amount = playerMove.getAmount();
 
         Cell originCell = getOriginCell(playerIB, playerMove);
@@ -87,13 +111,8 @@ public class Attacker {
         destCell.setValues(playerId, destCell.getNumSoldiers() + amount);
     }
 
-    private void copy(Board target, Board source) {
-        for (int colIdx = 1; colIdx <= target.getDim(); colIdx++) {
-            for (int rowIdx = 1; rowIdx <= target.getDim(); rowIdx++) {
-                Cell cell = source.cellAt(colIdx, rowIdx);
-                target.cellAt(colIdx, rowIdx).setValues(cell.getControllingPlayerId(), cell.getNumSoldiers());
-            }
-        }
+    private Cell getDestCell(Board board, AttackMove attackMove) {
+        return getCell(attackMove.getDestCol(), attackMove.getDestRow(), board);
     }
 
     private Board reduce(Board[] intermediateBoards) {
@@ -119,7 +138,6 @@ public class Attacker {
     }
 
     private int getReducedControllingPlayerId(int colIdx, int rowIdx, Board a, Board b) {
-
         int soldiersA = getCell(colIdx, rowIdx, a).getNumSoldiers();
         int soldiersB = getCell(colIdx, rowIdx, b).getNumSoldiers();
         if (soldiersA < soldiersB) {
@@ -131,33 +149,16 @@ public class Attacker {
         }
     }
 
-    private Cell getCell(int colIdx, int rowIdx, Board a) {
-        return a.cellAt(colIdx, rowIdx);
-    }
-
     private int getReducedNumSoldiers(int colIdx, int rowIdx, Board a, Board b) {
         return Math.abs(getCell(colIdx, rowIdx, a).getNumSoldiers() - getCell(colIdx, rowIdx, b).getNumSoldiers());
     }
 
-    private boolean isValidMove(Board board, AttackMove move) {
-        return isValidAmount(board, move) &&
-                isBetweenNeighbouringCells(move);
-    }
-
-    private boolean isValidAmount(Board board, AttackMove move) {
-        return move.getAmount() <= getOriginCell(board, move).getNumSoldiers();
-    }
-
-    private boolean isBetweenNeighbouringCells(AttackMove move) {
-        return Math.abs(move.getOriginCol() - move.getDestCol()) <= 1 &&
-                Math.abs(move.getOriginRow() - move.getDestRow()) <= 1;
-    }
-
-    private Cell getOriginCell(Board board, AttackMove move) {
-        return getCell(move.getOriginCol(), move.getOriginRow(), board);
-    }
-
-    private Cell getDestCell(Board board, AttackMove attackMove) {
-        return getCell(attackMove.getDestCol(), attackMove.getDestRow(), board);
+    private void copy(Board target, Board source) {
+        for (int colIdx = 1; colIdx <= target.getDim(); colIdx++) {
+            for (int rowIdx = 1; rowIdx <= target.getDim(); rowIdx++) {
+                Cell cell = source.cellAt(colIdx, rowIdx);
+                target.cellAt(colIdx, rowIdx).setValues(cell.getControllingPlayerId(), cell.getNumSoldiers());
+            }
+        }
     }
 }
