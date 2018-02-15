@@ -84,7 +84,8 @@ public class Attacker {
     }
 
     private boolean isValidMove(Board board, AttackMove move) {
-        return isValidAmount(board, move) &&
+        return !isExceedingBoardMove(board, move) &&
+                isValidAmount(board, move) &&
                 isBetweenNeighbouringCells(move);
     }
 
@@ -99,6 +100,11 @@ public class Attacker {
     private boolean isBetweenNeighbouringCells(AttackMove move) {
         return Math.abs(move.getOriginCol() - move.getDestCol()) <= 1 &&
                 Math.abs(move.getOriginRow() - move.getDestRow()) <= 1;
+    }
+
+    private boolean isExceedingBoardMove(Board board, AttackMove move) {
+        return (move.getDestCol() > board.getDim() || move.getDestRow() > board.getDim()) ||
+                (move.getOriginCol() < 1 || move.getOriginRow() < 1);
     }
 
     private void applyMove(Board playerIB, int playerId, AttackMove playerMove) {
