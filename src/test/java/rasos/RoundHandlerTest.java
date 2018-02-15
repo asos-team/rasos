@@ -100,6 +100,15 @@ public class RoundHandlerTest {
         inOrder.verify(reinforcer,atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void loggerLogsOnRoundEnd(){
+        roundHandler.playOneRound(board);
+        InOrder inOrder = inOrder(logger, attacker);
+        inOrder.verify(attacker,atLeastOnce()).apply(any(Board.class),anyVararg());
+        inOrder.verify(logger).logRoundEnd(board);
+    }
+
     private void makePlayerAControlTotalOf_3_Cells() {
         board.cellAt(1, 1).setValues(1, 4);
         board.cellAt(1, 3).setValues(1, 4);

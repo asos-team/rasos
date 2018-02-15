@@ -12,4 +12,6 @@ public interface RiskLogger {
     void logFailedAttack(int playerId, AttackMove move);
 
     void logRoundStart();
+
+    void logRoundEnd(Board board);
 }

@@ -23,6 +23,7 @@ public class RoundHandler {
         logger.logRoundStart();
         reinforce(board);
         attack(board);
+        logger.logRoundEnd(board);
     }
 
     private void reinforce(Board board) {

@@ -30,4 +30,9 @@ public class StdoutRiskLogger implements RiskLogger {
     public void logRoundStart() {
 
     }
+
+    @Override
+    public void logRoundEnd(Board board) {
+
+    }
 }
