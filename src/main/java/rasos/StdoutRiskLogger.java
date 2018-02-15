@@ -35,4 +35,9 @@ public class StdoutRiskLogger implements RiskLogger {
     public void logRoundEnd(Board board) {
 
     }
+
+    @Override
+    public void logGameEnd(int winnerId) {
+
+    }
 }

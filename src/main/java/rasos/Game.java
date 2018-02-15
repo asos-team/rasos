@@ -21,6 +21,7 @@ class Game {
         for (int i = 0; i < rounds && !checker.isEndOfGame(board); i++) {
             handler.playOneRound(board);
         }
+        logger.logGameEnd(checker.getWinnerId(board));
     }
 
     Board getBoard() {

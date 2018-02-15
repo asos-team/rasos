@@ -14,4 +14,6 @@ public interface RiskLogger {
     void logRoundStart();
 
     void logRoundEnd(Board board);
+
+    void logGameEnd(int winnerId);
 }

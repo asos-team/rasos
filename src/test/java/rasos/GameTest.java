@@ -2,6 +2,7 @@ package rasos;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -72,8 +73,20 @@ public class GameTest {
 
     @Test
     public void gameCallsLogStartOnMatchStart() {
+        InOrder inOrder = inOrder(logger, handler);
         game.start();
-        verify(logger).logGameStart();
+
+        inOrder.verify(logger).logGameStart();
+        inOrder.verify(handler, atLeastOnce()).playOneRound(any(Board.class));
+    }
+
+    @Test
+    public void gameCallsLogEndOnMatchEnd(){
+        InOrder inOrder = inOrder(logger, handler);
+        game.start();
+
+        inOrder.verify(handler, atLeastOnce()).playOneRound(any(Board.class));
+        inOrder.verify(logger).logGameEnd(checker.getWinnerId(any(Board.class)));
     }
 
     private Game createSimpleGame(int soldiers) {
