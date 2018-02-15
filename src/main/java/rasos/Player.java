@@ -1,7 +1,7 @@
 package rasos;
 
-public interface Player {
-    Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement);
+public abstract class Player {
+    abstract Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement);
 
-    Iterable<AttackMove> onAttack(Board board);
+    abstract Iterable<AttackMove> onAttack(Board board);
 }
