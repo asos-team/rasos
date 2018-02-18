@@ -1,8 +1,10 @@
 package rasos;
 
+import com.google.common.collect.Iterables;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -96,9 +98,28 @@ public class BoardTest {
     public void toStringHumanReadable() {
         Board b = new Board(2);
         b.populateHomeBases(10);
+        b.cellAt(2, 1).setValues(1, 5);
 
         String toString = b.toString();
 
-        assertThat(toString, is("[10,1][0,0]" + System.lineSeparator() + "[0,0][10,2]"));
+        assertThat(toString, is("[10,1][5,1]" + System.lineSeparator() + "[0,0][10,2]"));
+    }
+
+    @Test
+    public void retrievesPlayerControlledCellCoordinates() {
+        board.populateHomeBases(20);
+        board.cellAt(1, 2).setValues(1, 10);
+
+        Iterable<CellCoordinates> player1Cells = board.getControlledCoordinates(1);
+
+        CellCoordinates cc1 = new CellCoordinates(1, 1);
+        CellCoordinates cc2 = new CellCoordinates(1, 2);
+
+        assertThat(player1Cells, hasItems(cc1, cc2));
+    }
+
+    @Test
+    public void retrievesEmptyCoordinatesListForNonExistingPlayer() {
+        assertThat(Iterables.size(board.getControlledCoordinates(1)), is(0));
     }
 }

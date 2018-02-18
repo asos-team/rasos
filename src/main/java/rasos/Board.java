@@ -1,8 +1,10 @@
 package rasos;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Stream;
 
-class Board {
+public class Board {
     private final Cell[][] configuration;
     private final int dim;
 
@@ -14,6 +16,35 @@ class Board {
                 configuration[i][j] = Cell.neutral();
             }
         }
+    }
+
+    public Iterable<CellCoordinates> getControlledCoordinates(int playerId) {
+        List<CellCoordinates> res = new LinkedList<>();
+        for (int colIdx = 0; colIdx < dim; colIdx++) {
+            for (int rowIdx = 0; rowIdx < dim; rowIdx++) {
+                if (configuration[colIdx][rowIdx].isControlledBy(playerId)) {
+                    res.add(new CellCoordinates(colIdx + 1, rowIdx + 1));
+                }
+            }
+        }
+        return res;
+    }
+
+    public boolean isEmpty() {
+        return getBoardCellStream().allMatch(Cell::isNeutral);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int rowIdx = 0; rowIdx < dim; rowIdx++) {
+            for (int colIdx = 0; colIdx < dim; colIdx++) {
+                sb.append(configuration[colIdx][rowIdx].toString());
+            }
+            sb.append(System.lineSeparator());
+
+        }
+        return sb.toString().trim();
     }
 
     void populateHomeBases(int numSoldiers) {
@@ -34,10 +65,6 @@ class Board {
         return dim;
     }
 
-    public boolean isEmpty() {
-        return getBoardCellStream().allMatch(Cell::isNeutral);
-    }
-
     int getPlayerCellCount(int playerId) {
         return (int) getBoardCellStream()
                 .filter(cell -> cell.isControlledBy(playerId))
@@ -50,19 +77,6 @@ class Board {
 
     Cell getHome2Cell() {
         return cellAt(dim, dim);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (Cell[] row : configuration) {
-            for (Cell cell : row) {
-                sb.append(cell.toString());
-            }
-            sb.append(System.lineSeparator());
-        }
-
-        return sb.toString().trim();
     }
 
     private Stream<Cell> getBoardCellStream() {
