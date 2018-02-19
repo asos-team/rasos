@@ -1,5 +1,7 @@
 package rasos;
 
+import java.util.Objects;
+
 public class AttackMove {
     private final int originCol;
     private final int originRow;
@@ -33,5 +35,33 @@ public class AttackMove {
 
     public int getAmount() {
         return amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AttackMove that = (AttackMove) o;
+        return originCol == that.originCol &&
+                originRow == that.originRow &&
+                destCol == that.destCol &&
+                destRow == that.destRow &&
+                amount == that.amount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(originCol, originRow, destCol, destRow, amount);
+    }
+
+    @Override
+    public String toString() {
+        return "AttackMove{" +
+                "originCol=" + originCol +
+                ", originRow=" + originRow +
+                ", destCol=" + destCol +
+                ", destRow=" + destRow +
+                ", amount=" + amount +
+                '}';
     }
 }
