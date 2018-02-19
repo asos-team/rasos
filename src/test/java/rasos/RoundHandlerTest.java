@@ -35,6 +35,12 @@ public class RoundHandlerTest {
     }
 
     @Test
+    public void assignPlayerIds() {
+        verify(playerA).setPlayerId(1);
+        verify(playerB).setPlayerId(2);
+    }
+
+    @Test
     public void callsPlayerOnReinforcementWithGameBoard() {
         roundHandler.playOneRound(board);
 

@@ -12,6 +12,8 @@ public class RoundHandler {
 
     RoundHandler(Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer, RiskLogger logger) {
         this.players = new HashMap<>(2);
+        playerA.setPlayerId(1);
+        playerB.setPlayerId(2);
         players.put(1, playerA);
         players.put(2, playerB);
         this.attacker = attacker;
