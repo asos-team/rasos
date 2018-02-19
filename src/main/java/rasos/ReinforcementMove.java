@@ -3,9 +3,11 @@ package rasos;
 import java.util.Objects;
 
 public class ReinforcementMove {
-    private final int col;
-    private final int row;
-    private final int amount;
+    private int col;
+    private int row;
+    private int amount;
+
+    public ReinforcementMove(){}
 
     public ReinforcementMove(int col, int row, int amount) {
         this.col = col;

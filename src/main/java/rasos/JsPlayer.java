@@ -1,5 +1,6 @@
 package rasos;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import jdk.nashorn.api.scripting.JSObject;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class JsPlayer extends Player {
     private String script;
 
-    public JsPlayer(String script) {
+    JsPlayer(String script) {
         this.script = script;
     }
 
@@ -34,9 +35,8 @@ public class JsPlayer extends Player {
     }
 
     private List<ReinforcementMove> extractReinforcementMovesFromJSResult(JSObject result) {
-        Gson converter = new Gson();
-        String json = converter.toJson(result.values());
-        ReinforcementMove[] moves = converter.fromJson(json, ReinforcementMove[].class);
+        ObjectMapper converter = new ObjectMapper();
+        ReinforcementMove[] moves = converter.convertValue(result.values(), ReinforcementMove[].class);
         return Arrays.asList(moves);
     }
 
