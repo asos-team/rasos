@@ -7,8 +7,7 @@ import rasos.players.ReinforcePlayer;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class ReinforcePlayerTest {
@@ -41,6 +40,11 @@ public class ReinforcePlayerTest {
 
         assertThat(moves.size(), is(2));
         assertThat(moves, hasItems(new ReinforcementMove(1, 1, 2), new ReinforcementMove(1, 2, 2)));
+    }
+
+    @Test
+    public void doesNotAttack() {
+        assertThat(p.onAttack(b), nullValue());
     }
 
     private ArrayList<ReinforcementMove> getMoves() {
