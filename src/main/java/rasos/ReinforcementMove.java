@@ -7,7 +7,7 @@ public class ReinforcementMove {
     private int row;
     private int amount;
 
-    public ReinforcementMove(){}
+    private ReinforcementMove(){}
 
     public ReinforcementMove(int col, int row, int amount) {
         this.col = col;

@@ -13,7 +13,7 @@ public class JsPlayerTest {
     public final ExpectedException expectedEx = ExpectedException.none();
 
     @Test
-    public void corruptedPlayerReturnsEmptyLists() {
+    public void corruptedPlayerReturnsEmptyList() {
         String script = "script";
         Player player = new JsPlayer(script);
         Iterable<ReinforcementMove> moves = player.onReinforcement(mock(Board.class), 0);
@@ -28,11 +28,10 @@ public class JsPlayerTest {
         assertEquals(new ReinforcementMove(1, 2, 5), moves.iterator().next());
     }
 
-//    @Test
-//    public void jsRunnerThrowsOnUnparsableMove(){
-////        expectedEx.expect(RuntimeException.class);
-//        String script = "function onReinforcement(board, soldiers) { return [{'adom':'yes', 'yarok':'yes', 'garinimShelAvatiach':'yes'}]; }";
-//        Player player = new JsPlayer(script);
-//        Iterable<ReinforcementMove> moves = player.onReinforcement(mock(Board.class), 0);;
-//    }
+    @Test
+    public void onUnparsableMoveReturnsEmptyList(){
+        String script = "function onReinforcement(board, soldiers) { return [{'adom':'yes', 'yarok':'yes', 'garinimShelAvatiach':'yes'}]; }";
+        Player player = new JsPlayer(script);
+        Iterable<ReinforcementMove> moves = player.onReinforcement(mock(Board.class), 0);
+    }
 }

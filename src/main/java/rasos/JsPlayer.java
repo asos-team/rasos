@@ -24,7 +24,7 @@ public class JsPlayer extends Player {
         try {
             JSObject result = (JSObject) getInvocableJSEngine().invokeFunction("onReinforcement", board, reinforcement);
             return extractReinforcementMovesFromJSResult(result);
-        } catch (ScriptException | NoSuchMethodException e) {
+        } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
             return Collections.emptyList();
         }
     }
