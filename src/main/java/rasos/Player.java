@@ -8,11 +8,11 @@ public abstract class Player {
 
     public abstract Iterable<AttackMove> onAttack(Board board);
 
-    void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    int getPlayerId() {
+        return playerId;
     }
 
-    protected Iterable<CellCoordinates> getMyCellsCoordinates(Board board){
-        return board.getControlledCoordinates(playerId);
+    void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 }

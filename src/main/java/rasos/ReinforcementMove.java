@@ -40,4 +40,13 @@ public class ReinforcementMove {
     public int getAmount() {
         return amount;
     }
+
+    @Override
+    public String toString() {
+        return "ReinforcementMove{" +
+                "col=" + col +
+                ", row=" + row +
+                ", amount=" + amount +
+                '}';
+    }
 }

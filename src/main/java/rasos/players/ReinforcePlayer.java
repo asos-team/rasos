@@ -6,10 +6,13 @@ import rasos.*;
 import java.util.ArrayList;
 
 public class ReinforcePlayer extends Player {
+
+    private PlayerUtils playerUtils = new PlayerUtils(this);
+
     @Override
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         ArrayList<ReinforcementMove> reinforcementMoves = new ArrayList<>();
-        Iterable<CellCoordinates> myCellsCoordinates = getMyCellsCoordinates(board);
+        Iterable<CellCoordinates> myCellsCoordinates = playerUtils.getControlledCells(board);
         int numControlledCells = Iterables.size(myCellsCoordinates);
 
         for (CellCoordinates cc :
