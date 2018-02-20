@@ -1,7 +1,6 @@
 package rasos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import jdk.nashorn.api.scripting.JSObject;
 
 import javax.script.Invocable;
@@ -31,10 +30,22 @@ public class JsPlayer extends Player {
 
     @Override
     public Iterable<AttackMove> onAttack(Board board) {
+        try {
+            JSObject result = (JSObject) getInvocableJSEngine().invokeFunction("onAttack", board);
+            return extractAttackMovesFromJSResult(result);
+        } catch (ScriptException | NoSuchMethodException e) {
+//            return Collections.emptyList();
+        }
         return null;
     }
 
-    private List<ReinforcementMove> extractReinforcementMovesFromJSResult(JSObject result) {
+    private Iterable<AttackMove> extractAttackMovesFromJSResult(JSObject result) {
+        ObjectMapper converter = new ObjectMapper();
+        AttackMove[] moves = converter.convertValue(result.values(), AttackMove[].class);
+        return Arrays.asList(moves);
+    }
+
+    private Iterable<ReinforcementMove> extractReinforcementMovesFromJSResult(JSObject result) {
         ObjectMapper converter = new ObjectMapper();
         ReinforcementMove[] moves = converter.convertValue(result.values(), ReinforcementMove[].class);
         return Arrays.asList(moves);

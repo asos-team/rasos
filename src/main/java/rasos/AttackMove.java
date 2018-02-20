@@ -3,11 +3,14 @@ package rasos;
 import java.util.Objects;
 
 public class AttackMove {
-    private final int originCol;
-    private final int originRow;
-    private final int destCol;
-    private final int destRow;
-    private final int amount;
+    private int originCol;
+    private int originRow;
+    private int destCol;
+    private int destRow;
+    private int amount;
+
+    private AttackMove() {
+    }
 
     public AttackMove(int originCol, int originRow, int destCol, int destRow, int amount) {
         this.originCol = originCol;

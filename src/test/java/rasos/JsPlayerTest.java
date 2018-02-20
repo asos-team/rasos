@@ -21,6 +21,13 @@ public class JsPlayerTest {
     }
 
     @Test
+    public void onUnparsableReinforcementMoveReturnsEmptyList() {
+        String script = "function onReinforcement(board, soldiers) { return [{'adom':'yes', 'yarok':'yes', 'garinimShelAvatiach':'yes'}]; }";
+        Player player = new JsPlayer(script);
+        Iterable<ReinforcementMove> moves = player.onReinforcement(mock(Board.class), 0);
+    }
+
+    @Test
     public void playerReturnsReinforcementMoves() {
         String script = "function onReinforcement(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
         Player player = new JsPlayer(script);
@@ -29,9 +36,10 @@ public class JsPlayerTest {
     }
 
     @Test
-    public void onUnparsableMoveReturnsEmptyList(){
-        String script = "function onReinforcement(board, soldiers) { return [{'adom':'yes', 'yarok':'yes', 'garinimShelAvatiach':'yes'}]; }";
+    public void playerReturnsAttackMoves() {
+        String script = "function onAttack(board) { return [{'originCol':1, 'originRow':2,'destCol':3, 'destRow':4, 'amount':5}]; }";
         Player player = new JsPlayer(script);
-        Iterable<ReinforcementMove> moves = player.onReinforcement(mock(Board.class), 0);
+        Iterable<AttackMove> moves = player.onAttack(mock(Board.class));
+        assertEquals(new AttackMove(1, 2, 3, 4, 5), moves.iterator().next());
     }
 }
