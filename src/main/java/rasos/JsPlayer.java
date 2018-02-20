@@ -9,7 +9,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class JsPlayer extends Player {
     private String script;
@@ -21,8 +20,7 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         try {
-            JSObject result = (JSObject) getInvocableJSEngine().invokeFunction("onReinforcement", board, reinforcement);
-            return extractReinforcementMovesFromJSResult(result);
+            return executeJsMethod(ReinforcementMove[].class, board);
         } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
             return Collections.emptyList();
         }
@@ -31,29 +29,32 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<AttackMove> onAttack(Board board) {
         try {
-            JSObject result = (JSObject) getInvocableJSEngine().invokeFunction("onAttack", board);
-            return extractAttackMovesFromJSResult(result);
-        } catch (ScriptException | NoSuchMethodException e) {
-//            return Collections.emptyList();
+            return executeJsMethod(AttackMove[].class, board);
+        } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
+            return Collections.emptyList();
         }
-        return null;
     }
 
-    private Iterable<AttackMove> extractAttackMovesFromJSResult(JSObject result) {
-        ObjectMapper converter = new ObjectMapper();
-        AttackMove[] moves = converter.convertValue(result.values(), AttackMove[].class);
-        return Arrays.asList(moves);
+    private <T> Iterable<T> executeJsMethod(Class<T[]> moveType, Object... params) throws ScriptException, NoSuchMethodException {
+        String methodName = getMethodName(moveType);
+        JSObject result = (JSObject) getInvocableJSEngine().invokeFunction(methodName, params);
+        return extractMovesFromJSResult(result, moveType);
     }
 
-    private Iterable<ReinforcementMove> extractReinforcementMovesFromJSResult(JSObject result) {
+    private <T> Iterable<T> extractMovesFromJSResult(JSObject result, Class<T[]> moveClass) {
         ObjectMapper converter = new ObjectMapper();
-        ReinforcementMove[] moves = converter.convertValue(result.values(), ReinforcementMove[].class);
+        T[] moves = converter.convertValue(result.values(), moveClass);
         return Arrays.asList(moves);
+
     }
 
     private Invocable getInvocableJSEngine() throws ScriptException {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         engine.eval(script);
         return (Invocable) engine;
+    }
+
+    private <T> String getMethodName(Class<T[]> moveType) {
+        return "on" + moveType.getSimpleName().substring(0, moveType.getSimpleName().length() - 6);
     }
 }
