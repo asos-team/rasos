@@ -3,6 +3,7 @@ package rasos;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RoundHandler {
     private final Map<Integer, Player> players;
@@ -50,14 +51,12 @@ public class RoundHandler {
     }
 
     private Iterable<AttackMove> getAttackMoves(Player player, Board board) {
-        Iterable<AttackMove> moves;
         try {
-            moves = player.onAttack(board);
+            Iterable<AttackMove> moves = player.onAttack(board);
+            Objects.requireNonNull(moves);
+            return moves;
         } catch (Exception e) {
-            moves = Collections.emptyList();
+            return Collections.emptyList();
         }
-        moves = moves != null ? moves : Collections.emptyList();
-        return moves;
     }
-
 }
