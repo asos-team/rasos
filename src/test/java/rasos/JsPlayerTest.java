@@ -1,19 +1,15 @@
 package rasos;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import static rasos.JsPlayer.*;
+import static rasos.JsPlayer.ATTACK_JS_FUNCTION_NAME;
+import static rasos.JsPlayer.REINFORCEMENT_JS_FUNCTION_NAME;
 
 public class JsPlayerTest {
-    @Rule
-    public final ExpectedException expectedEx = ExpectedException.none();
-
     private Board board;
 
     @Before
@@ -55,7 +51,7 @@ public class JsPlayerTest {
 
     @Test
     public void playerReturnsAttackMoves() {
-        String script = "function " + ATTACK_JS_FUNCTION_NAME + "(board) { return [{'originCol':1, 'originRow':2,'destCol':3, 'destRow':4, 'amount':5}]; }";
+        String script = "function " + ATTACK_JS_FUNCTION_NAME + "(board) { return [{'originCol':1, 'originRow':2, 'destCol':3, 'destRow':4, 'amount':5}]; }";
         Player player = new JsPlayer(script);
         Iterable<AttackMove> moves = player.onAttack(board);
         assertEquals(new AttackMove(1, 2, 3, 4, 5), moves.iterator().next());
