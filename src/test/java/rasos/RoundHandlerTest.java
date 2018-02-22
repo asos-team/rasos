@@ -3,12 +3,6 @@ package rasos;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -31,7 +25,7 @@ public class RoundHandlerTest {
         playerB = mock(Player.class);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
-        roundHandler = new RoundHandler(playerA, playerB, attacker, reinforcer,logger);
+        roundHandler = new RoundHandler(playerA, playerB, attacker, reinforcer, logger);
     }
 
     @Test
@@ -103,15 +97,15 @@ public class RoundHandlerTest {
         roundHandler.playOneRound(board);
         InOrder inOrder = inOrder(logger, reinforcer);
         inOrder.verify(logger).logRoundStart();
-        inOrder.verify(reinforcer,atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
+        inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void loggerLogsOnRoundEnd(){
+    public void loggerLogsOnRoundEnd() {
         roundHandler.playOneRound(board);
         InOrder inOrder = inOrder(logger, attacker);
-        inOrder.verify(attacker,atLeastOnce()).apply(any(Board.class),anyVararg());
+        inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
         inOrder.verify(logger).logRoundEnd(board);
     }
 
