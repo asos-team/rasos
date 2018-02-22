@@ -20,7 +20,7 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         try {
-            return executeJsMethod(ReinforcementMove[].class, board);
+            return executeJsMethod("onReinforcement", ReinforcementMove[].class);
         } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
             return Collections.emptyList();
         }
@@ -29,14 +29,13 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<AttackMove> onAttack(Board board) {
         try {
-            return executeJsMethod(AttackMove[].class, board);
+            return executeJsMethod("onAttack", AttackMove[].class);
         } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
             return Collections.emptyList();
         }
     }
 
-    private <T> Iterable<T> executeJsMethod(Class<T[]> moveType, Object... params) throws ScriptException, NoSuchMethodException {
-        String methodName = getMethodName(moveType);
+    private <T> Iterable<T> executeJsMethod(String methodName, Class<T[]> moveType, Object... params) throws ScriptException, NoSuchMethodException {
         JSObject result = (JSObject) getInvocableJSEngine().invokeFunction(methodName, params);
         return extractMovesFromJSResult(result, moveType);
     }
@@ -52,9 +51,5 @@ public class JsPlayer extends Player {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         engine.eval(script);
         return (Invocable) engine;
-    }
-
-    private <T> String getMethodName(Class<T[]> moveType) {
-        return "on" + moveType.getSimpleName().substring(0, moveType.getSimpleName().length() - 6);
     }
 }

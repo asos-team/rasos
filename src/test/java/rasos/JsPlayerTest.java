@@ -16,7 +16,7 @@ public class JsPlayerTest {
     private Board board;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         board = mock(Board.class);
     }
 
@@ -37,6 +37,14 @@ public class JsPlayerTest {
     }
 
     @Test
+    public void onUnparsableAttackMoveReturnsEmptyList() {
+        String script = "function onAttack(board) { return [{'hamburger': 'sandwich', 'hotdog':'sandwich', 'burrito':'not_sandwich'}]; }";
+        Player player = new JsPlayer(script);
+        Iterable<AttackMove> moves = player.onAttack(board);
+        assertFalse(moves.iterator().hasNext());
+    }
+
+    @Test
     public void playerReturnsReinforcementMoves() {
         String script = "function onReinforcement(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
         Player player = new JsPlayer(script);
@@ -50,13 +58,5 @@ public class JsPlayerTest {
         Player player = new JsPlayer(script);
         Iterable<AttackMove> moves = player.onAttack(board);
         assertEquals(new AttackMove(1, 2, 3, 4, 5), moves.iterator().next());
-    }
-
-    @Test
-    public void onUnparsableAttackMoveReturnsEmptyList() {
-        String script = "function onAttack(board) { return [{'hamburger': 'sandwich', 'hotdog':'sandwich', 'burrito':'not_sandwich'}]; }";
-        Player player = new JsPlayer(script);
-        Iterable<AttackMove> moves = player.onAttack(board);
-        assertFalse(moves.iterator().hasNext());
     }
 }
