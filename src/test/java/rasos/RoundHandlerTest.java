@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import java.util.Collections;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -51,6 +53,20 @@ public class RoundHandlerTest {
 
         verify(playerA).onReinforcement(any(Board.class), eq(3));
         verify(playerB).onReinforcement(any(Board.class), eq(2));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void whenPlayerThrowsUseEmptyListInstead() {
+        when(playerA.onReinforcement(any(Board.class), any(int.class)))
+                .thenThrow(new RuntimeException("I'm a shitty programmer"));
+
+        try {
+            roundHandler.playOneRound(board);
+        } catch (Exception ignored) {
+        }
+
+        verify(reinforcer).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
