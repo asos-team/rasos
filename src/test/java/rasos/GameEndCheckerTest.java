@@ -49,9 +49,17 @@ public class GameEndCheckerTest {
     }
 
     @Test
-    public void getWinnerIdThrowsWhenItIsNotEndOfGame() {
+    public void getWinnerIdReturnsZeroForATie() {
         board.populateHomeBases(676);
         assertEquals("WinnerId should be zero for a tie.", 0, winner());
+    }
+
+    @Test
+    public void getWinnerIdReturnsTheLeadingPlayerId() {
+        int id = 2;
+        board.populateHomeBases(43);
+        board.cellAt(4, 5).setValues(id, 60);
+        assertEquals(String.format("WinnerId should be %d.", id), id, winner());
     }
 
     private boolean isEndOfGame() {
