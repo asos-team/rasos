@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class JsPlayer extends Player {
+    static final String REINFORCEMENT_JS_FUNCTION_NAME = "onReinforcement";
+    static final String ATTACK_JS_FUNCTION_NAME = "onAttack";
     private String script;
 
     JsPlayer(String script) {
@@ -20,7 +22,7 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         try {
-            return executeJsMethod("onReinforcement", ReinforcementMove[].class);
+            return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class);
         } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
             return Collections.emptyList();
         }
@@ -29,7 +31,7 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<AttackMove> onAttack(Board board) {
         try {
-            return executeJsMethod("onAttack", AttackMove[].class);
+            return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class);
         } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
             return Collections.emptyList();
         }

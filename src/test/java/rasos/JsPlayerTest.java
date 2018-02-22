@@ -46,7 +46,8 @@ public class JsPlayerTest {
 
     @Test
     public void playerReturnsReinforcementMoves() {
-        String script = "function onReinforcement(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
+        String onReinforcement = JsPlayer.REINFORCEMENT_JS_FUNCTION_NAME;
+        String script = "function " + onReinforcement + "(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
         Player player = new JsPlayer(script);
         Iterable<ReinforcementMove> moves = player.onReinforcement(board, 0);
         assertEquals(new ReinforcementMove(1, 2, 5), moves.iterator().next());
@@ -54,7 +55,8 @@ public class JsPlayerTest {
 
     @Test
     public void playerReturnsAttackMoves() {
-        String script = "function onAttack(board) { return [{'originCol':1, 'originRow':2,'destCol':3, 'destRow':4, 'amount':5}]; }";
+        String onAttack = JsPlayer.ATTACK_JS_FUNCTION_NAME;
+        String script = "function " + onAttack + "(board) { return [{'originCol':1, 'originRow':2,'destCol':3, 'destRow':4, 'amount':5}]; }";
         Player player = new JsPlayer(script);
         Iterable<AttackMove> moves = player.onAttack(board);
         assertEquals(new AttackMove(1, 2, 3, 4, 5), moves.iterator().next());
