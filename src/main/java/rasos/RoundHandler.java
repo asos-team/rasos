@@ -46,7 +46,9 @@ public class RoundHandler {
 
     private Iterable<ReinforcementMove> getReinforcementMoves(Player player, Board board, int quota) {
         try {
-            return player.onReinforcement(board, quota);
+            Iterable<ReinforcementMove> moves = player.onReinforcement(board, quota);
+            Objects.requireNonNull(moves);
+            return moves;
         } catch (Exception e) {
             return Collections.emptyList();
         }
