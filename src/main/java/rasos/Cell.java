@@ -51,7 +51,7 @@ public class Cell {
         return String.format("[%d,%d]", numSoldiers, controllingPlayerId);
     }
 
-    int getNumSoldiers() {
+    public int getNumSoldiers() {
         return numSoldiers;
     }
 

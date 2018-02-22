@@ -34,6 +34,10 @@ public class Board {
         return getBoardCellStream().allMatch(Cell::isNeutral);
     }
 
+    public Cell cellAt(int col, int row) {
+        return configuration[col - 1][row - 1];
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -55,10 +59,6 @@ public class Board {
             cellAt(1, 1).setValues(1, numSoldiers);
             cellAt(dim, dim).setValues(2, numSoldiers);
         }
-    }
-
-    Cell cellAt(int col, int row) {
-        return configuration[col - 1][row - 1];
     }
 
     int getDim() {

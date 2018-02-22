@@ -32,4 +32,12 @@ public class CellCoordinates {
     public int hashCode() {
         return Objects.hash(rowIdx, colIdx);
     }
+
+    @Override
+    public String toString() {
+        return "CellCoordinates{" +
+                "rowIdx=" + rowIdx +
+                ", colIdx=" + colIdx +
+                '}';
+    }
 }
