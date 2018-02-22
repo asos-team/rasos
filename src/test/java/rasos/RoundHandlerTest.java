@@ -57,9 +57,9 @@ public class RoundHandlerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void whenPlayerThrowsUseEmptyListInstead() {
+    public void whenPlayerThrowsInOnReinforcementUseEmptyListInstead() {
         when(playerA.onReinforcement(any(Board.class), any(int.class)))
-                .thenThrow(new RuntimeException("I'm a shitty programmer"));
+                .thenThrow(new RuntimeException("Bukchin is a shitty programmer"));
 
         try {
             roundHandler.playOneRound(board);
@@ -67,6 +67,20 @@ public class RoundHandlerTest {
         }
 
         verify(reinforcer).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void whenPlayerThrowsInOnAttackUseEmptyListInstead() {
+        when(playerA.onAttack(any(Board.class)))
+                .thenThrow(new RuntimeException("Weiss is a shitty programmer"));
+
+        try {
+            roundHandler.playOneRound(board);
+        } catch (Exception ignored) {
+        }
+
+        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
     }
 
     @SuppressWarnings("unchecked")
