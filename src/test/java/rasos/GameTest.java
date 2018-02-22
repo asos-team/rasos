@@ -3,6 +3,7 @@ package rasos;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+import rasos.players.AttackPlayer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,6 +25,13 @@ public class GameTest {
         checker = mock(GameEndChecker.class);
         logger = mock(RiskLogger.class);
         game = createSimpleGame(NO_SOLDIERS);
+    }
+
+    @Test
+    public void theGame() {
+        RiskLogger logger = new StdoutRiskLogger();
+        Game g = new Game(5, 20, 50, new RoundHandler(new AttackPlayer(), new AttackPlayer(), new Attacker(logger), new Reinforcer(logger), logger), new GameEndChecker(), logger);
+        g.start();
     }
 
     @Test
@@ -81,7 +89,7 @@ public class GameTest {
     }
 
     @Test
-    public void gameCallsLogEndOnMatchEnd(){
+    public void gameCallsLogEndOnMatchEnd() {
         InOrder inOrder = inOrder(logger, handler);
         game.start();
 

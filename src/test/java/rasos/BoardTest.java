@@ -102,7 +102,7 @@ public class BoardTest {
 
         String toString = b.toString();
 
-        assertThat(toString, is("[10,1][5,1]" + System.lineSeparator() + "[0,0][10,2]"));
+        assertThat(toString, is("[10,1]\t[5,1]\t" + System.lineSeparator() + "[0,0]\t[10,2]"));
     }
 
     @Test
