@@ -1,15 +1,19 @@
 package rasos;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static rasos.JsPlayer.ATTACK_JS_FUNCTION_NAME;
 import static rasos.JsPlayer.REINFORCEMENT_JS_FUNCTION_NAME;
 
 public class JsPlayerTest {
+    @Rule
+    public final ExpectedException expectedException = ExpectedException.none();
+
     private Board board;
 
     @Before
@@ -18,27 +22,30 @@ public class JsPlayerTest {
     }
 
     @Test
-    public void corruptedPlayerReturnsEmptyList() {
+    public void throwOnCorruptedPlayerImplementation() {
         String script = "script";
         Player player = new JsPlayer(script);
-        Iterable<ReinforcementMove> moves = player.onReinforcement(board, 0);
-        assertFalse(moves.iterator().hasNext());
+        expectedException.expect(RuntimeException.class);
+
+        player.onReinforcement(board, 0);
     }
 
     @Test
-    public void onUnparsableReinforcementMoveReturnsEmptyList() {
+    public void throwOnUnparsableReinforcement() {
         String script = "function " + REINFORCEMENT_JS_FUNCTION_NAME + "(board, soldiers) { return [{'adom':'yes', 'yarok':'yes', 'garinimShelAvatiach':'yes'}]; }";
         Player player = new JsPlayer(script);
-        Iterable<ReinforcementMove> moves = player.onReinforcement(board, 0);
-        assertFalse(moves.iterator().hasNext());
+        expectedException.expect(RuntimeException.class);
+
+        player.onReinforcement(board, 0);
     }
 
     @Test
-    public void onUnparsableAttackMoveReturnsEmptyList() {
+    public void throwOnUnparsableAttack() {
         String script = "function " + ATTACK_JS_FUNCTION_NAME + "(board) { return [{'hamburger': 'sandwich', 'hotdog':'sandwich', 'burrito':'not_sandwich'}]; }";
         Player player = new JsPlayer(script);
-        Iterable<AttackMove> moves = player.onAttack(board);
-        assertFalse(moves.iterator().hasNext());
+        expectedException.expect(RuntimeException.class);
+
+        player.onAttack(board);
     }
 
     @Test

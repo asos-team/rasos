@@ -23,8 +23,8 @@ public class JsPlayer extends Player {
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         try {
             return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class);
-        } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
-            return Collections.emptyList();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -32,8 +32,8 @@ public class JsPlayer extends Player {
     public Iterable<AttackMove> onAttack(Board board) {
         try {
             return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class);
-        } catch (ScriptException | NoSuchMethodException | IllegalArgumentException e) {
-            return Collections.emptyList();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
