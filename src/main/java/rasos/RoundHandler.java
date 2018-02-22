@@ -32,13 +32,7 @@ public class RoundHandler {
     private void reinforce(Board board) {
         for (int id = 1; id <= 2; id++) {
             int quota = board.getPlayerCellCount(id);
-
-            Iterable<ReinforcementMove> moves;
-            try {
-                moves = players.get(id).onReinforcement(board, quota);
-            } catch (Exception e) {
-                moves = Collections.emptyList();
-            }
+            Iterable<ReinforcementMove> moves = getReinforcementMoves(players.get(id), board, quota);
             reinforcer.apply(board, moves, quota, id);
         }
     }
@@ -48,6 +42,14 @@ public class RoundHandler {
         Iterable<AttackMove> movesB = getAttackMoves(players.get(2), board);
         //noinspection unchecked
         attacker.apply(board, movesA, movesB);
+    }
+
+    private Iterable<ReinforcementMove> getReinforcementMoves(Player player, Board board, int quota) {
+        try {
+            return player.onReinforcement(board, quota);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
     private Iterable<AttackMove> getAttackMoves(Player player, Board board) {
