@@ -30,11 +30,6 @@ public class ReinforcerTest {
     }
 
     @Test
-    public void nullReinforcementMoves_areIgnored() {
-        reinforcer.apply(board, null, 52, 7);
-    }
-
-    @Test
     public void reinforcementMove_isApplied_playerA() {
         test_reinforcementMove_isApplied(1, 13, 1, 4, 1);
     }

@@ -8,7 +8,6 @@ public class Reinforcer {
     }
 
     void apply(Board board, Iterable<ReinforcementMove> moves, int quota, int playerId) {
-        if (moves == null) return;
         for (ReinforcementMove move : moves) {
             try {
                 Cell cell = board.cellAt(move.getCol(), move.getRow());
@@ -17,7 +16,7 @@ public class Reinforcer {
                     cell.updateNumSoldiers(cell.getNumSoldiers() + amount);
                     quota -= amount;
                     logger.logSuccessfulReinforcement(playerId, move);
-                } else{
+                } else {
                     logger.logFailedReinforcement(playerId, move);
                 }
             } catch (Exception ignored) {
