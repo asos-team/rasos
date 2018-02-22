@@ -6,8 +6,6 @@ public class GameEndChecker {
     }
 
     public int getWinnerId(Board board) {
-        if (!isEndOfGame(board))
-            throw new RuntimeException("The game has not ended, please make sure to check isEndOfGame(board) first.");
         if (!board.isEmpty())
             return board.getPlayerCellCount(1) > 0 ? 1 : 2;
         return 0;
