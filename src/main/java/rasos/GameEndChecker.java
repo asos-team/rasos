@@ -6,9 +6,11 @@ public class GameEndChecker {
     }
 
     public int getWinnerId(Board board) {
-        if (board.getPlayerCellCount(1) == board.getPlayerCellCount(2))
+        int aCellCount = board.getPlayerCellCount(1);
+        int bCellCount = board.getPlayerCellCount(2);
+        if (aCellCount == bCellCount)
             return 0;
-        return board.getPlayerCellCount(1) > board.getPlayerCellCount(2) ? 1 : 2;
+        return aCellCount > bCellCount ? 1 : 2;
     }
 
     private boolean playerHaveNoSoldiers(Board board, int id) {
