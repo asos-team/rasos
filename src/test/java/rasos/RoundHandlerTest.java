@@ -71,20 +71,6 @@ public class RoundHandlerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void whenPlayerThrowsInOnAttackUseEmptyListInstead() {
-        when(playerA.onAttack(any(Board.class)))
-                .thenThrow(new RuntimeException("Weiss is a shitty programmer"));
-
-        try {
-            roundHandler.playOneRound(board);
-        } catch (Exception ignored) {
-        }
-
-        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
     public void callsReinforcerWithReinforcementMoves() {
         Iterable<ReinforcementMove> movesA = mock(Iterable.class);
         Iterable<ReinforcementMove> movesB = mock(Iterable.class);
@@ -106,6 +92,20 @@ public class RoundHandlerTest {
 
         verify(playerA).onAttack(board);
         verify(playerB).onAttack(board);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void whenPlayerThrowsInOnAttackUseEmptyListInstead() {
+        when(playerA.onAttack(any(Board.class)))
+                .thenThrow(new RuntimeException("Weiss is a shitty programmer"));
+
+        try {
+            roundHandler.playOneRound(board);
+        } catch (Exception ignored) {
+        }
+
+        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
     }
 
     @SuppressWarnings("unchecked")
