@@ -29,7 +29,7 @@ public class GameTest {
 
     @Test
     public void theGame() {
-        RiskLogger logger = new StdoutRiskLogger();
+        RiskLogger logger = new StdoutRiskLogger(s -> {});
         Game g = new Game(5, 20, 50, new RoundHandler(new AttackPlayer(), new AttackPlayer(), new Attacker(logger), new Reinforcer(logger), logger), new GameEndChecker(), logger);
         g.start();
     }

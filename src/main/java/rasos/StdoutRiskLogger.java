@@ -14,7 +14,7 @@ public class StdoutRiskLogger implements RiskLogger {
         this(System.out::println);
     }
 
-    private StdoutRiskLogger(Printer printer) {
+    public StdoutRiskLogger(Printer printer) {
         this.printer = printer;
     }
 
@@ -72,7 +72,7 @@ public class StdoutRiskLogger implements RiskLogger {
         printer.print(ASOS);
     }
 
-    private interface Printer {
+    public interface Printer {
         void print(String s);
     }
 }
