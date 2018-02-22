@@ -34,21 +34,21 @@ public class Board {
         return getBoardCellStream().allMatch(Cell::isNeutral);
     }
 
-    public Cell cellAt(int col, int row) {
-        return configuration[col - 1][row - 1];
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int rowIdx = 0; rowIdx < dim; rowIdx++) {
             for (int colIdx = 0; colIdx < dim; colIdx++) {
-                sb.append(configuration[colIdx][rowIdx].toString());
+                sb.append(configuration[colIdx][rowIdx].toString() + "\t");
             }
             sb.append(System.lineSeparator());
 
         }
         return sb.toString().trim();
+    }
+
+    public Cell cellAt(int col, int row) {
+        return configuration[col - 1][row - 1];
     }
 
     void populateHomeBases(int numSoldiers) {
