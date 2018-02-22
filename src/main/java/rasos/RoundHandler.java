@@ -54,7 +54,9 @@ public class RoundHandler {
 
     private Iterable<AttackMove> getAttackMoves(Player player, Board board) {
         try {
-            return player.onAttack(board);
+            Iterable<AttackMove> moves = player.onAttack(board);
+            Objects.requireNonNull(moves);
+            return moves;
         } catch (Exception e) {
             return Collections.emptyList();
         }

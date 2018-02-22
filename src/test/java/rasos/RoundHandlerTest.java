@@ -96,6 +96,14 @@ public class RoundHandlerTest {
 
     @SuppressWarnings("unchecked")
     @Test
+    public void whenPlayerReturnsNullInOnAttackUseEmptyListInstead() {
+        roundHandler.playOneRound(board);
+
+        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
     public void whenPlayerThrowsInOnAttackUseEmptyListInstead() {
         when(playerA.onAttack(any(Board.class))).thenReturn(Collections.emptyList());
         when(playerB.onAttack(any(Board.class))).thenThrow(new RuntimeException("Weiss is a shitty programmer"));
