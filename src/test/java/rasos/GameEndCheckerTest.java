@@ -1,7 +1,6 @@
 package rasos;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -50,7 +49,6 @@ public class GameEndCheckerTest {
     }
 
     @Test
-    @Ignore
     public void getWinnerIdThrowsWhenItIsNotEndOfGame() {
         board.populateHomeBases(676);
         assertEquals("WinnerId should be zero for a tie.", 0, winner());

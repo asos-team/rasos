@@ -6,6 +6,8 @@ public class GameEndChecker {
     }
 
     public int getWinnerId(Board board) {
+        if (board.getPlayerCellCount(1) == board.getPlayerCellCount(2))
+            return 0;
         if (!board.isEmpty())
             return board.getPlayerCellCount(1) > 0 ? 1 : 2;
         return 0;
