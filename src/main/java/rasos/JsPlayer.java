@@ -4,18 +4,22 @@ import jdk.nashorn.api.scripting.JSObject;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 public class JsPlayer extends Player {
     static final String REINFORCEMENT_JS_FUNCTION_NAME = "onReinforcement";
     static final String ATTACK_JS_FUNCTION_NAME = "onAttack";
     private JsonParser parser;
-    private String script;
+    private Invocable invocable;
 
-    JsPlayer(String script, JsonParser parser) {
-        this.script = script;
-        this.parser = parser;
+    JsPlayer(String script, ScriptEngine engine, JsonParser parser) {
+        try {
+            engine.eval(script);
+            this.invocable = (Invocable) engine;
+            this.parser = parser;
+        } catch (ScriptException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -42,9 +46,7 @@ public class JsPlayer extends Player {
         return parser.extractMovesFromJSResult(result, moveType);
     }
 
-    private Invocable getInvocableJSEngine() throws ScriptException {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-        engine.eval(script);
-        return (Invocable) engine;
+    private Invocable getInvocableJSEngine() {
+        return this.invocable;
     }
 }
