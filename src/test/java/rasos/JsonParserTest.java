@@ -45,7 +45,7 @@ public class JsonParserTest {
     }
 
     @Test
-    public void playerReturnsReinforcementMoves() throws ScriptException {
+    public void parserParsesReinforcementMoves() throws ScriptException {
         String json = "[{'col':1, 'row':2, 'amount':5}]";
         JSObject object = (JSObject) engine.eval(json);
         Iterable<ReinforcementMove> moves = parser.extractMovesFromJSResult(object, ReinforcementMove[].class);
@@ -53,7 +53,7 @@ public class JsonParserTest {
     }
 
     @Test
-    public void playerReturnsAttackMoves() throws ScriptException {
+    public void parserParsesAttackMoves() throws ScriptException {
         String json = "[{'originCol':1, 'originRow':2, 'destCol':3, 'destRow':4, 'amount':5}]";
         JSObject object = (JSObject) engine.eval(json);
         Iterable<AttackMove> moves = parser.extractMovesFromJSResult(object, AttackMove[].class);
