@@ -1,7 +1,6 @@
 package rasos;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 
@@ -19,7 +18,6 @@ public class RoundHandlerTest {
     private Reinforcer reinforcer;
     private Attacker attacker;
     private RoundHandler roundHandler;
-    private ExecutorService executor;
     private RiskLogger logger;
 
     @Before
@@ -29,7 +27,7 @@ public class RoundHandlerTest {
         playerB = mock(Player.class);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
-        executor = mock(ExecutorService.class);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         logger = mock(RiskLogger.class);
         roundHandler = new RoundHandler(playerA, playerB, reinforcer, attacker, executor, logger);
     }
@@ -60,20 +58,12 @@ public class RoundHandlerTest {
     }
 
     @Test
-    @Ignore
-    public void timeoutTooLongReinforcementComputation() throws InterruptedException, ExecutionException, TimeoutException {
-        stubExecutorWithImmediateThrowingFuture();
-        when(playerB.onReinforcement(any(Board.class), anyInt())).then(invocation -> {
-            //noinspection InfiniteLoopStatement,StatementWithEmptyBody
-            while (true) ;
-        });
+    public void preventTooLongReinforcementComputation() throws InterruptedException, ExecutionException, TimeoutException {
+        ExecutorService executor = stubExecutorWithImmediateThrowingFuture();
+        Player player = stubPlayerWithInfiniteLoop();
+        roundHandler = new RoundHandler(playerA, player, reinforcer, attacker, executor, logger);
 
-        try {
-            Executors.newSingleThreadExecutor()
-                    .submit(() -> roundHandler.playOneRound(board))
-                    .get(100, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException ignored) {
-        }
+        playOneRoundWithTimeLimit(100);
 
         verify(reinforcer, times(2)).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
     }
@@ -189,9 +179,34 @@ public class RoundHandlerTest {
         board.cellAt(3, 2).setValues(2, 2);
     }
 
-    private void stubExecutorWithImmediateThrowingFuture() throws InterruptedException, ExecutionException, TimeoutException {
+    private ExecutorService stubExecutorWithImmediateThrowingFuture() throws InterruptedException, ExecutionException, TimeoutException {
+        ExecutorService executor = mock(ExecutorService.class);
         Future future = mock(Future.class);
         when(future.get(anyLong(), any(TimeUnit.class))).thenThrow(new TimeoutException());
+        //noinspection unchecked
         when(executor.submit(any(Runnable.class))).thenReturn(future);
+        return executor;
+    }
+
+    private Player stubPlayerWithInfiniteLoop() {
+        Player player = mock(Player.class);
+        when(player.onReinforcement(any(Board.class), anyInt())).then(invocation -> {
+            //noinspection InfiniteLoopStatement,StatementWithEmptyBody
+            while (true) ;
+        });
+        return player;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private void playOneRoundWithTimeLimit(int timeoutInMilliseconds) {
+        try {
+            Executors.newSingleThreadExecutor()
+                    .submit(() -> roundHandler.playOneRound(board))
+                    .get(timeoutInMilliseconds, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("An unpredicted exception occurred: " + e);
+        } catch (TimeoutException e) {
+            throw new RuntimeException("Handler should put limits to player's computation time.");
+        }
     }
 }

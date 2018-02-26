@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
 
@@ -50,9 +52,11 @@ public class RoundHandler {
 
     private Iterable<ReinforcementMove> getReinforcementMoves(Player player, Board board, int quota) {
         try {
-            Iterable<ReinforcementMove> moves = player.onReinforcement(board, quota);
-            requireNonNull(moves);
-            return moves;
+            AtomicReference<Iterable<ReinforcementMove>> moves = new AtomicReference<>();
+            executor.submit(() -> moves.set(player.onReinforcement(board, quota)))
+                    .get(500, TimeUnit.MILLISECONDS);
+            requireNonNull(moves.get());
+            return moves.get();
         } catch (Exception e) {
             return Collections.emptyList();
         }
