@@ -32,7 +32,15 @@ public class GameTest {
     @Test
     public void theGame() {
         RiskLogger logger = new StdoutRiskLogger(s -> {});
-        Game g = new Game(5, 20, 50, new RoundHandler(new AttackPlayer(), new AttackPlayer(), new Reinforcer(logger), new Attacker(logger), Executors.newSingleThreadExecutor(), logger), new GameEndChecker(), logger);
+        RoundHandler handler = new RoundHandler(
+                new AttackPlayer(),
+                new AttackPlayer(),
+                new Reinforcer(logger),
+                new Attacker(logger),
+                Executors.newSingleThreadExecutor(),
+                logger);
+        Game g = new Game(5, 20, 50, handler, new GameEndChecker(), logger);
+
         g.start();
     }
 
