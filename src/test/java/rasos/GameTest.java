@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import rasos.players.AttackPlayer;
 
+import java.util.concurrent.Executors;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
@@ -30,7 +32,7 @@ public class GameTest {
     @Test
     public void theGame() {
         RiskLogger logger = new StdoutRiskLogger(s -> {});
-        Game g = new Game(5, 20, 50, new RoundHandler(new AttackPlayer(), new AttackPlayer(), new Attacker(logger), new Reinforcer(logger), logger), new GameEndChecker(), logger);
+        Game g = new Game(5, 20, 50, new RoundHandler(new AttackPlayer(), new AttackPlayer(), new Reinforcer(logger), new Attacker(logger), Executors.newSingleThreadExecutor(), logger), new GameEndChecker(), logger);
         g.start();
     }
 

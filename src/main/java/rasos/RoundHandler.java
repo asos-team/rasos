@@ -3,6 +3,7 @@ package rasos;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import static java.util.Objects.requireNonNull;
 
@@ -11,15 +12,17 @@ public class RoundHandler {
     private final Attacker attacker;
     private final Reinforcer reinforcer;
     private final RiskLogger logger;
+    private final ExecutorService executor;
 
-    RoundHandler(Player playerA, Player playerB, Attacker attacker, Reinforcer reinforcer, RiskLogger logger) {
+    RoundHandler(Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
         this.players = new HashMap<>(2);
         playerA.setPlayerId(1);
         playerB.setPlayerId(2);
         players.put(1, playerA);
         players.put(2, playerB);
-        this.attacker = attacker;
         this.reinforcer = reinforcer;
+        this.attacker = attacker;
+        this.executor = executor;
         this.logger = logger;
     }
 

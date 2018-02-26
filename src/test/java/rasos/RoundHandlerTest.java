@@ -1,10 +1,12 @@
 package rasos;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 
 import java.util.Collections;
+import java.util.concurrent.*;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -17,17 +19,19 @@ public class RoundHandlerTest {
     private Reinforcer reinforcer;
     private Attacker attacker;
     private RoundHandler roundHandler;
+    private ExecutorService executor;
     private RiskLogger logger;
 
     @Before
     public void setUp() {
-        logger = mock(RiskLogger.class);
         board = new Board(7);
         playerA = mock(Player.class);
         playerB = mock(Player.class);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
-        roundHandler = new RoundHandler(playerA, playerB, attacker, reinforcer, logger);
+        executor = mock(ExecutorService.class);
+        logger = mock(RiskLogger.class);
+        roundHandler = new RoundHandler(playerA, playerB, reinforcer, attacker, executor, logger);
     }
 
     @Test
@@ -53,6 +57,25 @@ public class RoundHandlerTest {
 
         verify(playerA).onReinforcement(any(Board.class), eq(3));
         verify(playerB).onReinforcement(any(Board.class), eq(2));
+    }
+
+    @Test
+    @Ignore
+    public void timeoutTooLongReinforcementComputation() throws InterruptedException, ExecutionException, TimeoutException {
+        stubExecutorWithImmediateThrowingFuture();
+        when(playerB.onReinforcement(any(Board.class), anyInt())).then(invocation -> {
+            //noinspection InfiniteLoopStatement,StatementWithEmptyBody
+            while (true) ;
+        });
+
+        try {
+            Executors.newSingleThreadExecutor()
+                    .submit(() -> roundHandler.playOneRound(board))
+                    .get(100, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException ignored) {
+        }
+
+        verify(reinforcer, times(2)).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -164,5 +187,11 @@ public class RoundHandlerTest {
     private void makePlayerBControlTotalOf_2_Cells() {
         board.cellAt(2, 2).setValues(2, 2);
         board.cellAt(3, 2).setValues(2, 2);
+    }
+
+    private void stubExecutorWithImmediateThrowingFuture() throws InterruptedException, ExecutionException, TimeoutException {
+        Future future = mock(Future.class);
+        when(future.get(anyLong(), any(TimeUnit.class))).thenThrow(new TimeoutException());
+        when(executor.submit(any(Runnable.class))).thenReturn(future);
     }
 }
