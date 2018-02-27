@@ -177,8 +177,10 @@ public class RoundHandlerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void loggerLogsOnRoundStart() {
-        roundHandler.playOneRound(board);
         InOrder inOrder = inOrder(logger, reinforcer);
+
+        roundHandler.playOneRound(board);
+
         inOrder.verify(logger).logRoundStart();
         inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
     }
@@ -186,8 +188,10 @@ public class RoundHandlerTest {
     @SuppressWarnings("unchecked")
     @Test
     public void loggerLogsOnRoundEnd() {
-        roundHandler.playOneRound(board);
         InOrder inOrder = inOrder(logger, attacker);
+
+        roundHandler.playOneRound(board);
+
         inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
         inOrder.verify(logger).logRoundEnd(board);
     }
