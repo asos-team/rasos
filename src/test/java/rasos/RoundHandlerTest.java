@@ -214,6 +214,15 @@ public class RoundHandlerTest {
         return player;
     }
 
+    private Player stubPlayerWithInfiniteLoopOnAttack() {
+        Player player = mock(Player.class);
+        when(player.onAttack(any(Board.class))).then(invocation -> {
+            //noinspection InfiniteLoopStatement,StatementWithEmptyBody
+            while (true) ;
+        });
+        return player;
+    }
+
     @SuppressWarnings("SameParameterValue")
     private void playOneRoundWithTimeLimit(int timeoutInMilliseconds) {
         try {
@@ -225,14 +234,5 @@ public class RoundHandlerTest {
         } catch (TimeoutException e) {
             throw new RuntimeException("Handler should put limits to player's computation time.");
         }
-    }
-
-    private Player stubPlayerWithInfiniteLoopOnAttack() {
-        Player player = mock(Player.class);
-        when(player.onAttack(any(Board.class))).then(invocation -> {
-            //noinspection InfiniteLoopStatement,StatementWithEmptyBody
-            while (true) ;
-        });
-        return player;
     }
 }
