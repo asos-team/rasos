@@ -34,7 +34,7 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<AttackMove> onAttack(Board board) {
         try {
-            return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class);
+            return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class, board);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

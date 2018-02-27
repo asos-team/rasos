@@ -95,7 +95,7 @@ public class JsPlayerTest {
     }
 
     @Test
-    public void playerCallsReinforcementWithTheRightParameters() throws ScriptException, NoSuchMethodException {
+    public void playerCallsReinforcementWithBoardAndReinforcementAmount() throws ScriptException, NoSuchMethodException {
         String script = "function " + REINFORCEMENT_JS_FUNCTION_NAME + "(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
         Player player = new JsPlayer(script, engine, parser);
         when(parser.extractMovesFromJSResult(any(JSObject.class), eq(ReinforcementMove[].class)))
@@ -104,6 +104,17 @@ public class JsPlayerTest {
         player.onReinforcement(board, 0);
 
         verify(invocable).invokeFunction(REINFORCEMENT_JS_FUNCTION_NAME, board, 0);
+    }
+
+    @Test
+    public void playerCallsAttackWithBoard() throws ScriptException, NoSuchMethodException {
+        String script = "function " + ATTACK_JS_FUNCTION_NAME + "(board) { return [{'originCol':1, 'originRow':2, 'destCol':3, 'destRow':4, 'amount':5}]; }";
+        Player player = new JsPlayer(script, engine, parser);
+        when(parser.extractMovesFromJSResult(any(JSObject.class), eq(AttackMove[].class)))
+                .thenReturn(Lists.newArrayList(new AttackMove(1, 2, 3, 4, 5)));
+
+        player.onAttack(board);
+        verify(invocable).invokeFunction(ATTACK_JS_FUNCTION_NAME, board);
     }
 
 }
