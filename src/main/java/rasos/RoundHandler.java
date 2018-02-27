@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.util.Objects.requireNonNull;
 
 public class RoundHandler {
+    private static final int COMPUTATION_TIMEOUT_MILLIS = 500;
     private final Map<Integer, Player> players;
     private final Attacker attacker;
     private final Reinforcer reinforcer;
@@ -54,7 +55,7 @@ public class RoundHandler {
         try {
             AtomicReference<Iterable<ReinforcementMove>> moves = new AtomicReference<>();
             executor.submit(() -> moves.set(player.onReinforcement(board, quota)))
-                    .get(500, TimeUnit.MILLISECONDS);
+                    .get(COMPUTATION_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS);
             requireNonNull(moves.get());
             return moves.get();
         } catch (Exception e) {
@@ -66,7 +67,7 @@ public class RoundHandler {
         try {
             AtomicReference<Iterable<AttackMove>> moves = new AtomicReference<>();
             executor.submit(() -> moves.set(player.onAttack(board)))
-                    .get(500, TimeUnit.MILLISECONDS);
+                    .get(COMPUTATION_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS);
             requireNonNull(moves.get());
             return moves.get();
         } catch (Exception e) {
