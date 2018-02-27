@@ -19,6 +19,7 @@ public class RoundHandlerTest {
     private Attacker attacker;
     private RoundHandler roundHandler;
     private RiskLogger logger;
+    private ExecutorService executor;
 
     @Before
     public void setUp() {
@@ -27,9 +28,9 @@ public class RoundHandlerTest {
         playerB = mock(Player.class);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor = Executors.newSingleThreadExecutor();
         logger = mock(RiskLogger.class);
-        roundHandler = new RoundHandler(playerA, playerB, reinforcer, attacker, executor, logger);
+        roundHandler = getRoundHandler();
     }
 
     @Test
@@ -59,9 +60,9 @@ public class RoundHandlerTest {
 
     @Test
     public void preventTooLongReinforcementComputation() throws InterruptedException, ExecutionException, TimeoutException {
-        ExecutorService executor = stubExecutorWithImmediateThrowingFuture();
-        Player player = stubPlayerWithInfiniteLoop();
-        roundHandler = new RoundHandler(playerA, player, reinforcer, attacker, executor, logger);
+        executor = stubExecutorWithImmediateThrowingFuture();
+        playerB = stubPlayerWithInfiniteLoop();
+        roundHandler = getRoundHandler();
 
         playOneRoundWithTimeLimit(100);
 
@@ -166,6 +167,10 @@ public class RoundHandlerTest {
         InOrder inOrder = inOrder(logger, attacker);
         inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
         inOrder.verify(logger).logRoundEnd(board);
+    }
+
+    private RoundHandler getRoundHandler() {
+        return new RoundHandler(playerA, playerB, reinforcer, attacker, executor, logger);
     }
 
     private void makePlayerAControlTotalOf_3_Cells() {
