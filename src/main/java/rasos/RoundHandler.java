@@ -64,9 +64,11 @@ public class RoundHandler {
 
     private Iterable<AttackMove> getAttackMoves(Player player, Board board) {
         try {
-            Iterable<AttackMove> moves = player.onAttack(board);
-            requireNonNull(moves);
-            return moves;
+            AtomicReference<Iterable<AttackMove>> moves = new AtomicReference<>();
+            executor.submit(() -> moves.set(player.onAttack(board)))
+                    .get(500, TimeUnit.MILLISECONDS);
+            requireNonNull(moves.get());
+            return moves.get();
         } catch (Exception e) {
             return Collections.emptyList();
         }

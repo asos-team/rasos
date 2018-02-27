@@ -61,7 +61,7 @@ public class RoundHandlerTest {
     @Test
     public void preventTooLongReinforcementComputation() throws InterruptedException, ExecutionException, TimeoutException {
         executor = stubExecutorWithImmediateThrowingFuture();
-        playerB = stubPlayerWithInfiniteLoop();
+        playerB = stubPlayerWithInfiniteLoopOnReinforcement();
         roundHandler = getRoundHandler();
 
         playOneRoundWithTimeLimit(100);
@@ -114,6 +114,18 @@ public class RoundHandlerTest {
 
         verify(playerA).onAttack(board);
         verify(playerB).onAttack(board);
+    }
+
+    @Test
+    public void preventTooLongAttackComputation() throws InterruptedException, ExecutionException, TimeoutException {
+        executor = stubExecutorWithImmediateThrowingFuture();
+        playerB = stubPlayerWithInfiniteLoopOnAttack();
+        roundHandler = getRoundHandler();
+
+        playOneRoundWithTimeLimit(100);
+
+        //noinspection unchecked
+        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
     }
 
     @SuppressWarnings("unchecked")
@@ -193,7 +205,7 @@ public class RoundHandlerTest {
         return executor;
     }
 
-    private Player stubPlayerWithInfiniteLoop() {
+    private Player stubPlayerWithInfiniteLoopOnReinforcement() {
         Player player = mock(Player.class);
         when(player.onReinforcement(any(Board.class), anyInt())).then(invocation -> {
             //noinspection InfiniteLoopStatement,StatementWithEmptyBody
@@ -213,5 +225,14 @@ public class RoundHandlerTest {
         } catch (TimeoutException e) {
             throw new RuntimeException("Handler should put limits to player's computation time.");
         }
+    }
+
+    private Player stubPlayerWithInfiniteLoopOnAttack() {
+        Player player = mock(Player.class);
+        when(player.onAttack(any(Board.class))).then(invocation -> {
+            //noinspection InfiniteLoopStatement,StatementWithEmptyBody
+            while (true) ;
+        });
+        return player;
     }
 }
