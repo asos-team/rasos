@@ -165,6 +165,17 @@ public class RoundHandlerTest {
 
     @SuppressWarnings("unchecked")
     @Test
+    public void reinforcementHappensBeforeAttack() {
+        InOrder inOrder = inOrder(reinforcer, attacker);
+
+        roundHandler.playOneRound(board);
+
+        inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
+        inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
     public void loggerLogsOnRoundStart() {
         roundHandler.playOneRound(board);
         InOrder inOrder = inOrder(logger, reinforcer);
