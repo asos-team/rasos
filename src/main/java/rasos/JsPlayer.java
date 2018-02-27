@@ -25,7 +25,7 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         try {
-            return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class);
+            return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class, board, reinforcement);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

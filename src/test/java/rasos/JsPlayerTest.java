@@ -15,9 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyVararg;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
+import static org.mockito.Mockito.*;
 import static rasos.JsPlayer.ATTACK_JS_FUNCTION_NAME;
 import static rasos.JsPlayer.REINFORCEMENT_JS_FUNCTION_NAME;
 
@@ -79,7 +77,9 @@ public class JsPlayerTest {
         when(parser.extractMovesFromJSResult(any(JSObject.class), eq(ReinforcementMove[].class)))
                 .thenReturn(Lists.newArrayList(new ReinforcementMove(1, 2, 5)));
 
+
         Iterable<ReinforcementMove> moves = player.onReinforcement(board, 0);
+
         assertEquals(new ReinforcementMove(1, 2, 5), moves.iterator().next());
     }
 
@@ -93,4 +93,17 @@ public class JsPlayerTest {
         Iterable<AttackMove> moves = player.onAttack(board);
         assertEquals(new AttackMove(1, 2, 3, 4, 5), moves.iterator().next());
     }
+
+    @Test
+    public void playerCallsReinforcementWithTheRightParameters() throws ScriptException, NoSuchMethodException {
+        String script = "function " + REINFORCEMENT_JS_FUNCTION_NAME + "(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
+        Player player = new JsPlayer(script, engine, parser);
+        when(parser.extractMovesFromJSResult(any(JSObject.class), eq(ReinforcementMove[].class)))
+                .thenReturn(Lists.newArrayList(new ReinforcementMove(1, 2, 5)));
+
+        player.onReinforcement(board, 0);
+
+        verify(invocable).invokeFunction(REINFORCEMENT_JS_FUNCTION_NAME, board, 0);
+    }
+
 }
