@@ -14,7 +14,7 @@ public class StdoutRiskLogger implements RiskLogger {
         this(System.out::println);
     }
 
-    private StdoutRiskLogger(Printer printer) {
+    public StdoutRiskLogger(Printer printer) {
         this.printer = printer;
     }
 
