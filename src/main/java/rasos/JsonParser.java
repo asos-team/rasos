@@ -1,5 +1,6 @@
 package rasos;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.api.scripting.JSObject;
 
@@ -10,5 +11,10 @@ public class JsonParser {
         ObjectMapper converter = new ObjectMapper();
         T[] moves = converter.convertValue(result.values(), moveClass);
         return Arrays.asList(moves);
+    }
+
+    public String createBoardJson(Board board) throws JsonProcessingException {
+        ObjectMapper converter = new ObjectMapper();
+        return converter.writeValueAsString(board);
     }
 }

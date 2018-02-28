@@ -1,5 +1,7 @@
 package rasos;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jdk.nashorn.api.scripting.JSObject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -58,5 +60,29 @@ public class JsonParserTest {
         JSObject object = (JSObject) engine.eval(json);
         Iterable<AttackMove> moves = parser.extractMovesFromJSResult(object, AttackMove[].class);
         assertEquals(new AttackMove(1, 2, 3, 4, 5), moves.iterator().next());
+    }
+
+    @Test
+    public void getBoardAsJsonWorksOnASingleControlledCellBoard() throws JsonProcessingException {
+        String json = "{\"configuration\":[[{\"controllingPlayerId\":1,\"numSoldiers\":5}]],\"dim\":1}";
+        Board board = new Board(1);
+        board.cellAt(1, 1).setValues(1, 5);
+        String boardJson = parser.createBoardJson(board);
+
+        assertEquals(boardJson, json);
+    }
+
+    @Test
+    public void createJSONFromBoardWorks() throws JsonProcessingException {
+        String json = "{\"configuration\":[[{\"controllingPlayerId\":1,\"numSoldiers\":5}," +
+                "{\"controllingPlayerId\":1,\"numSoldiers\":7}]," +
+                "[{\"controllingPlayerId\":0,\"numSoldiers\":0}," +
+                "{\"controllingPlayerId\":2,\"numSoldiers\":5}]],\"dim\":2}";
+        Board board = new Board(2);
+        board.populateHomeBases(5);
+        board.cellAt(1,2).setValues(1,7);
+        String boardJson = parser.createBoardJson(board);
+
+        assertEquals(json, boardJson);
     }
 }

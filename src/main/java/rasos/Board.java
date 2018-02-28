@@ -1,13 +1,21 @@
 package rasos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class Board {
-    private final Cell[][] configuration;
-    private final int dim;
+    @JsonProperty
+    private Cell[][] configuration;
+    @JsonProperty
+    private int dim;
 
+    private Board(){
+
+    }
     Board(int dim) {
         this.dim = dim;
         configuration = new Cell[dim][dim];
@@ -30,6 +38,7 @@ public class Board {
         return res;
     }
 
+    @JsonIgnore
     public boolean isEmpty() {
         return getBoardCellStream().allMatch(Cell::isNeutral);
     }
