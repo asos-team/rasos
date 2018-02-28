@@ -21,7 +21,6 @@ import static rasos.JsPlayer.REINFORCEMENT_JS_FUNCTION_NAME;
 
 
 //TODO: Create JsPlayerBuilder (so that JsPlayer will get only an invocable in the constructor and not a script+engine that it doesn't use
-//TODO: Tests that verify the call of the invocable with the correct variables
 public class JsPlayerTest {
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
@@ -116,5 +115,4 @@ public class JsPlayerTest {
         player.onAttack(board);
         verify(invocable).invokeFunction(ATTACK_JS_FUNCTION_NAME, board);
     }
-
 }

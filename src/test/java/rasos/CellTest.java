@@ -127,6 +127,14 @@ public class CellTest {
     }
 
     @Test
+    public void cannotUpdateNumSoldiersToNeutralCell(){
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
+        Cell cell = new Cell(0, 0);
+        cell.updateNumSoldiers(5);
+    }
+
+    @Test
     public void whenNumSoldiersSetToZeroCellBecomesNeutral() {
         Cell cell = new Cell(5, 12);
         cell.updateNumSoldiers(0);

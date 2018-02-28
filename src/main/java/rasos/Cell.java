@@ -91,8 +91,11 @@ public class Cell {
     private void setNumSoldiersAccordingToValue(int numSoldiers) {
         if (numSoldiers == 0) {
             makeNeutral();
+        } else if (isNeutral()) {
+            throw new RuntimeException(NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
         } else {
             this.numSoldiers = numSoldiers;
         }
     }
 }
+
