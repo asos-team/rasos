@@ -1,7 +1,6 @@
 package rasos;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import jdk.nashorn.api.scripting.JSObject;
 import org.junit.Before;
 import org.junit.Rule;
@@ -63,16 +62,6 @@ public class JsonParserTest {
     }
 
     @Test
-    public void getBoardAsJsonWorksOnASingleControlledCellBoard() throws JsonProcessingException {
-        String json = "{\"configuration\":[[{\"controllingPlayerId\":1,\"numSoldiers\":5}]],\"dim\":1}";
-        Board board = new Board(1);
-        board.cellAt(1, 1).setValues(1, 5);
-        String boardJson = parser.createBoardJson(board);
-
-        assertEquals(boardJson, json);
-    }
-
-    @Test
     public void createJSONFromBoardWorks() throws JsonProcessingException {
         String json = "{\"configuration\":[[{\"controllingPlayerId\":1,\"numSoldiers\":5}," +
                 "{\"controllingPlayerId\":1,\"numSoldiers\":7}]," +
@@ -81,7 +70,7 @@ public class JsonParserTest {
         Board board = new Board(2);
         board.populateHomeBases(5);
         board.cellAt(1,2).setValues(1,7);
-        String boardJson = parser.createBoardJson(board);
+        String boardJson = parser.createJSONFromBoard(board);
 
         assertEquals(json, boardJson);
     }

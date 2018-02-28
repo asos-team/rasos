@@ -13,7 +13,7 @@ public class JsonParser {
         return Arrays.asList(moves);
     }
 
-    public String createBoardJson(Board board) throws JsonProcessingException {
+    public String createJSONFromBoard(Board board) throws JsonProcessingException {
         ObjectMapper converter = new ObjectMapper();
         return converter.writeValueAsString(board);
     }
