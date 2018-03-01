@@ -3,7 +3,6 @@ package rasos;
 import com.google.common.collect.Lists;
 import jdk.nashorn.api.scripting.JSObject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -126,12 +125,26 @@ public class JsPlayerTest {
     public void riskLoggerLogsExceptionsThatHappenWhenReinforcementIsCalled() throws ScriptException, NoSuchMethodException {
         String script = "asdsa";
         Player player = new JsPlayer(script, engine, parser, logger);
-        Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
 
         when(invocable.invokeFunction(eq(JsPlayer.REINFORCEMENT_JS_FUNCTION_NAME), anyVararg())).thenThrow(RuntimeException.class);
-        expectedException.expect(RuntimeException.class);
+        try {
+            player.onReinforcement(board, 0);
+        } catch (RuntimeException e) {
+            verify(logger).logPlayerReinforcementCodeException(eq(player.getPlayerId()), any(RuntimeException.class));
+        }
+    }
 
-        player.onReinforcement(board,0);
-        verify(logger).logReinforcementException(eq(player.getPlayerId()), any(Exception.class));
+    @Test
+    public void riskLoggerLogsExceptionsThatHappenWhenAttackIsCalled() throws ScriptException, NoSuchMethodException {
+        String script = "ewqewqewq";
+        Player player = new JsPlayer(script, engine, parser, logger);
+
+        when(invocable.invokeFunction(eq(JsPlayer.ATTACK_JS_FUNCTION_NAME), anyVararg())).thenThrow(RuntimeException.class);
+        try {
+            player.onAttack(board);
+        } catch (RuntimeException e) {
+            verify(logger).logPlayerAttackCodeException(eq(player.getPlayerId()), any(RuntimeException.class));
+        }
+
     }
 }

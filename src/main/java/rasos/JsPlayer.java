@@ -31,7 +31,7 @@ public class JsPlayer extends Player {
             Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
             return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class, mapFromBoard, reinforcement);
         } catch (Exception e) {
-            logger.logReinforcementException(getPlayerId(), e);
+            logger.logPlayerReinforcementCodeException(getPlayerId(), e);
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -42,6 +42,7 @@ public class JsPlayer extends Player {
             Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
             return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class, mapFromBoard);
         } catch (Exception e) {
+            logger.logPlayerAttackCodeException(getPlayerId(), e);
             throw new RuntimeException(e.getMessage());
         }
     }

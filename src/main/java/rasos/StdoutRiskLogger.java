@@ -75,7 +75,12 @@ public class StdoutRiskLogger implements RiskLogger {
     }
 
     @Override
-    public void logReinforcementException(int playerId, Exception e) {
+    public void logPlayerReinforcementCodeException(int playerId, Exception e) {
+        printer.print("");
+    }
+
+    @Override
+    public void logPlayerAttackCodeException(int eq, Exception e) {
         printer.print("");
     }
 

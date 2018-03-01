@@ -17,5 +17,7 @@ public interface RiskLogger {
 
     void logGameEnd(int winnerId);
 
-    void logReinforcementException(int playerId, Exception e);
+    void logPlayerReinforcementCodeException(int playerId, Exception e);
+
+    void logPlayerAttackCodeException(int eq, Exception e);
 }
