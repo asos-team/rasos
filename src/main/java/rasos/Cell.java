@@ -51,7 +51,8 @@ public class Cell {
     public String toString() {
         if (isNeutral())
             return "[  ]";
-        return String.format("[%s%s%s]", getColor(), getFixedWidthNumSoldiers(), ANSI_RESET_COLOR);
+        String coloredNumSoldiers = colorString(getFixedWidthNumSoldiers(), getColor());
+        return String.format("[%s]", coloredNumSoldiers);
     }
 
     public int getNumSoldiers() {
@@ -105,9 +106,9 @@ public class Cell {
         return controllingPlayerId == 1 ? ANSI_YELLOW : ANSI_BLUE;
     }
 
-    private Object getFixedWidthNumSoldiers() {
+    private String getFixedWidthNumSoldiers() {
         if (numSoldiers / 10 > 0) {
-            return numSoldiers;
+            return String.valueOf(numSoldiers);
         }
         return " " + numSoldiers;
     }

@@ -128,7 +128,7 @@ public class CellTest {
     }
 
     @Test
-    public void cannotUpdateNumSoldiersToNeutralCell(){
+    public void cannotUpdateNumSoldiersToNeutralCell() {
         expectedEx.expect(RuntimeException.class);
         expectedEx.expectMessage(Cell.NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR);
         Cell cell = new Cell(0, 0);
@@ -170,8 +170,8 @@ public class CellTest {
         Cell player2Cell = new Cell(2, 7);
         Cell neutralCell = Cell.neutral();
 
-        assertThat(player1Cell.toString(), is(String.format("[%s10%s]", ANSI_YELLOW, ANSI_RESET_COLOR)));
-        assertThat(player2Cell.toString(), is(String.format("[%s 7%s]", ANSI_BLUE, ANSI_RESET_COLOR)));
+        assertThat(player1Cell.toString(), is(String.format("[%s]", colorString("10", ANSI_YELLOW))));
+        assertThat(player2Cell.toString(), is(String.format("[%s]", colorString(" 7", ANSI_BLUE))));
         assertThat(neutralCell.toString(), is("[  ]"));
     }
 }
