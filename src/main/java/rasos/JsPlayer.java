@@ -5,6 +5,7 @@ import jdk.nashorn.api.scripting.JSObject;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.util.Map;
 
 public class JsPlayer extends Player {
     static final String REINFORCEMENT_JS_FUNCTION_NAME = "onReinforcement";
@@ -25,7 +26,8 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
         try {
-            return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class, board, reinforcement);
+            Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
+            return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class, mapFromBoard, reinforcement);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -34,7 +36,8 @@ public class JsPlayer extends Player {
     @Override
     public Iterable<AttackMove> onAttack(Board board) {
         try {
-            return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class, board);
+            Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
+            return executeJsMethod(ATTACK_JS_FUNCTION_NAME, AttackMove[].class, mapFromBoard);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

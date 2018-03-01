@@ -10,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -97,22 +98,20 @@ public class JsPlayerTest {
     public void playerCallsReinforcementWithBoardAndReinforcementAmount() throws ScriptException, NoSuchMethodException {
         String script = "function " + REINFORCEMENT_JS_FUNCTION_NAME + "(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
         Player player = new JsPlayer(script, engine, parser);
-        when(parser.extractMovesFromJSResult(any(JSObject.class), eq(ReinforcementMove[].class)))
-                .thenReturn(Lists.newArrayList(new ReinforcementMove(1, 2, 5)));
+        Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
 
         player.onReinforcement(board, 0);
 
-        verify(invocable).invokeFunction(REINFORCEMENT_JS_FUNCTION_NAME, board, 0);
+        verify(invocable).invokeFunction(REINFORCEMENT_JS_FUNCTION_NAME, mapFromBoard, 0);
     }
 
     @Test
     public void playerCallsAttackWithBoard() throws ScriptException, NoSuchMethodException {
         String script = "function " + ATTACK_JS_FUNCTION_NAME + "(board) { return [{'originCol':1, 'originRow':2, 'destCol':3, 'destRow':4, 'amount':5}]; }";
         Player player = new JsPlayer(script, engine, parser);
-        when(parser.extractMovesFromJSResult(any(JSObject.class), eq(AttackMove[].class)))
-                .thenReturn(Lists.newArrayList(new AttackMove(1, 2, 3, 4, 5)));
+        Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
 
         player.onAttack(board);
-        verify(invocable).invokeFunction(ATTACK_JS_FUNCTION_NAME, board);
+        verify(invocable).invokeFunction(ATTACK_JS_FUNCTION_NAME, mapFromBoard);
     }
 }

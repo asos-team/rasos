@@ -1,6 +1,6 @@
 package rasos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import org.junit.Before;
@@ -11,20 +11,25 @@ import org.junit.rules.ExpectedException;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.IOException;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class JsonParserTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
     private JsonParser parser;
     private ScriptObjectMirror json;
+    private ObjectMapper mapper;
 
     @Before
     public void setUp() throws ScriptException {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         json = (ScriptObjectMirror) engine.eval("JSON");
         parser = new JsonParser();
+        mapper = new ObjectMapper();
     }
 
     @Test
@@ -57,7 +62,7 @@ public class JsonParserTest {
 
     @Test
     public void extractMovesFromJSResultParsesAttackMoves() {
-        String attack= "[{\"originCol\":1, \"originRow\":2, \"destCol\":3, \"destRow\":4, \"amount\":5}]";
+        String attack = "[{\"originCol\":1, \"originRow\":2, \"destCol\":3, \"destRow\":4, \"amount\":5}]";
         JSObject object = (JSObject) json.callMember("parse", attack);
 
         Iterable<AttackMove> moves = parser.extractMovesFromJSResult(object, AttackMove[].class);
@@ -65,21 +70,21 @@ public class JsonParserTest {
     }
 
     @Test
-    public void createJSONFromBoardWorks() throws JsonProcessingException, ScriptException {
+    public void createJSONFromBoardWorks() throws IOException {
         String expectedBoardJson = "{\"configuration\":[[{\"controllingPlayerId\":1,\"numSoldiers\":5}," +
                 "{\"controllingPlayerId\":1,\"numSoldiers\":7}]," +
                 "[{\"controllingPlayerId\":0,\"numSoldiers\":0}," +
                 "{\"controllingPlayerId\":2,\"numSoldiers\":5}]],\"dim\":2}";
 
-        JSObject expectedBoardJSObject = (JSObject) json.callMember("parse",expectedBoardJson);
+
+        Map<String, Object> expectedBoardMap = mapper.readValue(expectedBoardJson, Map.class);
 
         Board board = new Board(2);
         board.populateHomeBases(5);
-        board.cellAt(1,2).setValues(1,7);
+        board.cellAt(1, 2).setValues(1, 7);
 
-        JSObject boardJSObject= parser.createJSObjectFromBoard(board);
-        String actualBoardJSON = (String) json.callMember("stringify", boardJSObject);
-//
-        assertEquals(expectedBoardJson, actualBoardJSON);
+        Map<String, Object> actualBoardMap = parser.createMapFromBoard(board);
+
+        assertEquals(expectedBoardMap, actualBoardMap);
     }
 }

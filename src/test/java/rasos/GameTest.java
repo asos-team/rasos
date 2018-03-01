@@ -33,7 +33,8 @@ public class GameTest {
 
     @Test
     public void theGame() {
-        RiskLogger logger = new StdoutRiskLogger(s -> {});
+        RiskLogger logger = new StdoutRiskLogger(s -> {
+        });
         RoundHandler handler = new RoundHandler(
                 new AttackPlayer(),
                 new AttackPlayer(),
@@ -47,17 +48,17 @@ public class GameTest {
     }
 
     @Test
-    public void gameWithShittyJsPlayer(){
+    public void gameWithShittyJsPlayer() {
         RiskLogger logger = new StdoutRiskLogger();
         String script = "function onReinforcement(board, reinforcement){" +
-                "return [{col:1,row:1,amount:reinforcement+board.cellAt(1,1).getNumSoldiers()+board.cellAt(5,5).getNumSoldiers()}];" +
+                "return [{col:1,row:1,amount:board.configuration[0][0].numSoldiers}];" +
                 "}; function onAttack(board){" +
                 "return [];};";
 
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         JsonParser parser = new JsonParser();
         RoundHandler handler = new RoundHandler(
-                new JsPlayer(script,engine,parser),
+                new JsPlayer(script, engine, parser),
                 new AttackPlayer(),
                 new Reinforcer(logger),
                 new Attacker(logger),
