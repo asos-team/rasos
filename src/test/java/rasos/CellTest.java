@@ -6,6 +6,7 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static rasos.ColorUtils.*;
 
 public class CellTest {
 
@@ -166,9 +167,11 @@ public class CellTest {
     @Test
     public void humanReadableToString() {
         Cell player1Cell = new Cell(1, 10);
+        Cell player2Cell = new Cell(2, 7);
         Cell neutralCell = Cell.neutral();
 
-        assertThat(player1Cell.toString(), is("[10,1]"));
-        assertThat(neutralCell.toString(), is("[0,0]"));
+        assertThat(player1Cell.toString(), is(String.format("[%s10%s]", ANSI_YELLOW, ANSI_RESET)));
+        assertThat(player2Cell.toString(), is(String.format("[%s07%s]", ANSI_BLUE, ANSI_RESET)));
+        assertThat(neutralCell.toString(), is("[  ]"));
     }
 }

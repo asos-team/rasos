@@ -1,11 +1,12 @@
 package rasos;
 
+import static rasos.ColorUtils.*;
+
 public class Cell {
     static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
     static final String CONTROLLED_CELL_WITH_ZERO_SOLDIERS_ERROR = "A cell can't be controlled by a player without having any soldiers in it";
     static final String NEGATIVE_CONTROLLING_PLAYER_ID_ERROR = "Non-positive controlling player ID is not allowed.";
     static final String NEGATIVE_AMOUNT_OF_SOLDIERS_ERROR = "Negative amount of soldiers is not allowed.";
-
     private int controllingPlayerId;
     private int numSoldiers;
 
@@ -48,7 +49,9 @@ public class Cell {
 
     @Override
     public String toString() {
-        return String.format("[%d,%d]", numSoldiers, controllingPlayerId);
+        if (isNeutral())
+            return "[  ]";
+        return String.format("[%s%02d%s]", getColor(), numSoldiers, ANSI_RESET);
     }
 
     public int getNumSoldiers() {
@@ -96,6 +99,10 @@ public class Cell {
         } else {
             this.numSoldiers = numSoldiers;
         }
+    }
+
+    private String getColor() {
+        return controllingPlayerId == 1 ? ANSI_YELLOW : ANSI_BLUE;
     }
 }
 
