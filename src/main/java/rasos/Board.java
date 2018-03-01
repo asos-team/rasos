@@ -48,7 +48,7 @@ public class Board {
         StringBuilder sb = new StringBuilder();
         for (int rowIdx = 0; rowIdx < dim; rowIdx++) {
             for (int colIdx = 0; colIdx < dim; colIdx++) {
-                sb.append(configuration[colIdx][rowIdx].toString() + "\t");
+                sb.append(configuration[colIdx][rowIdx].toString()).append("\t");
             }
             sb.append(System.lineSeparator());
 

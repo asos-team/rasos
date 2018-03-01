@@ -102,7 +102,9 @@ public class BoardTest {
 
         String toString = b.toString();
 
-        assertThat(toString, is("[10,1]\t[5,1]\t" + System.lineSeparator() + "[0,0]\t[10,2]"));
+        String line1 = String.format("%s\t%s\t", b.getHome1Cell(), b.cellAt(2, 1));
+        String line2 = String.format("%s\t%s", b.cellAt(1, 2), b.getHome2Cell());
+        assertThat(toString, is(line1 + System.lineSeparator() + line2));
     }
 
     @Test
