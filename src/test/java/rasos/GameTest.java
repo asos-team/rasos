@@ -58,7 +58,7 @@ public class GameTest {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         JsonParser parser = new JsonParser();
         RoundHandler handler = new RoundHandler(
-                new JsPlayer(script, engine, parser),
+                new JsPlayer(script, engine, parser, logger),
                 new AttackPlayer(),
                 new Reinforcer(logger),
                 new Attacker(logger),

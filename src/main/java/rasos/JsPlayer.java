@@ -12,12 +12,14 @@ public class JsPlayer extends Player {
     static final String ATTACK_JS_FUNCTION_NAME = "onAttack";
     private JsonParser parser;
     private Invocable invocable;
+    private RiskLogger logger;
 
-    JsPlayer(String script, ScriptEngine engine, JsonParser parser) {
+    JsPlayer(String script, ScriptEngine engine, JsonParser parser, RiskLogger logger) {
         try {
             engine.eval(script);
             this.invocable = (Invocable) engine;
             this.parser = parser;
+            this.logger = logger;
         } catch (ScriptException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -29,6 +31,7 @@ public class JsPlayer extends Player {
             Map<String, Object> mapFromBoard = parser.createMapFromBoard(board);
             return executeJsMethod(REINFORCEMENT_JS_FUNCTION_NAME, ReinforcementMove[].class, mapFromBoard, reinforcement);
         } catch (Exception e) {
+            logger.logReinforcementException(getPlayerId(), e);
             throw new RuntimeException(e.getMessage());
         }
     }

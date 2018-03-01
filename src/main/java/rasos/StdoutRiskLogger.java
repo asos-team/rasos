@@ -10,11 +10,11 @@ public class StdoutRiskLogger implements RiskLogger {
             "                     \n";
     private final Printer printer;
 
-    public StdoutRiskLogger() {
+    StdoutRiskLogger() {
         this(System.out::println);
     }
 
-    public StdoutRiskLogger(Printer printer) {
+    StdoutRiskLogger(Printer printer) {
         this.printer = printer;
     }
 
@@ -72,6 +72,11 @@ public class StdoutRiskLogger implements RiskLogger {
         printer.print("Brought to you by:");
 
         printer.print(ASOS);
+    }
+
+    @Override
+    public void logReinforcementException(int playerId, Exception e) {
+        printer.print("");
     }
 
     public interface Printer {
