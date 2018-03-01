@@ -62,11 +62,11 @@ public class Board {
 
     void populateHomeBases(int numSoldiers) {
         if (numSoldiers == 0) {
-            cellAt(1, 1).makeNeutral();
-            cellAt(dim, dim).makeNeutral();
+            getHome1Cell().makeNeutral();
+            getHome2Cell().makeNeutral();
         } else {
-            cellAt(1, 1).setValues(1, numSoldiers);
-            cellAt(dim, dim).setValues(2, numSoldiers);
+            getHome1Cell().setValues(1, numSoldiers);
+            getHome2Cell().setValues(2, numSoldiers);
         }
     }
 
