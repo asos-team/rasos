@@ -170,8 +170,8 @@ public class CellTest {
         Cell player2Cell = new Cell(2, 7);
         Cell neutralCell = Cell.neutral();
 
-        assertThat(player1Cell.toString(), is(String.format("[%s10%s]", ANSI_YELLOW, ANSI_RESET)));
-        assertThat(player2Cell.toString(), is(String.format("[%s07%s]", ANSI_BLUE, ANSI_RESET)));
+        assertThat(player1Cell.toString(), is(String.format("[%s10%s]", ANSI_YELLOW, ANSI_RESET_COLOR)));
+        assertThat(player2Cell.toString(), is(String.format("[%s 7%s]", ANSI_BLUE, ANSI_RESET_COLOR)));
         assertThat(neutralCell.toString(), is("[  ]"));
     }
 }
