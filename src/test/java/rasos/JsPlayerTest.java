@@ -145,6 +145,5 @@ public class JsPlayerTest {
         } catch (RuntimeException e) {
             verify(logger).logPlayerAttackCodeException(eq(player.getPlayerId()), any(RuntimeException.class));
         }
-
     }
 }

@@ -76,12 +76,14 @@ public class StdoutRiskLogger implements RiskLogger {
 
     @Override
     public void logPlayerReinforcementCodeException(int playerId, Exception e) {
-        printer.print("");
+        printer.print(String.format("player %d threw exception on reinforcement (exception: %s)",
+                playerId, e.getMessage()));
     }
 
     @Override
-    public void logPlayerAttackCodeException(int eq, Exception e) {
-        printer.print("");
+    public void logPlayerAttackCodeException(int playerId, Exception e) {
+        printer.print(String.format("player %d threw exception on attack (exception: %s)",
+                playerId, e.getMessage()));
     }
 
     public interface Printer {

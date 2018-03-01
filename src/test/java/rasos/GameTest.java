@@ -53,7 +53,7 @@ public class GameTest {
         String script = "function onReinforcement(board, reinforcement){" +
                 "return [{col:1,row:1,amount:board.configuration[0][0].numSoldiers}];" +
                 "}; function onAttack(board){" +
-                "return [];};";
+                "throw 'fucking mega lol';};";
 
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         JsonParser parser = new JsonParser();
