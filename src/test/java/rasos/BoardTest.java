@@ -102,8 +102,8 @@ public class BoardTest {
 
         String toString = b.toString();
 
-        String line1 = String.format("%s\t%s\t", b.getHome1Cell(), b.cellAt(2, 1));
-        String line2 = String.format("%s\t%s", b.cellAt(1, 2), b.getHome2Cell());
+        String line1 = String.format("%s %s ", b.getHome1Cell(), b.cellAt(2, 1));
+        String line2 = String.format("%s %s", b.cellAt(1, 2), b.getHome2Cell());
         assertThat(toString, is(line1 + System.lineSeparator() + line2));
     }
 
