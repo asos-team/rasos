@@ -20,7 +20,9 @@ public class JsPlayer extends Player {
             this.invocable = (Invocable) engine;
             this.parser = parser;
             this.logger = logger;
-        } catch (ScriptException e) {
+
+            invocable.invokeFunction("onGameStart", getPlayerId());
+        } catch (ScriptException | NoSuchMethodException e) {
             throw new RuntimeException(e.getMessage());
         }
     }

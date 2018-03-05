@@ -101,6 +101,13 @@ public class JsPlayerTest {
     }
 
     @Test
+    public void playerExecutesInitMethod() throws ScriptException, NoSuchMethodException {
+        String script = "function onGameStart(playerId){myPlayerId=playerId}";
+        Player player = new JsPlayer(script, engine, parser, logger);
+        verify(invocable).invokeFunction("onGameStart", player.getPlayerId());
+    }
+
+    @Test
     public void playerCallsReinforcementWithBoardAndReinforcementAmount() throws ScriptException, NoSuchMethodException {
         String script = "function " + REINFORCEMENT_JS_FUNCTION_NAME + "(board, soldiers) { return [{'col':1, 'row':2, 'amount':5}]; }";
         Player player = new JsPlayer(script, engine, parser, logger);

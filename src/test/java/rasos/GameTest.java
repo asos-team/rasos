@@ -50,7 +50,8 @@ public class GameTest {
     @Test
     public void gameWithShittyJsPlayer() {
         RiskLogger logger = new StdoutRiskLogger();
-        String script = "function onReinforcement(board, reinforcement){" +
+        String script = "function onGameStart(playerId){};" +
+                "function onReinforcement(board, reinforcement){" +
                 "return [{col:1,row:1,amount:board.configuration[0][0].numSoldiers}];" +
                 "}; function onAttack(board){" +
                 "throw 'fucking mega lol';};";
