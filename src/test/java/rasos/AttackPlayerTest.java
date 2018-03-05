@@ -18,7 +18,7 @@ public class AttackPlayerTest {
     private AttackPlayer p;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         b = new Board(10);
         p = new AttackPlayer();
         ((Player) p).setPlayerId(1);
@@ -37,7 +37,7 @@ public class AttackPlayerTest {
     @Test
     public void attacksFromEveryControlledCell() {
         b = new Board(5);
-        b.populateHomeBases(10);
+        b.populateHomeBases(10, 1, 2);
         b.cellAt(3, 3).setValues(1, 15);
 
         List<AttackMove> attackMoves = Lists.newArrayList(p.onAttack(b));

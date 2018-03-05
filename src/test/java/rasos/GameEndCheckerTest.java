@@ -26,7 +26,7 @@ public class GameEndCheckerTest {
 
     @Test
     public void gameIsContinuedWhenBoardIsNotEmpty() {
-        board.populateHomeBases(11);
+        board.populateHomeBases(11, 1, 2);
         assertFalse("Game should continue when the board is not empty.", isEndOfGame());
     }
 
@@ -50,14 +50,14 @@ public class GameEndCheckerTest {
 
     @Test
     public void getWinnerIdReturnsZeroForATie() {
-        board.populateHomeBases(676);
+        board.populateHomeBases(676, 1, 2);
         assertEquals("WinnerId should be zero for a tie.", 0, winner());
     }
 
     @Test
     public void getWinnerIdReturnsTheLeadingPlayerId() {
         int id = 2;
-        board.populateHomeBases(43);
+        board.populateHomeBases(43, 1, 2);
         board.cellAt(4, 5).setValues(id, 60);
         assertEquals(String.format("WinnerId should be %d.", id), id, winner());
     }

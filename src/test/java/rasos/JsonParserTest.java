@@ -80,7 +80,7 @@ public class JsonParserTest {
         Map<String, Object> expectedBoardMap = mapper.readValue(expectedBoardJson, Map.class);
 
         Board board = new Board(2);
-        board.populateHomeBases(5);
+        board.populateHomeBases(5, 1, 2);
         board.cellAt(1, 2).setValues(1, 7);
 
         Map<String, Object> actualBoardMap = parser.createMapFromBoard(board);

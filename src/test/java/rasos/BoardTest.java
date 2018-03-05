@@ -48,7 +48,7 @@ public class BoardTest {
     @Test
     public void isNotEmpty() {
         Board board = new Board(12);
-        board.populateHomeBases(33);
+        board.populateHomeBases(33, 1, 2);
         assertFalse("Board shouldn't be empty.", board.isEmpty());
     }
 
@@ -70,16 +70,16 @@ public class BoardTest {
     public void populatesHomeBases() {
         int soldiers = 30;
 
-        board.populateHomeBases(soldiers);
+        board.populateHomeBases(soldiers, 46, 19);
 
-        TestUtils.assertCellContents(board.getHome1Cell(), 1, soldiers);
-        TestUtils.assertCellContents(board.getHome2Cell(), 2, soldiers);
+        TestUtils.assertCellContents(board.getHome1Cell(), 46, soldiers);
+        TestUtils.assertCellContents(board.getHome2Cell(), 19, soldiers);
     }
 
     @Test
     public void populateHomeBasesReturnsBoardWithNeutralHomes() {
-        board.populateHomeBases(17);
-        board.populateHomeBases(0);
+        board.populateHomeBases(17, 1, 2);
+        board.populateHomeBases(0, 1, 2);
 
         assertTrue("Home base A should be neutral", board.getHome1Cell().isNeutral());
         assertTrue("Home base B should be neutral", board.getHome2Cell().isNeutral());
@@ -97,7 +97,7 @@ public class BoardTest {
     @Test
     public void toStringHumanReadable() {
         Board b = new Board(2);
-        b.populateHomeBases(10);
+        b.populateHomeBases(10, 1, 2);
         b.cellAt(2, 1).setValues(1, 5);
 
         String toString = b.toString();
@@ -109,7 +109,7 @@ public class BoardTest {
 
     @Test
     public void retrievesPlayerControlledCellCoordinates() {
-        board.populateHomeBases(20);
+        board.populateHomeBases(20, 1, 2);
         board.cellAt(1, 2).setValues(1, 10);
 
         Iterable<CellCoordinates> player1Cells = board.getControlledCoordinates(1);

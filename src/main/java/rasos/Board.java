@@ -13,9 +13,11 @@ public class Board {
     @JsonProperty
     private int dim;
 
-    private Board(){
+    @SuppressWarnings("unused") // necessary for Jackson
+    private Board() {
 
     }
+
     Board(int dim) {
         this.dim = dim;
         configuration = new Cell[dim][dim];
@@ -60,13 +62,13 @@ public class Board {
         return configuration[col - 1][row - 1];
     }
 
-    void populateHomeBases(int numSoldiers) {
+    void populateHomeBases(int numSoldiers, int idA, int idB) {
         if (numSoldiers == 0) {
             getHome1Cell().makeNeutral();
             getHome2Cell().makeNeutral();
         } else {
-            getHome1Cell().setValues(1, numSoldiers);
-            getHome2Cell().setValues(2, numSoldiers);
+            getHome1Cell().setValues(idA, numSoldiers);
+            getHome2Cell().setValues(idB, numSoldiers);
         }
     }
 

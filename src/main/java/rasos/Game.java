@@ -10,7 +10,7 @@ class Game {
     Game(int dim, int soldiers, int rounds, RoundHandler handler, GameEndChecker checker, RiskLogger logger) {
         this.board = new Board(dim);
         this.checker = checker;
-        this.board.populateHomeBases(soldiers);
+        this.board.populateHomeBases(soldiers, 1, 2);
         this.rounds = rounds;
         this.handler = handler;
         this.logger = logger;

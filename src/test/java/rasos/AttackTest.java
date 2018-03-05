@@ -9,6 +9,7 @@ import java.util.Collections;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("unchecked")
 public class AttackTest {
 
     private static final int boardDim = 2;
@@ -21,7 +22,7 @@ public class AttackTest {
         logger = mock(RiskLogger.class);
         attacker = new Attacker(logger);
         board = new Board(boardDim);
-        board.populateHomeBases(20);
+        board.populateHomeBases(20, 1, 2);
     }
 
     @Test
@@ -122,7 +123,7 @@ public class AttackTest {
     @Test
     public void conqueringAttackMove() {
         Board b = new Board(2);
-        b.populateHomeBases(10);
+        b.populateHomeBases(10, 1, 2);
         b.cellAt(1, 1).updateNumSoldiers(20);
         AttackMove am = new AttackMove(1, 1, 2, 2, 15);
 
@@ -169,7 +170,7 @@ public class AttackTest {
     @Test
     public void ignoresNonNeighbouringAttackMoves() {
         Board b = new Board(3);
-        b.populateHomeBases(20);
+        b.populateHomeBases(20, 1, 2);
 
         AttackMove am = new AttackMove(1, 1, 1, 3, 10);
 
@@ -182,7 +183,7 @@ public class AttackTest {
     @Test
     public void ignoresNonNeighbouringAttackMovesAndAppliesLegalOnes() {
         Board b = new Board(3);
-        b.populateHomeBases(20);
+        b.populateHomeBases(20, 1, 2);
 
         AttackMove am1 = new AttackMove(1, 1, 1, 2, 5);
         AttackMove am2 = new AttackMove(1, 1, 1, 3, 5);
@@ -199,7 +200,7 @@ public class AttackTest {
     @Test
     public void concurrentMoveToSameCellFromDifferentPlayers() {
         Board b = new Board(3);
-        b.populateHomeBases(20);
+        b.populateHomeBases(20, 1, 2);
 
         AttackMove amA = new AttackMove(1, 1, 2, 2, 10);
         AttackMove amB = new AttackMove(3, 3, 2, 2, 8);
