@@ -55,7 +55,8 @@ public class StdoutRiskLogger implements RiskLogger {
     public void logRoundEnd(Board board) {
         printer.print("-------========ROUND ENDED========-------");
         printer.print(board.toString());
-
+        printer.print(String.format("Player A controls %d cells.", board.getPlayerCellCount(1)));
+        printer.print(String.format("Player B controls %d cells.", board.getPlayerCellCount(2)));
     }
 
     @Override
