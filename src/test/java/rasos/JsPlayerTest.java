@@ -104,7 +104,7 @@ public class JsPlayerTest {
     public void playerExecutesInitMethod() throws ScriptException, NoSuchMethodException {
         String script = "function onGameStart(playerId){myPlayerId=playerId}";
         Player player = new JsPlayer(script, engine, parser, logger);
-        verify(invocable).invokeFunction("onGameStart", player.getPlayerId());
+        verify(invocable).invokeFunction(JsPlayer.ON_GAME_START_JS_FUNCTION_NAME, player.getPlayerId());
     }
 
     @Test

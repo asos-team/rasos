@@ -10,6 +10,7 @@ import java.util.Map;
 public class JsPlayer extends Player {
     static final String REINFORCEMENT_JS_FUNCTION_NAME = "onReinforcement";
     static final String ATTACK_JS_FUNCTION_NAME = "onAttack";
+    static final String ON_GAME_START_JS_FUNCTION_NAME = "onGameStart";
     private JsonParser parser;
     private Invocable invocable;
     private RiskLogger logger;
@@ -21,7 +22,7 @@ public class JsPlayer extends Player {
             this.parser = parser;
             this.logger = logger;
 
-            invocable.invokeFunction("onGameStart", getPlayerId());
+            invocable.invokeFunction(ON_GAME_START_JS_FUNCTION_NAME, getPlayerId());
         } catch (ScriptException | NoSuchMethodException e) {
             throw new RuntimeException(e.getMessage());
         }
