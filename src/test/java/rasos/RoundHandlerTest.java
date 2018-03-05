@@ -12,6 +12,10 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class RoundHandlerTest {
+
+    private static final int PLAYER_A_ID = 1;
+    private static final int PLAYER_B_ID = 2;
+
     private Board board;
     private Player playerA;
     private Player playerB;
@@ -35,8 +39,8 @@ public class RoundHandlerTest {
 
     @Test
     public void assignPlayerIds() {
-        verify(playerA).setPlayerId(1);
-        verify(playerB).setPlayerId(2);
+        verify(playerA).setPlayerId(PLAYER_A_ID);
+        verify(playerB).setPlayerId(PLAYER_B_ID);
     }
 
     @Test
@@ -104,8 +108,8 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        verify(reinforcer).apply(board, movesA, 3, 1);
-        verify(reinforcer).apply(board, movesB, 2, 2);
+        verify(reinforcer).apply(board, movesA, 3, PLAYER_A_ID);
+        verify(reinforcer).apply(board, movesB, 2, PLAYER_B_ID);
     }
 
     @Test
@@ -201,14 +205,14 @@ public class RoundHandlerTest {
     }
 
     private void makePlayerAControlTotalOf_3_Cells() {
-        board.cellAt(1, 1).setValues(1, 4);
-        board.cellAt(1, 3).setValues(1, 4);
-        board.cellAt(3, 1).setValues(1, 19);
+        board.cellAt(1, 1).setValues(PLAYER_A_ID, 4);
+        board.cellAt(1, 3).setValues(PLAYER_A_ID, 4);
+        board.cellAt(3, 1).setValues(PLAYER_A_ID, 19);
     }
 
     private void makePlayerBControlTotalOf_2_Cells() {
-        board.cellAt(2, 2).setValues(2, 2);
-        board.cellAt(3, 2).setValues(2, 2);
+        board.cellAt(2, 2).setValues(PLAYER_B_ID, 2);
+        board.cellAt(3, 2).setValues(PLAYER_B_ID, 2);
     }
 
     private ExecutorService stubExecutorWithImmediateThrowingFuture() throws InterruptedException, ExecutionException, TimeoutException {
