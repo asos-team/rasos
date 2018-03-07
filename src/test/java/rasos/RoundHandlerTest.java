@@ -69,13 +69,13 @@ public class RoundHandlerTest {
         verify(playerB).onReinforcement(any(Board.class), eq(2));
     }
 
-    @Test
+    @Test(timeout = 100)
     public void preventTooLongReinforcementComputation() throws InterruptedException, ExecutionException, TimeoutException {
         executor = stubExecutorWithImmediateThrowingFuture();
         playerB = stubPlayerWithInfiniteLoopOnReinforcement();
         roundHandler = getRoundHandler();
 
-        playOneRoundWithTimeLimit(100);
+        roundHandler.playOneRound(board);
 
         verify(reinforcer, times(2)).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
     }
@@ -127,13 +127,13 @@ public class RoundHandlerTest {
         verify(playerB).onAttack(board);
     }
 
-    @Test
+    @Test(timeout = 100)
     public void preventTooLongAttackComputation() throws InterruptedException, ExecutionException, TimeoutException {
         executor = stubExecutorWithImmediateThrowingFuture();
         playerB = stubPlayerWithInfiniteLoopOnAttack();
         roundHandler = getRoundHandler();
 
-        playOneRoundWithTimeLimit(100);
+        roundHandler.playOneRound(board);
 
         //noinspection unchecked
         verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
@@ -247,18 +247,5 @@ public class RoundHandlerTest {
             while (true) ;
         });
         return player;
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private void playOneRoundWithTimeLimit(int timeoutInMilliseconds) {
-        try {
-            Executors.newSingleThreadExecutor()
-                    .submit(() -> roundHandler.playOneRound(board))
-                    .get(timeoutInMilliseconds, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException("An unpredicted exception occurred: " + e);
-        } catch (TimeoutException e) {
-            throw new RuntimeException("Handler should put limits to player's computation time.");
-        }
     }
 }
