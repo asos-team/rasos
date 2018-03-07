@@ -13,11 +13,10 @@ import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
+import static rasos.RoundHandler.ID_A;
+import static rasos.RoundHandler.ID_B;
 
 public class RoundHandlerTest {
-
-    private static final int PLAYER_A_ID = 1;
-    private static final int PLAYER_B_ID = 2;
 
     private Board board;
     private Player playerA;
@@ -33,8 +32,8 @@ public class RoundHandlerTest {
         board = new Board(7);
         playerA = mock(Player.class);
         playerB = mock(Player.class);
-        when(playerA.getPlayerId()).thenReturn(PLAYER_A_ID);
-        when(playerB.getPlayerId()).thenReturn(PLAYER_B_ID);
+        when(playerA.getPlayerId()).thenReturn(ID_A);
+        when(playerB.getPlayerId()).thenReturn(ID_B);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
         executor = Executors.newSingleThreadExecutor();
@@ -115,8 +114,8 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        verify(reinforcer).apply(board, PLAYER_A_ID, movesA, 3);
-        verify(reinforcer).apply(board, PLAYER_B_ID, movesB, 2);
+        verify(reinforcer).apply(board, ID_A, movesA, 3);
+        verify(reinforcer).apply(board, ID_B, movesB, 2);
     }
 
     @Test
@@ -169,7 +168,7 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        verify(attacker).apply(board, movesA, movesB, PLAYER_A_ID, PLAYER_B_ID);
+        verify(attacker).apply(board, movesA, movesB, ID_A, ID_B);
     }
 
     @Test
@@ -207,14 +206,14 @@ public class RoundHandlerTest {
     }
 
     private void makePlayerAControlTotalOf_3_Cells() {
-        board.cellAt(1, 1).setValues(PLAYER_A_ID, 4);
-        board.cellAt(1, 3).setValues(PLAYER_A_ID, 4);
-        board.cellAt(3, 1).setValues(PLAYER_A_ID, 19);
+        board.cellAt(1, 1).setValues(ID_A, 4);
+        board.cellAt(1, 3).setValues(ID_A, 4);
+        board.cellAt(3, 1).setValues(ID_A, 19);
     }
 
     private void makePlayerBControlTotalOf_2_Cells() {
-        board.cellAt(2, 2).setValues(PLAYER_B_ID, 2);
-        board.cellAt(3, 2).setValues(PLAYER_B_ID, 2);
+        board.cellAt(2, 2).setValues(ID_B, 2);
+        board.cellAt(3, 2).setValues(ID_B, 2);
     }
 
     private ExecutorService stubExecutorWithImmediateThrowingFuture() throws InterruptedException, ExecutionException, TimeoutException {

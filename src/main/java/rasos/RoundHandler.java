@@ -10,23 +10,23 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.util.Objects.requireNonNull;
 
 public class RoundHandler {
+
+    static final int ID_A = 1;
+    static final int ID_B = 2;
+
     private static final int COMPUTATION_TIMEOUT_MILLIS = 500;
     private final Map<Integer, Player> players;
     private final Attacker attacker;
     private final Reinforcer reinforcer;
     private final RiskLogger logger;
     private final ExecutorService executor;
-    private final int idA;
-    private final int idB;
 
     RoundHandler(Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
         this.players = new HashMap<>(2);
-        idA = 1;
-        idB = 2;
-        playerA.setPlayerId(idA);
-        playerB.setPlayerId(idB);
-        players.put(idA, playerA);
-        players.put(idB, playerB);
+        playerA.setPlayerId(ID_A);
+        playerB.setPlayerId(ID_B);
+        players.put(ID_A, playerA);
+        players.put(ID_B, playerB);
         this.reinforcer = reinforcer;
         this.attacker = attacker;
         this.executor = executor;
@@ -50,10 +50,10 @@ public class RoundHandler {
     }
 
     private void attack(Board board) {
-        Iterable<AttackMove> movesA = getAttackMoves(players.get(idA), board);
-        Iterable<AttackMove> movesB = getAttackMoves(players.get(idB), board);
+        Iterable<AttackMove> movesA = getAttackMoves(players.get(ID_A), board);
+        Iterable<AttackMove> movesB = getAttackMoves(players.get(ID_B), board);
         //noinspection unchecked
-        attacker.apply(board, movesA, movesB, idA, idB);
+        attacker.apply(board, movesA, movesB, ID_A, ID_B);
     }
 
     private Iterable<ReinforcementMove> getReinforcementMoves(Player player, Board board, int quota) {
