@@ -11,8 +11,15 @@ public class Attacker {
         this.logger = logger;
     }
 
+    @Deprecated
     public void apply(Board board, Iterable<AttackMove>... moves) {
         Board[] intermediateBoards = generateIntermediateBoards(board, moves);
+        Board reduced = reduce(intermediateBoards);
+        copy(board, reduced);
+    }
+
+    public void applyTwoPlayers(Board board, Iterable<AttackMove> movesA, Iterable<AttackMove> movesB) {
+        Board[] intermediateBoards = generateIntermediateBoards(board, new Iterable[]{movesA, movesB});
         Board reduced = reduce(intermediateBoards);
         copy(board, reduced);
     }

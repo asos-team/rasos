@@ -30,7 +30,7 @@ public class AttackTest {
         AttackMove aAttackMove = new AttackMove(1, 1, 2, 1, 2);
         AttackMove bAttackMove = new AttackMove(2, 2, 1, 2, 3);
 
-        attacker.apply(board, Collections.singleton(aAttackMove), Collections.singleton(bAttackMove));
+        attacker.applyTwoPlayers(board, Collections.singleton(aAttackMove), Collections.singleton(bAttackMove));
 
         TestUtils.assertCellContents(board.getHome1Cell(), 1, 18);
         TestUtils.assertCellContents(board.cellAt(2, 1), 1, 2);
