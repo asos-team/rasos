@@ -2,11 +2,9 @@ package rasos;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.*;
 
 import static org.junit.Assert.assertNotEquals;
@@ -43,12 +41,13 @@ public class RoundHandlerTest {
 
     @Test
     public void assignPlayerIds() {
-        ArgumentCaptor<Integer> captor = ArgumentCaptor.forClass(Integer.class);
-        verify(playerA).setPlayerId(captor.capture());
-        verify(playerB).setPlayerId(captor.capture());
+        verify(playerA).setPlayerId(ID_A);
+        verify(playerB).setPlayerId(ID_B);
+    }
 
-        List<Integer> values = captor.getAllValues();
-        assertNotEquals("Players should have different ids", values.get(0), values.get(1));
+    @Test
+    public void differentPlayerIds() {
+        assertNotEquals("Players should have different ids", ID_A, ID_B);
     }
 
     @Test
