@@ -7,7 +7,7 @@ public class Reinforcer {
         this.logger = logger;
     }
 
-    void apply(Board board, Iterable<ReinforcementMove> moves, int quota, int playerId) {
+    void apply(Board board, int playerId, Iterable<ReinforcementMove> moves, int quota) {
         for (ReinforcementMove move : moves) {
             try {
                 Cell cell = board.cellAt(move.getCol(), move.getRow());

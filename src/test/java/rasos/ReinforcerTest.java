@@ -43,7 +43,7 @@ public class ReinforcerTest {
     public void reinforcementMove_toCellYouDoNotControl_isIgnored() {
         board.cellAt(1, 1).setValues(1, 4);
 
-        reinforcer.apply(board, Collections.singleton(new ReinforcementMove(3, 1, 1)), 1, 1);
+        reinforcer.apply(board, 1, Collections.singleton(new ReinforcementMove(3, 1, 1)), 1);
 
         assertTrue("Cell was reinforced although not controlled by the reinforcing player",
                 board.cellAt(3, 1).isNeutral());
@@ -53,7 +53,7 @@ public class ReinforcerTest {
     public void reinforcementMove_withExceedingAmount_isIgnored() {
         board.cellAt(3, 1).setValues(2, 4);
 
-        reinforcer.apply(board, Collections.singleton(new ReinforcementMove(3, 1, 5)), 1, 2);
+        reinforcer.apply(board, 2, Collections.singleton(new ReinforcementMove(3, 1, 5)), 1);
 
         TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
     }
@@ -62,7 +62,7 @@ public class ReinforcerTest {
     public void reinforcementMove_withInvalidCoordinates_isIgnored() {
         board.cellAt(3, 2).setValues(2, 7);
 
-        reinforcer.apply(board, Collections.singleton(new ReinforcementMove(3, 0, 1)), 2, 2);
+        reinforcer.apply(board, 2, Collections.singleton(new ReinforcementMove(3, 0, 1)), 2);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ReinforcerTest {
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(3, 1, 1));
 
-        reinforcer.apply(board, moves, 2, 2);
+        reinforcer.apply(board, 2, moves, 2);
 
         TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
         TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
@@ -86,7 +86,7 @@ public class ReinforcerTest {
         moves.add(new ReinforcementMove(3, 2, 1));
         moves.add(new ReinforcementMove(1, 1, 1));
 
-        reinforcer.apply(board, moves, 1, 2);
+        reinforcer.apply(board, 2, moves, 1);
 
         assertTrue("Cell was reinforced although not controlled by the reinforcing player",
                 board.cellAt(3, 2).isNeutral());
@@ -102,7 +102,7 @@ public class ReinforcerTest {
         moves.add(new ReinforcementMove(3, 1, 2));
         moves.add(new ReinforcementMove(3, 1, 1));
 
-        reinforcer.apply(board, moves, 2, 2);
+        reinforcer.apply(board, 2, moves, 2);
 
         TestUtils.assertCellContents(board.cellAt(3, 2), 2, 8);
         TestUtils.assertCellContents(board.cellAt(3, 1), 2, 4);
@@ -114,7 +114,7 @@ public class ReinforcerTest {
         board.cellAt(4, 1).setValues(1, 1);
         int playerId = 1;
 
-        reinforcer.apply(board, appliedMoves, 2, playerId);
+        reinforcer.apply(board, playerId, appliedMoves, 2);
 
         for (ReinforcementMove move : appliedMoves) {
             verify(logger).logSuccessfulReinforcement(playerId, move);
@@ -127,7 +127,7 @@ public class ReinforcerTest {
         board.cellAt(4, 1).setValues(1, 1);
         int playerId = 1;
 
-        reinforcer.apply(board, appliedMoves, 0, playerId);
+        reinforcer.apply(board, playerId, appliedMoves, 0);
 
         for (ReinforcementMove move : appliedMoves) {
             verify(logger).logFailedReinforcement(playerId, move);
@@ -137,7 +137,7 @@ public class ReinforcerTest {
     private void test_reinforcementMove_isApplied(int id, int soldiers, int quota, int col, int row) {
         board.cellAt(col, row).setValues(id, soldiers);
 
-        reinforcer.apply(board, Collections.singleton(new ReinforcementMove(col, row, quota)), quota, id);
+        reinforcer.apply(board, id, Collections.singleton(new ReinforcementMove(col, row, quota)), quota);
 
         TestUtils.assertCellContents(board.cellAt(col, row), id, soldiers + quota);
     }

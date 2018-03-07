@@ -79,7 +79,7 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        verify(reinforcer, times(2)).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
+        verify(reinforcer, times(2)).apply(any(Board.class), anyInt(), eq(Collections.emptyList()), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -87,7 +87,7 @@ public class RoundHandlerTest {
     public void whenPlayerReturnsNullInOnReinforcementUseEmptyListInstead() {
         roundHandler.playOneRound(board);
 
-        verify(reinforcer, times(2)).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
+        verify(reinforcer, times(2)).apply(any(Board.class), anyInt(), eq(Collections.emptyList()), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -101,7 +101,7 @@ public class RoundHandlerTest {
         } catch (Exception ignored) {
         }
 
-        verify(reinforcer, times(2)).apply(any(Board.class), eq(Collections.emptyList()), anyInt(), anyInt());
+        verify(reinforcer, times(2)).apply(any(Board.class), anyInt(), eq(Collections.emptyList()), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -117,8 +117,8 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        verify(reinforcer).apply(board, movesA, 3, PLAYER_A_ID);
-        verify(reinforcer).apply(board, movesB, 2, PLAYER_B_ID);
+        verify(reinforcer).apply(board, PLAYER_A_ID, movesA, 3);
+        verify(reinforcer).apply(board, PLAYER_B_ID, movesB, 2);
     }
 
     @Test
@@ -183,7 +183,7 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
+        inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), anyInt(), any(Iterable.class), anyInt());
         inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
     }
 
@@ -195,7 +195,7 @@ public class RoundHandlerTest {
         roundHandler.playOneRound(board);
 
         inOrder.verify(logger).logRoundStart();
-        inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), any(Iterable.class), anyInt(), anyInt());
+        inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), anyInt(), any(Iterable.class), anyInt());
     }
 
     @SuppressWarnings("unchecked")
