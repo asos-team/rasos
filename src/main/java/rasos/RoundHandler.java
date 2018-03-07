@@ -16,11 +16,13 @@ public class RoundHandler {
     private final Reinforcer reinforcer;
     private final RiskLogger logger;
     private final ExecutorService executor;
+    private final int idA;
+    private final int idB;
 
     RoundHandler(Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
         this.players = new HashMap<>(2);
-        int idA = 1;
-        int idB = 2;
+        idA = 1;
+        idB = 2;
         playerA.setPlayerId(idA);
         playerB.setPlayerId(idB);
         players.put(idA, playerA);
@@ -48,10 +50,10 @@ public class RoundHandler {
     }
 
     private void attack(Board board) {
-        Iterable<AttackMove> movesA = getAttackMoves(players.get(1), board);
-        Iterable<AttackMove> movesB = getAttackMoves(players.get(2), board);
+        Iterable<AttackMove> movesA = getAttackMoves(players.get(idA), board);
+        Iterable<AttackMove> movesB = getAttackMoves(players.get(idB), board);
         //noinspection unchecked
-        attacker.apply(board, movesA, movesB);
+        attacker.apply(board, movesA, movesB, idA, idB);
     }
 
     private Iterable<ReinforcementMove> getReinforcementMoves(Player player, Board board, int quota) {

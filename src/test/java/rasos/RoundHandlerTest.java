@@ -16,8 +16,8 @@ import static org.mockito.Mockito.*;
 
 public class RoundHandlerTest {
 
-    private static final int PLAYER_A_ID = 1;
-    private static final int PLAYER_B_ID = 2;
+    private static final int PLAYER_A_ID = 130;
+    private static final int PLAYER_B_ID = 79;
 
     private Board board;
     private Player playerA;
@@ -138,7 +138,7 @@ public class RoundHandlerTest {
         roundHandler.playOneRound(board);
 
         //noinspection unchecked
-        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
+        verify(attacker).apply(any(Board.class), any(), any(), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -146,7 +146,7 @@ public class RoundHandlerTest {
     public void whenPlayerReturnsNullInOnAttackUseEmptyListInstead() {
         roundHandler.playOneRound(board);
 
-        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
+        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -160,12 +160,12 @@ public class RoundHandlerTest {
         } catch (Exception ignored) {
         }
 
-        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()));
+        verify(attacker).apply(any(Board.class), eq(Collections.emptyList()), eq(Collections.emptyList()), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    public void callsAttackerWithAttackMoves() {
+    public void callsAttackerWithAttackMovesAndIds() {
         Iterable<AttackMove> movesA = mock(Iterable.class);
         Iterable<AttackMove> movesB = mock(Iterable.class);
         when(playerA.onAttack(any(Board.class))).thenReturn(movesA);
@@ -173,7 +173,7 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        verify(attacker).apply(board, movesA, movesB);
+        verify(attacker).apply(board, movesA, movesB, PLAYER_A_ID, PLAYER_B_ID);
     }
 
     @SuppressWarnings("unchecked")
@@ -184,7 +184,7 @@ public class RoundHandlerTest {
         roundHandler.playOneRound(board);
 
         inOrder.verify(reinforcer, atLeastOnce()).apply(any(Board.class), anyInt(), any(Iterable.class), anyInt());
-        inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
+        inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), any(), any(), anyInt(), anyInt());
     }
 
     @SuppressWarnings("unchecked")
@@ -205,7 +205,7 @@ public class RoundHandlerTest {
 
         roundHandler.playOneRound(board);
 
-        inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), anyVararg());
+        inOrder.verify(attacker, atLeastOnce()).apply(any(Board.class), any(), any(), anyInt(), anyInt());
         inOrder.verify(logger).logRoundEnd(board);
     }
 
