@@ -19,7 +19,7 @@ public class Attacker {
     }
 
     public void applyTwoPlayers(Board board, Iterable<AttackMove> movesA, Iterable<AttackMove> movesB) {
-        Board[] intermediateBoards = generateIntermediateBoards(board, new Iterable[]{movesA, movesB});
+        Board[] intermediateBoards = generateIntermediateBoards(board, movesA, movesB);
         Board reduced = reduce(intermediateBoards);
         copy(board, reduced);
     }
@@ -27,6 +27,12 @@ public class Attacker {
     private Board[] generateIntermediateBoards(Board board, Iterable<AttackMove>[] moves) {
         Board[] projectedBoards = createProjectedBoards(board);
         fillIntermediateBoards(moves, projectedBoards);
+        return projectedBoards;
+    }
+
+    private Board[] generateIntermediateBoards(Board board, Iterable<AttackMove> movesA, Iterable<AttackMove> movesB) {
+        Board[] projectedBoards = createProjectedBoards(board);
+        fillIntermediateBoards(movesA, movesB, projectedBoards);
         return projectedBoards;
     }
 
@@ -77,6 +83,11 @@ public class Attacker {
             fillIntermediateBoard(intermediateBoards[playerId - 1], playerId, playerMoves);
             playerId++;
         }
+    }
+
+    private void fillIntermediateBoards(Iterable<AttackMove> movesA, Iterable<AttackMove> movesB, Board[] intermediateBoards) {
+        fillIntermediateBoard(intermediateBoards[0], 1, movesA);
+        fillIntermediateBoard(intermediateBoards[1], 2, movesB);
     }
 
     private void fillIntermediateBoard(Board intermediateBoard, int playerId, Iterable<AttackMove> playerMoves) {
