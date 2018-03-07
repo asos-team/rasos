@@ -33,6 +33,8 @@ public class RoundHandlerTest {
         board = new Board(7);
         playerA = mock(Player.class);
         playerB = mock(Player.class);
+        when(playerA.getPlayerId()).thenReturn(PLAYER_A_ID);
+        when(playerB.getPlayerId()).thenReturn(PLAYER_B_ID);
         reinforcer = mock(Reinforcer.class);
         attacker = mock(Attacker.class);
         executor = Executors.newSingleThreadExecutor();

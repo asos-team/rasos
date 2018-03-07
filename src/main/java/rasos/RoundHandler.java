@@ -39,9 +39,10 @@ public class RoundHandler {
     }
 
     private void reinforce(Board board) {
-        for (int id = 1; id <= 2; id++) {
+        for (Player player : players.values()) {
+            int id = player.getPlayerId();
             int quota = board.getPlayerCellCount(id);
-            Iterable<ReinforcementMove> moves = getReinforcementMoves(players.get(id), board, quota);
+            Iterable<ReinforcementMove> moves = getReinforcementMoves(player, board, quota);
             reinforcer.apply(board, moves, quota, id);
         }
     }
