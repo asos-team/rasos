@@ -11,8 +11,8 @@ import static java.util.Objects.requireNonNull;
 
 public class RoundHandler {
 
-    static final int ID_A = 321;
-    static final int ID_B = 79;
+    static final int ID_A = 1;
+    static final int ID_B = 2;
 
     private static final int COMPUTATION_TIMEOUT_MILLIS = 500;
     private final Map<Integer, Player> players;
