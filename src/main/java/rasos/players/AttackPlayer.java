@@ -1,6 +1,5 @@
 package rasos.players;
 
-
 import rasos.AttackMove;
 import rasos.Board;
 import rasos.CellCoordinates;

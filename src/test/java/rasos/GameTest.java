@@ -32,21 +32,6 @@ public class GameTest {
     }
 
     @Test
-    public void theGame() {
-        RiskLogger logger = new StdoutRiskLogger(s -> {});
-        RoundHandler handler = new RoundHandler(
-                new AttackPlayer(),
-                new AttackPlayer(),
-                new Reinforcer(logger),
-                new Attacker(logger),
-                Executors.newSingleThreadExecutor(),
-                logger);
-        Game g = new Game(5, 20, 50, handler, new GameEndChecker(), logger);
-
-        g.start();
-    }
-
-    @Test
     public void gameWithShittyJsPlayer() {
         RiskLogger logger = new StdoutRiskLogger(s -> {});
         String script = "function onGameStart(playerId){};" +
