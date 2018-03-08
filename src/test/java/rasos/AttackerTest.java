@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("unchecked")
-public class AttackTest {
+public class AttackerTest {
 
     private static final int boardDim = 2;
     private Attacker attacker;
