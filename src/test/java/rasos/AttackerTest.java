@@ -9,12 +9,11 @@ import java.util.Collections;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings("unchecked")
 public class AttackerTest {
 
     private static final int boardDim = 2;
-    private static final int ID_A = 1;
-    private static final int ID_B = 2;
+    private static final int ID_A = 100;
+    private static final int ID_B = 200;
     private Attacker attacker;
     private Board board;
     private RiskLogger logger;
@@ -125,7 +124,7 @@ public class AttackerTest {
     @Test
     public void conqueringAttackMove() {
         Board b = new Board(2);
-        b.populateHomeBases(10, 1, 2);
+        b.populateHomeBases(10, ID_A, ID_B);
         b.cellAt(1, 1).updateNumSoldiers(20);
         AttackMove am = new AttackMove(1, 1, 2, 2, 15);
 
@@ -220,7 +219,7 @@ public class AttackerTest {
         attacker.apply(board, movesToLog, Collections.emptyList(), ID_A, ID_B);
 
         for (AttackMove move : movesToLog) {
-            verify(logger).logSuccessfulAttack(1, move);
+            verify(logger).logSuccessfulAttack(ID_A, move);
         }
     }
 
