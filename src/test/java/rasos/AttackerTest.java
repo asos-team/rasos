@@ -44,7 +44,7 @@ public class AttackerTest {
     public void appliesEntireCellAttackMove() {
         AttackMove am = new AttackMove(1, 1, 1, 2, 20);
 
-        attacker.apply(board, Lists.newArrayList(am));
+        attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
         TestUtils.assertCellContents(board.cellAt(1, 2), ID_A, 20);
@@ -55,7 +55,7 @@ public class AttackerTest {
         AttackMove am1 = new AttackMove(1, 1, 1, 2, 10);
         AttackMove am2 = new AttackMove(1, 1, 2, 1, 5);
 
-        attacker.apply(board, Lists.newArrayList(am1, am2));
+        attacker.apply(board, Lists.newArrayList(am1, am2), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.getHome1Cell(), ID_A, 5);
         TestUtils.assertCellContents(board.cellAt(1, 2), ID_A, 10);
@@ -66,7 +66,7 @@ public class AttackerTest {
     public void ignoresAmountExceedingAttackMove() {
         AttackMove am = new AttackMove(1, 1, 2, 2, 300);
 
-        attacker.apply(board, Collections.singleton(am));
+        attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         assertBoardUnchanged();
     }
@@ -75,7 +75,7 @@ public class AttackerTest {
     public void ignoresAttackMoveFromUnpopulatedCell() {
         AttackMove am = new AttackMove(1, 2, 2, 1, 5);
 
-        attacker.apply(board, Lists.newArrayList(am));
+        attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         assertBoardUnchanged();
     }
@@ -85,7 +85,7 @@ public class AttackerTest {
         AttackMove am1 = new AttackMove(2, 2, 1, 2, 10);
         AttackMove am2 = new AttackMove(1, 1, 1, 2, 10);
 
-        attacker.apply(board, Lists.newArrayList(am1), Lists.newArrayList(am2));
+        attacker.apply(board, Collections.singleton(am1), Collections.singleton(am2), ID_A, ID_B);
 
         assertBoardUnchanged();
     }
@@ -96,7 +96,7 @@ public class AttackerTest {
         AttackMove illegal = new AttackMove(1, 1, 2, 2, 12);
         AttackMove legal2 = new AttackMove(1, 1, 1, 2, 5);
 
-        attacker.apply(board, Lists.newArrayList(legal, illegal, legal2));
+        attacker.apply(board, Lists.newArrayList(legal, illegal, legal2), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.getHome1Cell(), ID_A, 5);
         TestUtils.assertCellContents(board.cellAt(2, 1), ID_A, 10);
@@ -108,7 +108,7 @@ public class AttackerTest {
     public void ignoresAboveBoardExceedingMoves() {
         AttackMove am = new AttackMove(2, 2, 3, 3, 10);
 
-        attacker.apply(board, Lists.newArrayList(), Lists.newArrayList(am));
+        attacker.apply(board, Collections.emptyList(), Collections.singleton(am), ID_A, ID_B);
 
         assertBoardUnchanged();
     }
@@ -117,7 +117,7 @@ public class AttackerTest {
     public void ignoresBelowBoardExceedingMoves() {
         AttackMove am = new AttackMove(1, 0, 1, 1, 10);
 
-        attacker.apply(board, Lists.newArrayList(), Lists.newArrayList(am));
+        attacker.apply(board, Collections.emptyList(), Collections.singleton(am), ID_A, ID_B);
 
         assertBoardUnchanged();
     }
@@ -129,7 +129,7 @@ public class AttackerTest {
         b.cellAt(1, 1).updateNumSoldiers(20);
         AttackMove am = new AttackMove(1, 1, 2, 2, 15);
 
-        attacker.apply(b, Collections.singleton(am));
+        attacker.apply(b, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(b.getHome1Cell(), ID_A, 5);
         TestUtils.assertCellContents(b.getHome2Cell(), ID_A, 5);
@@ -139,7 +139,7 @@ public class AttackerTest {
     public void nonConqueringAttackMove() {
         AttackMove am = new AttackMove(1, 1, 2, 2, 10);
 
-        attacker.apply(board, Collections.singleton(am));
+        attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.getHome1Cell(), ID_A, 10);
         TestUtils.assertCellContents(board.getHome2Cell(), ID_B, 10);
@@ -149,7 +149,7 @@ public class AttackerTest {
     public void totalDemolitionAttackMove() {
         AttackMove am = new AttackMove(1, 1, 2, 2, 20);
 
-        attacker.apply(board, Collections.singleton(am));
+        attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
         TestUtils.assertCellContents(board.getHome2Cell(), 0, 0);
@@ -162,7 +162,7 @@ public class AttackerTest {
         AttackMove am1 = new AttackMove(1, 1, 1, 2, 10);
         AttackMove am2 = new AttackMove(2, 1, 1, 2, 5);
 
-        attacker.apply(board, Lists.newArrayList(am1, am2));
+        attacker.apply(board, Lists.newArrayList(am1, am2), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.cellAt(1, 1), ID_A, 10);
         TestUtils.assertCellContents(board.cellAt(2, 1), ID_A, 5);
@@ -176,7 +176,7 @@ public class AttackerTest {
 
         AttackMove am = new AttackMove(1, 1, 1, 3, 10);
 
-        attacker.apply(b, Collections.singleton(am));
+        attacker.apply(b, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(b.cellAt(1, 1), ID_A, 20);
         TestUtils.assertCellContents(b.cellAt(1, 3), 0, 0);
@@ -191,7 +191,7 @@ public class AttackerTest {
         AttackMove am2 = new AttackMove(1, 1, 1, 3, 5);
         AttackMove am3 = new AttackMove(1, 1, 2, 1, 5);
 
-        attacker.apply(b, Lists.newArrayList(am1, am2, am3));
+        attacker.apply(b, Lists.newArrayList(am1, am2, am3), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(b.cellAt(1, 1), ID_A, 10);
         TestUtils.assertCellContents(b.cellAt(1, 2), ID_A, 5);
@@ -207,7 +207,7 @@ public class AttackerTest {
         AttackMove amA = new AttackMove(1, 1, 2, 2, 10);
         AttackMove amB = new AttackMove(3, 3, 2, 2, 8);
 
-        attacker.apply(b, Lists.newArrayList(amA), Lists.newArrayList(amB));
+        attacker.apply(b, Collections.singleton(amA), Collections.singleton(amB), ID_A, ID_B);
 
         TestUtils.assertCellContents(b.cellAt(1, 1), ID_A, 10);
         TestUtils.assertCellContents(b.cellAt(2, 2), ID_A, 2);
@@ -217,7 +217,7 @@ public class AttackerTest {
     @Test
     public void appliedAttackMovesAreLogged() {
         Iterable<AttackMove> movesToLog = Collections.singleton(new AttackMove(1, 1, 2, 1, 2));
-        attacker.apply(board, movesToLog);
+        attacker.apply(board, movesToLog, Collections.emptyList(), ID_A, ID_B);
 
         for (AttackMove move : movesToLog) {
             verify(logger).logSuccessfulAttack(1, move);
@@ -227,7 +227,7 @@ public class AttackerTest {
     @Test
     public void unappliedAttackMovesAreLogged() {
         Iterable<AttackMove> movesToLog = Collections.singleton(new AttackMove(1, 1, 2, 1, 909));
-        attacker.apply(board, movesToLog);
+        attacker.apply(board, movesToLog, Collections.emptyList(), ID_A, ID_B);
 
         for (AttackMove move : movesToLog) {
             verify(logger).logFailedAttack(ID_A, move);

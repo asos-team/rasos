@@ -11,23 +11,10 @@ public class Attacker {
         this.logger = logger;
     }
 
-    @Deprecated
-    public void apply(Board board, Iterable<AttackMove>... moves) {
-        Board[] intermediateBoards = generateIntermediateBoards(board, moves);
-        Board reduced = reduce(intermediateBoards);
-        copy(board, reduced);
-    }
-
     public void apply(Board board, Iterable<AttackMove> movesA, Iterable<AttackMove> movesB, int idA, int idB) {
         Board[] intermediateBoards = generateIntermediateBoards(board, movesA, movesB, idA, idB);
         Board reduced = reduce(intermediateBoards);
         copy(board, reduced);
-    }
-
-    private Board[] generateIntermediateBoards(Board board, Iterable<AttackMove>[] moves) {
-        Board[] projectedBoards = createProjectedBoards(board);
-        fillIntermediateBoards(moves, projectedBoards);
-        return projectedBoards;
     }
 
     private Board[] generateIntermediateBoards(Board board, Iterable<AttackMove> movesA, Iterable<AttackMove> movesB, int idA, int idB) {
@@ -75,14 +62,6 @@ public class Attacker {
 
     private Cell getCell(int colIdx, int rowIdx, Board a) {
         return a.cellAt(colIdx, rowIdx);
-    }
-
-    private void fillIntermediateBoards(Iterable<AttackMove>[] moves, Board[] intermediateBoards) {
-        int playerId = 1;
-        for (Iterable<AttackMove> playerMoves : moves) {
-            fillIntermediateBoard(intermediateBoards[playerId - 1], playerId, playerMoves);
-            playerId++;
-        }
     }
 
     private void fillIntermediateBoards(Iterable<AttackMove> movesA, Iterable<AttackMove> movesB, Board[] intermediateBoards, int idA, int idB) {
