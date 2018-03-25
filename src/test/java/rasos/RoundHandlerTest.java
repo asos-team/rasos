@@ -7,12 +7,11 @@ import org.mockito.InOrder;
 import java.util.Collections;
 import java.util.concurrent.*;
 
-import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import static rasos.RoundHandler.ID_A;
-import static rasos.RoundHandler.ID_B;
+import static rasos.Game.ID_A;
+import static rasos.Game.ID_B;
 
 public class RoundHandlerTest {
 
@@ -37,17 +36,6 @@ public class RoundHandlerTest {
         executor = Executors.newSingleThreadExecutor();
         logger = mock(RiskLogger.class);
         roundHandler = getRoundHandler();
-    }
-
-    @Test
-    public void assignPlayerIds() {
-        verify(playerA).setPlayerId(ID_A);
-        verify(playerB).setPlayerId(ID_B);
-    }
-
-    @Test
-    public void differentPlayerIds() {
-        assertNotEquals("Players should have different ids", ID_A, ID_B);
     }
 
     @Test

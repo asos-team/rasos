@@ -8,11 +8,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
+import static rasos.Game.ID_A;
+import static rasos.Game.ID_B;
 
 public class RoundHandler {
-
-    static final int ID_A = 1;
-    static final int ID_B = 2;
 
     private static final int COMPUTATION_TIMEOUT_MILLIS = 500;
     private final Map<Integer, Player> players;
@@ -23,8 +22,6 @@ public class RoundHandler {
 
     RoundHandler(Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
         this.players = new HashMap<>(2);
-        playerA.setPlayerId(ID_A);
-        playerB.setPlayerId(ID_B);
         players.put(ID_A, playerA);
         players.put(ID_B, playerB);
         this.reinforcer = reinforcer;
