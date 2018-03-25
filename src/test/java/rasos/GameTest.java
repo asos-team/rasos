@@ -10,13 +10,18 @@ import javax.script.ScriptEngineManager;
 import java.util.concurrent.Executors;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
+import static rasos.Game.ID_A;
+import static rasos.Game.ID_B;
 
 public class GameTest {
 
     private static final int NO_SOLDIERS = 0;
     private int boardDim;
+    private Player playerA;
+    private Player playerB;
     private Game game;
     private RoundHandler handler;
     private GameEndChecker checker;
@@ -25,6 +30,8 @@ public class GameTest {
     @Before
     public void setUp() {
         boardDim = 7;
+        playerA = mock(Player.class);
+        playerB = mock(Player.class);
         handler = mock(RoundHandler.class);
         checker = mock(GameEndChecker.class);
         logger = mock(RiskLogger.class);
@@ -68,6 +75,17 @@ public class GameTest {
 
         TestUtils.assertCellContents(game.getBoard().getHome1Cell(), 1, soldiers);
         TestUtils.assertCellContents(game.getBoard().getHome2Cell(), 2, soldiers);
+    }
+
+    @Test
+    public void assignPlayerIds() {
+        verify(playerA).setPlayerId(ID_A);
+        verify(playerB).setPlayerId(ID_B);
+    }
+
+    @Test
+    public void differentPlayerIds() {
+        assertNotEquals("Players should have different ids", ID_A, ID_B);
     }
 
     @Test
@@ -128,6 +146,6 @@ public class GameTest {
     }
 
     private Game createConfigurableGame(int soldiers, int rounds) {
-        return new Game(boardDim, soldiers, rounds, mock(Player.class), mock(Player.class), handler, checker, logger);
+        return new Game(boardDim, soldiers, rounds, playerA, playerB, handler, checker, logger);
     }
 }
