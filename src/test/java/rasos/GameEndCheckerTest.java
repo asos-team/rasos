@@ -6,10 +6,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
-import static rasos.Config.ID_A;
-import static rasos.Config.ID_B;
 
 public class GameEndCheckerTest {
+
+    private static final int ID_A = 117;
+    private static final int ID_B = 66;
 
     @Rule
     public final ExpectedException expectedEx = ExpectedException.none();
@@ -36,7 +37,7 @@ public class GameEndCheckerTest {
 
     @Test
     public void gameIsEndedWhenOnePlayerDoesNotHaveSoldiersLeft() {
-        board.cellAt(2, 4).setValues(1, 9);
+        board.cellAt(2, 4).setValues(ID_A, 9);
         assertTrue("Game should end when a player does not have soldiers.", isEndOfGame());
     }
 
@@ -47,23 +48,21 @@ public class GameEndCheckerTest {
 
     @Test
     public void whenAPlayerDoesNotHaveSoldiersLeftHeLoses() {
-        int id = 2;
-        board.cellAt(3, 1).setValues(id, 12);
-        assertEquals(String.format("WinnerId should be %d.", id), id, winner());
+        board.cellAt(3, 1).setValues(ID_B, 12);
+        assertEquals(String.format("WinnerId should be %d.", ID_B), ID_B, winner());
     }
 
     @Test
     public void getWinnerIdReturnsZeroForATie() {
-        board.populateHomeBases(676, 1, 2);
+        board.populateHomeBases(676, ID_A, ID_B);
         assertEquals("WinnerId should be zero for a tie.", 0, winner());
     }
 
     @Test
     public void getWinnerIdReturnsTheLeadingPlayerId() {
-        int id = 2;
-        board.populateHomeBases(43, 1, 2);
-        board.cellAt(4, 5).setValues(id, 60);
-        assertEquals(String.format("WinnerId should be %d.", id), id, winner());
+        board.populateHomeBases(43, ID_A, ID_B);
+        board.cellAt(4, 5).setValues(ID_B, 60);
+        assertEquals(String.format("WinnerId should be %d.", ID_B), ID_B, winner());
     }
 
     private boolean isEndOfGame() {
