@@ -6,16 +6,20 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
+import static rasos.Config.ID_A;
+import static rasos.Config.ID_B;
 
 public class GameEndCheckerTest {
+
     @Rule
     public final ExpectedException expectedEx = ExpectedException.none();
+
     private GameEndChecker gameEndChecker;
     private Board board;
 
     @Before
     public void setUp() {
-        gameEndChecker = new GameEndChecker();
+        gameEndChecker = new GameEndChecker(ID_A, ID_B);
         board = new Board(5);
     }
 
@@ -26,7 +30,7 @@ public class GameEndCheckerTest {
 
     @Test
     public void gameIsContinuedWhenBoardIsNotEmpty() {
-        board.populateHomeBases(11, 1, 2);
+        board.populateHomeBases(11, ID_A, ID_B);
         assertFalse("Game should continue when the board is not empty.", isEndOfGame());
     }
 

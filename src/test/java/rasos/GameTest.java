@@ -58,7 +58,7 @@ public class GameTest {
                 new Attacker(logger),
                 Executors.newSingleThreadExecutor(),
                 logger);
-        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(), logger);
+        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();
     }

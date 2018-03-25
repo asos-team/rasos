@@ -1,8 +1,16 @@
 package rasos;
 
 public class GameEndChecker {
+    private final int idA;
+    private final int idB;
+
+    public GameEndChecker(int idA, int idB) {
+        this.idA = idA;
+        this.idB = idB;
+    }
+
     public boolean isEndOfGame(Board board) {
-        return playerHaveNoSoldiers(board, 1) || playerHaveNoSoldiers(board, 2);
+        return playerHaveNoSoldiers(board, idA) || playerHaveNoSoldiers(board, idB);
     }
 
     public int getWinnerId(Board board) {
