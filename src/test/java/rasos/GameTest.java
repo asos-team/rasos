@@ -40,7 +40,8 @@ public class GameTest {
 
     @Test
     public void gameWithShittyJsPlayer() {
-        RiskLogger logger = new StdoutRiskLogger(s -> {});
+        RiskLogger logger = new StdoutRiskLogger(s -> {
+        });
         String script = "function onGameStart(playerId){};" +
                 "function onReinforcement(board, reinforcement){" +
                 "return [{col:1,row:1,amount:board.configuration[0][0].numSoldiers}];" +
@@ -52,12 +53,12 @@ public class GameTest {
         JsPlayer playerA = new JsPlayer(script, engine, parser, logger);
         AttackPlayer playerB = new AttackPlayer();
         RoundHandler handler = new RoundHandler(
+                ID_A,
+                ID_B,
                 playerA,
                 playerB,
                 new Reinforcer(logger),
-                new Attacker(logger),
-                Executors.newSingleThreadExecutor(),
-                logger);
+                new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
         Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();

@@ -12,16 +12,17 @@ import static rasos.Config.ID_B;
 public class End2EndTest {
     @Test
     public void theGame() {
-        RiskLogger logger = new StdoutRiskLogger(s -> {});
+        RiskLogger logger = new StdoutRiskLogger(s -> {
+        });
         Player playerA = new RabakPlayer();
         Player playerB = new BunkerPlayer();
         RoundHandler handler = new RoundHandler(
+                ID_A,
+                ID_B,
                 playerA,
                 playerB,
                 new Reinforcer(logger),
-                new Attacker(logger),
-                Executors.newSingleThreadExecutor(),
-                logger);
+                new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
         Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();

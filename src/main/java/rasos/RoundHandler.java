@@ -8,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
-import static rasos.Config.ID_A;
-import static rasos.Config.ID_B;
 
 public class RoundHandler {
 
@@ -19,11 +17,15 @@ public class RoundHandler {
     private final Reinforcer reinforcer;
     private final RiskLogger logger;
     private final ExecutorService executor;
+    private final int idA;
+    private final int idB;
 
-    RoundHandler(Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
+    RoundHandler(int idA, int idB, Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
+        this.idA = idA;
+        this.idB = idB;
         this.players = new HashMap<>(2);
-        players.put(ID_A, playerA);
-        players.put(ID_B, playerB);
+        players.put(idA, playerA);
+        players.put(idB, playerB);
         this.reinforcer = reinforcer;
         this.attacker = attacker;
         this.executor = executor;
@@ -47,10 +49,10 @@ public class RoundHandler {
     }
 
     private void attack(Board board) {
-        Iterable<AttackMove> movesA = getAttackMoves(players.get(ID_A), board);
-        Iterable<AttackMove> movesB = getAttackMoves(players.get(ID_B), board);
+        Iterable<AttackMove> movesA = getAttackMoves(players.get(idA), board);
+        Iterable<AttackMove> movesB = getAttackMoves(players.get(idB), board);
         //noinspection unchecked
-        attacker.apply(board, movesA, movesB, ID_A, ID_B);
+        attacker.apply(board, movesA, movesB, idA, idB);
     }
 
     private Iterable<ReinforcementMove> getReinforcementMoves(Player player, Board board, int quota) {

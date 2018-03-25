@@ -10,10 +10,10 @@ import java.util.concurrent.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import static rasos.Config.ID_A;
-import static rasos.Config.ID_B;
 
 public class RoundHandlerTest {
+    private static final int ID_A = 86;
+    private static final int ID_B = 78;
 
     private Board board;
     private Player playerA;
@@ -189,7 +189,7 @@ public class RoundHandlerTest {
     }
 
     private RoundHandler getRoundHandler() {
-        return new RoundHandler(playerA, playerB, reinforcer, attacker, executor, logger);
+        return new RoundHandler(ID_A, ID_B, playerA, playerB, reinforcer, attacker, executor, logger);
     }
 
     private void makePlayerAControlTotalOf_3_Cells() {
