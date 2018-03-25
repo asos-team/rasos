@@ -1,9 +1,9 @@
 package rasos;
 
-class Game {
-    static final int ID_A = 1;
-    static final int ID_B = 2;
+import static rasos.Config.ID_A;
+import static rasos.Config.ID_B;
 
+class Game {
     private final Board board;
     private final int rounds;
     private final RoundHandler handler;

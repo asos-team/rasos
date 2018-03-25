@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
-import static rasos.Game.ID_A;
-import static rasos.Game.ID_B;
+import static rasos.Config.ID_A;
+import static rasos.Config.ID_B;
 
 public class RoundHandler {
 

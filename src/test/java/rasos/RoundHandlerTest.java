@@ -10,8 +10,8 @@ import java.util.concurrent.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import static rasos.Game.ID_A;
-import static rasos.Game.ID_B;
+import static rasos.Config.ID_A;
+import static rasos.Config.ID_B;
 
 public class RoundHandlerTest {
 

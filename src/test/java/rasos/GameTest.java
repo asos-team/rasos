@@ -13,8 +13,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
-import static rasos.Game.ID_A;
-import static rasos.Game.ID_B;
+import static rasos.Config.ID_A;
+import static rasos.Config.ID_B;
 
 public class GameTest {
 
