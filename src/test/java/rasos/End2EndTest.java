@@ -9,14 +9,16 @@ public class End2EndTest {
     @Test
     public void theGame() {
         RiskLogger logger = new StdoutRiskLogger(s -> {});
+        AttackPlayer playerA = new AttackPlayer();
+        AttackPlayer playerB = new AttackPlayer();
         RoundHandler handler = new RoundHandler(
-                new AttackPlayer(),
-                new AttackPlayer(),
+                playerA,
+                playerB,
                 new Reinforcer(logger),
                 new Attacker(logger),
                 Executors.newSingleThreadExecutor(),
                 logger);
-        Game g = new Game(5, 20, 50, handler, new GameEndChecker(), logger);
+        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(), logger);
 
         g.start();
     }

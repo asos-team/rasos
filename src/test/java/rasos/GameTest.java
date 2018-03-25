@@ -42,14 +42,16 @@ public class GameTest {
 
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         JsonParser parser = new JsonParser();
+        JsPlayer playerA = new JsPlayer(script, engine, parser, logger);
+        AttackPlayer playerB = new AttackPlayer();
         RoundHandler handler = new RoundHandler(
-                new JsPlayer(script, engine, parser, logger),
-                new AttackPlayer(),
+                playerA,
+                playerB,
                 new Reinforcer(logger),
                 new Attacker(logger),
                 Executors.newSingleThreadExecutor(),
                 logger);
-        Game g = new Game(5, 20, 50, handler, new GameEndChecker(), logger);
+        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(), logger);
 
         g.start();
     }
@@ -126,6 +128,6 @@ public class GameTest {
     }
 
     private Game createConfigurableGame(int soldiers, int rounds) {
-        return new Game(boardDim, soldiers, rounds, handler, checker, logger);
+        return new Game(boardDim, soldiers, rounds, mock(Player.class), mock(Player.class), handler, checker, logger);
     }
 }
