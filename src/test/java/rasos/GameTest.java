@@ -2,22 +2,23 @@ package rasos;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import rasos.players.AttackPlayer;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
-import static rasos.Config.ID_A;
-import static rasos.Config.ID_B;
 
 public class GameTest {
-
+    private static final int ID_A = 321;
+    private static final int ID_B = 456;
     private static final int NO_SOLDIERS = 0;
     private int boardDim;
     private Player playerA;
@@ -79,14 +80,13 @@ public class GameTest {
     }
 
     @Test
-    public void assignPlayerIds() {
-        verify(playerA).setPlayerId(ID_A);
-        verify(playerB).setPlayerId(ID_B);
-    }
+    public void assignDifferentPlayerIds() {
+        ArgumentCaptor<Integer> captor = ArgumentCaptor.forClass(int.class);
 
-    @Test
-    public void differentPlayerIds() {
-        assertNotEquals("Players should have different ids", ID_A, ID_B);
+        verify(playerA).setPlayerId(captor.capture());
+        verify(playerB).setPlayerId(captor.capture());
+        List<Integer> values = captor.getAllValues();
+        assertNotEquals("Players should have different ids", values.get(0), values.get(1));
     }
 
     @Test

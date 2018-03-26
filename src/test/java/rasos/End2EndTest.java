@@ -10,6 +10,7 @@ import static rasos.Config.ID_A;
 import static rasos.Config.ID_B;
 
 public class End2EndTest {
+
     @Test
     public void theGame() {
         RiskLogger logger = new StdoutRiskLogger(s -> {
