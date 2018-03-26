@@ -1,8 +1,10 @@
 package rasos;
 
 import com.google.common.collect.Lists;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import rasos.players.AttackPlayer;
 
 import java.util.Collections;
 import java.util.concurrent.Executors;
@@ -12,11 +14,32 @@ import static rasos.Config.ID_B;
 
 public class End2EndTest {
 
+    private RiskLogger logger;
+
+    @Before
+    public void setUp() {
+        logger = new StdoutRiskLogger(s -> {});
+    }
+
+    @Test
+    public void simpleGame() {
+        Player playerA = new AttackPlayer();
+        Player playerB = new AttackPlayer();
+        RoundHandler handler = new RoundHandler(
+                ID_A,
+                ID_B,
+                playerA,
+                playerB,
+                new Reinforcer(logger),
+                new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
+        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
+
+        g.start();
+    }
+
     @Test
     @Ignore
-    public void theGame() {
-        RiskLogger logger = new StdoutRiskLogger(s -> {
-        });
+    public void complexGame() {
         Player playerA = new RabakPlayer();
         Player playerB = new BunkerPlayer();
         RoundHandler handler = new RoundHandler(
