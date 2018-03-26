@@ -7,6 +7,8 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static rasos.ColorUtils.*;
+import static rasos.Config.ID_A;
+import static rasos.Config.ID_B;
 
 public class CellTest {
 
@@ -166,8 +168,8 @@ public class CellTest {
 
     @Test
     public void humanReadableToString() {
-        Cell player1Cell = new Cell(1, 10);
-        Cell player2Cell = new Cell(2, 7);
+        Cell player1Cell = new Cell(ID_A, 10);
+        Cell player2Cell = new Cell(ID_B, 7);
         Cell neutralCell = Cell.neutral();
 
         assertThat(player1Cell.toString(), is(String.format("[%s]", colorString("10", ANSI_YELLOW))));

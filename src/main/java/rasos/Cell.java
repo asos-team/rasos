@@ -1,6 +1,7 @@
 package rasos;
 
 import static rasos.ColorUtils.*;
+import static rasos.Config.ID_A;
 
 public class Cell {
     static final String NEUTRAL_CELL_CONTAINING_SOLDIERS_ERROR = "A neutral cell must not contain any soldiers.";
@@ -103,7 +104,7 @@ public class Cell {
     }
 
     private String getColor() {
-        return controllingPlayerId == 1 ? ANSI_YELLOW : ANSI_BLUE;
+        return controllingPlayerId == ID_A ? ANSI_YELLOW : ANSI_BLUE;
     }
 
     private String getFixedWidthNumSoldiers() {
