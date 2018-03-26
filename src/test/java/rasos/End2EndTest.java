@@ -32,7 +32,7 @@ public class End2EndTest {
                 playerB,
                 new Reinforcer(logger),
                 new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
-        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
+        Game g = new Game(5, 20, 50, playerA, ID_A, playerB, ID_B, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();
     }
@@ -49,7 +49,7 @@ public class End2EndTest {
                 playerB,
                 new Reinforcer(logger),
                 new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
-        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
+        Game g = new Game(5, 20, 50, playerA, ID_A, playerB, ID_B, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();
     }

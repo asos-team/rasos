@@ -60,7 +60,7 @@ public class GameTest {
                 playerB,
                 new Reinforcer(logger),
                 new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
-        Game g = new Game(5, 20, 50, playerA, playerB, handler, new GameEndChecker(ID_A, ID_B), logger);
+        Game g = new Game(5, 20, 50, playerA, ID_A, playerB, ID_B, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();
     }
@@ -75,8 +75,8 @@ public class GameTest {
         int soldiers = 99;
         Game game = createSimpleGame(soldiers);
 
-        TestUtils.assertCellContents(game.getBoard().getHome1Cell(), 1, soldiers);
-        TestUtils.assertCellContents(game.getBoard().getHome2Cell(), 2, soldiers);
+        TestUtils.assertCellContents(game.getBoard().getHome1Cell(), ID_A, soldiers);
+        TestUtils.assertCellContents(game.getBoard().getHome2Cell(), ID_B, soldiers);
     }
 
     @Test
@@ -147,6 +147,6 @@ public class GameTest {
     }
 
     private Game createConfigurableGame(int soldiers, int rounds) {
-        return new Game(boardDim, soldiers, rounds, playerA, playerB, handler, checker, logger);
+        return new Game(boardDim, soldiers, rounds, playerA, ID_A, playerB, ID_B, handler, checker, logger);
     }
 }

@@ -1,8 +1,5 @@
 package rasos;
 
-import static rasos.Config.ID_A;
-import static rasos.Config.ID_B;
-
 class Game {
     private final Board board;
     private final int rounds;
@@ -10,12 +7,12 @@ class Game {
     private final GameEndChecker checker;
     private final RiskLogger logger;
 
-    Game(int dim, int soldiers, int rounds, Player playerA, Player playerB, RoundHandler handler, GameEndChecker checker, RiskLogger logger) {
-        playerA.setPlayerId(ID_A);
-        playerB.setPlayerId(ID_B);
+    Game(int dim, int soldiers, int rounds, Player playerA, int idA, Player playerB, int idB, RoundHandler handler, GameEndChecker checker, RiskLogger logger) {
+        playerA.setPlayerId(idA);
+        playerB.setPlayerId(idB);
         this.board = new Board(dim);
         this.checker = checker;
-        this.board.populateHomeBases(soldiers, 1, 2);
+        this.board.populateHomeBases(soldiers, idA, idB);
         this.rounds = rounds;
         this.handler = handler;
         this.logger = logger;
