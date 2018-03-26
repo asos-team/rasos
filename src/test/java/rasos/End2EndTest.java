@@ -1,6 +1,7 @@
 package rasos;
 
 import com.google.common.collect.Lists;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -12,6 +13,7 @@ import static rasos.Config.ID_B;
 public class End2EndTest {
 
     @Test
+    @Ignore
     public void theGame() {
         RiskLogger logger = new StdoutRiskLogger(s -> {
         });
