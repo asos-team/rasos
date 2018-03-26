@@ -18,7 +18,7 @@ public class End2EndTest {
 
     @Before
     public void setUp() {
-        logger = new StdoutRiskLogger(s -> {});
+        logger = new StdoutRiskLogger();
     }
 
     @Test

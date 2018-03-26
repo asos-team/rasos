@@ -1,8 +1,8 @@
 package rasos;
 
+import com.google.common.collect.Lists;
+
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -12,20 +12,20 @@ import static java.util.Objects.requireNonNull;
 public class RoundHandler {
 
     private static final int COMPUTATION_TIMEOUT_MILLIS = 500;
-    private final Map<Integer, Player> players;
-    private final Attacker attacker;
-    private final Reinforcer reinforcer;
-    private final RiskLogger logger;
-    private final ExecutorService executor;
     private final int idA;
     private final int idB;
+    private final Player playerA;
+    private final Player playerB;
+    private final Reinforcer reinforcer;
+    private final Attacker attacker;
+    private final ExecutorService executor;
+    private final RiskLogger logger;
 
     RoundHandler(int idA, int idB, Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
         this.idA = idA;
         this.idB = idB;
-        this.players = new HashMap<>(2);
-        players.put(idA, playerA);
-        players.put(idB, playerB);
+        this.playerA = playerA;
+        this.playerB = playerB;
         this.reinforcer = reinforcer;
         this.attacker = attacker;
         this.executor = executor;
@@ -40,7 +40,7 @@ public class RoundHandler {
     }
 
     private void reinforce(Board board) {
-        for (Player player : players.values()) {
+        for (Player player : Lists.newArrayList(playerA, playerB)) {
             int id = player.getPlayerId();
             int quota = board.getPlayerCellCount(id);
             Iterable<ReinforcementMove> moves = getReinforcementMoves(player, board, quota);
@@ -49,9 +49,8 @@ public class RoundHandler {
     }
 
     private void attack(Board board) {
-        Iterable<AttackMove> movesA = getAttackMoves(players.get(idA), board);
-        Iterable<AttackMove> movesB = getAttackMoves(players.get(idB), board);
-        //noinspection unchecked
+        Iterable<AttackMove> movesA = getAttackMoves(playerA, board);
+        Iterable<AttackMove> movesB = getAttackMoves(playerB, board);
         attacker.apply(board, movesA, movesB, idA, idB);
     }
 
