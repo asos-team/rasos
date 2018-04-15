@@ -126,7 +126,7 @@ public class AttackerTest {
     public void conqueringAttackMove() {
         Board b = new Board(2);
         b.populateHomeBases(10, ID_A, ID_B);
-        b.cellAt(1, 1).updateNumSoldiers(20);
+        b.getHome1Cell().updateNumSoldiers(20);
         AttackMove am = new AttackMove(1, 1, 2, 2, 15);
 
         attacker.apply(b, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
