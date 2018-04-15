@@ -14,6 +14,7 @@ public class AttackerTest {
     private static final int boardDim = 2;
     private static final int ID_A = 100;
     private static final int ID_B = 200;
+    private static final int INITIAL_SOLDIERS = 20;
     private Attacker attacker;
     private Board board;
     private RiskLogger logger;
@@ -23,7 +24,7 @@ public class AttackerTest {
         logger = mock(RiskLogger.class);
         attacker = new Attacker(logger);
         board = new Board(boardDim);
-        board.populateHomeBases(20, ID_A, ID_B);
+        board.populateHomeBases(INITIAL_SOLDIERS, ID_A, ID_B);
     }
 
     @Test
@@ -41,12 +42,12 @@ public class AttackerTest {
 
     @Test
     public void appliesEntireCellAttackMove() {
-        AttackMove am = new AttackMove(1, 1, 1, 2, 20);
+        AttackMove am = new AttackMove(1, 1, 1, 2, INITIAL_SOLDIERS);
 
         attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
         TestUtils.assertCellContents(board.getHome1Cell(), 0, 0);
-        TestUtils.assertCellContents(board.cellAt(1, 2), ID_A, 20);
+        TestUtils.assertCellContents(board.cellAt(1, 2), ID_A, INITIAL_SOLDIERS);
     }
 
     @Test
@@ -100,7 +101,7 @@ public class AttackerTest {
         TestUtils.assertCellContents(board.getHome1Cell(), ID_A, 5);
         TestUtils.assertCellContents(board.cellAt(2, 1), ID_A, 10);
         TestUtils.assertCellContents(board.cellAt(1, 2), ID_A, 5);
-        TestUtils.assertCellContents(board.getHome2Cell(), ID_B, 20);
+        TestUtils.assertCellContents(board.getHome2Cell(), ID_B, INITIAL_SOLDIERS);
     }
 
     @Test
@@ -146,7 +147,7 @@ public class AttackerTest {
 
     @Test
     public void totalDemolitionAttackMove() {
-        AttackMove am = new AttackMove(1, 1, 2, 2, 20);
+        AttackMove am = new AttackMove(1, 1, 2, 2, INITIAL_SOLDIERS);
 
         attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
@@ -171,20 +172,20 @@ public class AttackerTest {
     @Test
     public void ignoresNonNeighbouringAttackMoves() {
         Board b = new Board(3);
-        b.populateHomeBases(20, ID_A, ID_B);
+        b.populateHomeBases(INITIAL_SOLDIERS, ID_A, ID_B);
 
         AttackMove am = new AttackMove(1, 1, 1, 3, 10);
 
         attacker.apply(b, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
 
-        TestUtils.assertCellContents(b.cellAt(1, 1), ID_A, 20);
+        TestUtils.assertCellContents(b.cellAt(1, 1), ID_A, INITIAL_SOLDIERS);
         TestUtils.assertCellContents(b.cellAt(1, 3), 0, 0);
     }
 
     @Test
     public void ignoresNonNeighbouringAttackMovesAndAppliesLegalOnes() {
         Board b = new Board(3);
-        b.populateHomeBases(20, ID_A, ID_B);
+        b.populateHomeBases(INITIAL_SOLDIERS, ID_A, ID_B);
 
         AttackMove am1 = new AttackMove(1, 1, 1, 2, 5);
         AttackMove am2 = new AttackMove(1, 1, 1, 3, 5);
@@ -201,7 +202,7 @@ public class AttackerTest {
     @Test
     public void concurrentMoveToSameCellFromDifferentPlayers() {
         Board b = new Board(3);
-        b.populateHomeBases(20, ID_A, ID_B);
+        b.populateHomeBases(INITIAL_SOLDIERS, ID_A, ID_B);
 
         AttackMove amA = new AttackMove(1, 1, 2, 2, 10);
         AttackMove amB = new AttackMove(3, 3, 2, 2, 8);
@@ -234,9 +235,9 @@ public class AttackerTest {
     }
 
     private void assertBoardUnchanged() {
-        TestUtils.assertCellContents(board.getHome1Cell(), ID_A, 20);
+        TestUtils.assertCellContents(board.getHome1Cell(), ID_A, INITIAL_SOLDIERS);
         TestUtils.assertCellContents(board.cellAt(1, 2), 0, 0);
         TestUtils.assertCellContents(board.cellAt(2, 1), 0, 0);
-        TestUtils.assertCellContents(board.getHome2Cell(), ID_B, 20);
+        TestUtils.assertCellContents(board.getHome2Cell(), ID_B, INITIAL_SOLDIERS);
     }
 }
