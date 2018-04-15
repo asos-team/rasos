@@ -13,6 +13,7 @@ public class StdoutRiskLogger implements RiskLogger {
             "                     \n";
     private final Printer printer;
 
+    @SuppressWarnings("unused")
     StdoutRiskLogger() {
         this(System.out::println);
     }
