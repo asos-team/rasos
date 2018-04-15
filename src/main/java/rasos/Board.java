@@ -15,7 +15,6 @@ public class Board {
 
     @SuppressWarnings("unused") // necessary for Jackson
     private Board() {
-
     }
 
     Board(int dim) {

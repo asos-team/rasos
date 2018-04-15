@@ -1,6 +1,7 @@
 package rasos;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import rasos.players.AttackPlayer;
 
@@ -55,6 +56,23 @@ public class End2EndTest {
         verify(logger).logGameEnd(ID_A);
     }
 
+    @Test
+    @Ignore
+    public void illegalGame() {
+        Player playerA = new IllegalPlayer();
+        Player playerB = new BunkerPlayer();
+        RoundHandler handler = new RoundHandler(
+                ID_A,
+                ID_B,
+                playerA,
+                playerB,
+                new Reinforcer(logger),
+                new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
+        Game g = new Game(5, 20, 50, playerA, ID_A, playerB, ID_B, handler, new GameEndChecker(ID_A, ID_B), logger);
+
+        g.start();
+    }
+
     private class RabakPlayer extends Player {
 
         private int turn = 0;
@@ -78,6 +96,19 @@ public class End2EndTest {
         @Override
         public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
             return Collections.singleton(new ReinforcementMove(board.getDim(), board.getDim(), reinforcement));
+        }
+
+        @Override
+        public Iterable<AttackMove> onAttack(Board board) {
+            return null;
+        }
+    }
+
+    private class IllegalPlayer extends Player {
+        @Override
+        public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
+            board.cellAt(5,5).setValues(ID_A, 1);
+            return null;
         }
 
         @Override
