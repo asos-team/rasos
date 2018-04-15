@@ -82,7 +82,8 @@ public class Attacker {
     }
 
     private boolean isValidAmount(Board board, AttackMove move) {
-        return move.getAmount() <= getOriginCell(board, move).getNumSoldiers();
+        int max = getOriginCell(board, move).getNumSoldiers();
+        return move.getAmount() > 0 && move.getAmount() <= max;
     }
 
     private Cell getOriginCell(Board board, AttackMove move) {

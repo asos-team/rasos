@@ -72,6 +72,15 @@ public class AttackerTest {
     }
 
     @Test
+    public void ignoresNegativeAmountAttackMove() {
+        AttackMove am = new AttackMove(1, 1, 2, 2, -1);
+
+        attacker.apply(board, Collections.singleton(am), Collections.emptyList(), ID_A, ID_B);
+
+        assertBoardUnchanged();
+    }
+
+    @Test
     public void ignoresAttackMoveFromUnpopulatedCell() {
         AttackMove am = new AttackMove(1, 2, 2, 1, 5);
 
