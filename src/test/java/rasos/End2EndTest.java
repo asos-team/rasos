@@ -59,16 +59,16 @@ public class End2EndTest {
     @Test
     @Ignore
     public void illegalGame() {
-        Player playerA = new IllegalPlayer();
-        Player playerB = new BunkerPlayer();
+        Player illegal = new IllegalPlayer();
+        Player bunker = new BunkerPlayer();
         RoundHandler handler = new RoundHandler(
                 ID_A,
                 ID_B,
-                playerA,
-                playerB,
+                illegal,
+                bunker,
                 new Reinforcer(logger),
                 new Attacker(logger), Executors.newSingleThreadExecutor(), logger);
-        Game g = new Game(5, 20, 50, playerA, ID_A, playerB, ID_B, handler, new GameEndChecker(ID_A, ID_B), logger);
+        Game g = new Game(5, 20, 50, illegal, ID_A, bunker, ID_B, handler, new GameEndChecker(ID_A, ID_B), logger);
 
         g.start();
     }
@@ -107,7 +107,7 @@ public class End2EndTest {
     private class IllegalPlayer extends Player {
         @Override
         public Iterable<ReinforcementMove> onReinforcement(Board board, int reinforcement) {
-            board.cellAt(5,5).setValues(ID_A, 1);
+            board.cellAt(5, 5).setValues(ID_A, 1);
             return null;
         }
 
