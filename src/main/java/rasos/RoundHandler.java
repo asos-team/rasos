@@ -21,7 +21,14 @@ public class RoundHandler {
     private final ExecutorService executor;
     private final RiskLogger logger;
 
-    RoundHandler(int idA, int idB, Player playerA, Player playerB, Reinforcer reinforcer, Attacker attacker, ExecutorService executor, RiskLogger logger) {
+    RoundHandler(int idA,
+                 int idB,
+                 Player playerA,
+                 Player playerB,
+                 Reinforcer reinforcer,
+                 Attacker attacker,
+                 ExecutorService executor,
+                 RiskLogger logger) {
         this.idA = idA;
         this.idB = idB;
         this.playerA = playerA;
