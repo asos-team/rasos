@@ -66,4 +66,12 @@ public class GameResultTest {
         assertThat(result.getScore(idA), is(0));
         assertThat(result.getScore(idB), is(10));
     }
+
+    @Test
+    public void tieAfterSoldierCountGivesZeroToBoth() {
+        board.populateHomeBases(10, idA, idB);
+
+        assertThat(result.getScore(idA), is(0));
+        assertThat(result.getScore(idB), is(0));
+    }
 }
