@@ -8,24 +8,36 @@ import java.util.function.Function;
 
 public class GameResult {
 
-    public static final int DEMOLITION_FACTOR = 11;
+    private static final int DEMOLITION_FACTOR = 11;
+
     private final Board board;
     private final int idA;
     private final int idB;
     private Map<Integer, Integer> idToScore;
+    private boolean isAlreadyEvaluated;
 
-    public GameResult(Board board, int idA, int idB) {
+    GameResult(Board board, int idA, int idB) {
         this.board = board;
         this.idA = idA;
         this.idB = idB;
         this.idToScore = new HashMap<>();
         idToScore.put(idA, 0);
         idToScore.put(idB, 0);
+        this.isAlreadyEvaluated = false;
     }
 
     public int getScore(int playerId) {
         throwOnUnknownId(playerId);
 
+        if (!isAlreadyEvaluated) {
+            evaluateScore();
+            isAlreadyEvaluated = true;
+        }
+
+        return idToScore.get(playerId);
+    }
+
+    private void evaluateScore() {
         int aCellCount = board.getPlayerCellCount(idA);
         int bCellCount = board.getPlayerCellCount(idB);
         if (isTotalDemolition(aCellCount, bCellCount)) {
@@ -35,7 +47,6 @@ public class GameResult {
         } else {
             assignScores(getSoldiersCount(idA), getSoldiersCount(idB), this::scoreWinner);
         }
-        return idToScore.get(playerId);
     }
 
     private void throwOnUnknownId(int playerId) {

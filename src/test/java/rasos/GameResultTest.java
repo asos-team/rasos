@@ -2,9 +2,11 @@ package rasos;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyInt;
 
 public class GameResultTest {
 
@@ -73,5 +75,19 @@ public class GameResultTest {
 
         assertThat(result.getScore(idA), is(0));
         assertThat(result.getScore(idB), is(0));
+    }
+
+    @Test
+    public void evaluatesScoreOnlyOnce() {
+        Board boardSpy = Mockito.spy(board);
+        GameResult result = new GameResult(boardSpy, idA, idB);
+        boardSpy.populateHomeBases(10, idA, idB);
+        boardSpy.cellAt(1, 2).setValues(idB, 5);
+        result.getScore(idA);
+
+        Mockito.reset(boardSpy);
+        result.getScore(idB);
+
+        Mockito.verify(boardSpy, Mockito.never()).getPlayerCellCount(anyInt());
     }
 }
