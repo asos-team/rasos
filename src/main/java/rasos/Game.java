@@ -12,6 +12,7 @@ class Game {
         playerB.setPlayerId(idB);
         this.board = new Board(dim);
         this.checker = checker;
+
         this.board.populateHomeBases(soldiers, idA, idB);
         this.rounds = rounds;
         this.handler = handler;
