@@ -24,33 +24,37 @@ public class GameResult {
     }
 
     public int getScore(int playerId) {
-        if (!idToScore.containsKey(playerId)) {
-            throw new RuntimeException(
-                    String.format("Unknown player id %d. Known ids are %d and %d", playerId, idA, idB));
-        }
+        throwOnUnknownId(playerId);
 
         int aCellCount = board.getPlayerCellCount(idA);
         int bCellCount = board.getPlayerCellCount(idB);
         if (isTotalDemolition(aCellCount, bCellCount)) {
-            calcDemolition(aCellCount, bCellCount);
+            assignDemolitionScores(aCellCount, bCellCount);
+        } else if (aCellCount != bCellCount) {
+            assignScores(aCellCount, bCellCount, this::scoreWinner);
         } else {
-            assignScores(aCellCount, bCellCount, winnerId -> board.getPlayerCellCount(winnerId) * 10);
+            assignScores(getSoldiersCount(idA), getSoldiersCount(idB), this::scoreWinner);
         }
-
-
         return idToScore.get(playerId);
     }
 
-    private void calcDemolition(int aCellCount, int bCellCount) {
+    private void throwOnUnknownId(int playerId) {
+        if (!idToScore.containsKey(playerId)) {
+            throw new RuntimeException(
+                    String.format("Unknown player id %d. Known ids are %d and %d", playerId, idA, idB));
+        }
+    }
+
+    private void assignDemolitionScores(int aCellCount, int bCellCount) {
         int totalDemolitionScore = DEMOLITION_FACTOR * board.getDim() * board.getDim();
         assignScores(aCellCount, bCellCount, winnerId -> totalDemolitionScore + getSoldiersCount(winnerId));
     }
 
-    private void assignScores(int aCellCount, int bCellCount, Function<Integer, Integer> winnerScore) {
-        if (aCellCount > bCellCount) {
+    private void assignScores(int aPower, int bPower, Function<Integer, Integer> winnerScore) {
+        if (aPower > bPower) {
             idToScore.put(idA, winnerScore.apply(idA));
             idToScore.put(idB, 0);
-        } else if (bCellCount > aCellCount) {
+        } else if (bPower > aPower) {
             idToScore.put(idA, 0);
             idToScore.put(idB, winnerScore.apply(idB));
         }
@@ -64,6 +68,11 @@ public class GameResult {
         return Observable.fromIterable(board.getControlledCoordinates(id))
                 .map(cors -> board.cellAt(cors.getColIdx(), cors.getRowIdx()))
                 .map(Cell::getNumSoldiers)
-                .reduce((x, y) -> x + y).blockingGet();
+                .reduce((x, y) -> x + y)
+                .blockingGet(0);
+    }
+
+    private Integer scoreWinner(Integer winnerId) {
+        return board.getPlayerCellCount(winnerId) * 10;
     }
 }

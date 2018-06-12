@@ -57,4 +57,13 @@ public class GameResultTest {
         assertThat(result.getScore(idA), is(0));
         assertThat(result.getScore(idB), is(20));
     }
+
+    @Test
+    public void tieIsBrokenBySoldiersCount() {
+        board.cellAt(1, 1).setValues(idA, 10);
+        board.cellAt(2, 2).setValues(idB, 11);
+
+        assertThat(result.getScore(idA), is(0));
+        assertThat(result.getScore(idB), is(10));
+    }
 }
